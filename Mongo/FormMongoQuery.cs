@@ -27,6 +27,8 @@ namespace DBUI.Mongo {
         public FormMongoQuery(FormMainMDI parent) {
             InitializeComponent();
             this.MdiParent = parent;
+            splitContainer1.Panel2Collapsed = true;
+            splitContainer1.Panel2.Hide();
         }
 
         private void this_handle_keydown(object sender, KeyEventArgs e) {
@@ -94,7 +96,7 @@ namespace DBUI.Mongo {
                 query = this.text_box.Text;
             } 
             this.executeConsoleApp(query);
-            this.text_box_query_status.Text = DateTime.Now.ToString() ;
+            //this.text_box_query_status.Text = DateTime.Now.ToString() ;
             FileManager.SaveToFile(this.QueryFilePath, this.text_box.Text);
         }
 
@@ -110,7 +112,7 @@ namespace DBUI.Mongo {
             //prepends custom javascript from files
 
             String arguments = String.Format(
-                "{0} --host {1} --eval \"{2}\" ",
+                "{0} --host {1} --eval \"{2}\" --quiet",
                 ((FormMainMDI) this.ParentForm).DatabaeName,
                 ((FormMainMDI) this.ParentForm).ServerName,
                 PrependCustomJSCode(javascript));
@@ -120,8 +122,12 @@ namespace DBUI.Mongo {
             compiler.StartInfo.RedirectStandardOutput = true;
             compiler.Start();
 
+            splitContainer1.Panel2Collapsed = false;
+            splitContainer1.Panel2.Show();
+            scintillaOutput.Text = compiler.StandardOutput.ReadToEnd();
             //ErrorManager.write(compiler.StandardOutput.ReadToEnd());
-            this.executeNotePad(compiler.StandardOutput.ReadToEnd());
+            //this.executeNotePad(compiler.StandardOutput.ReadToEnd());
+
             compiler.WaitForExit();
         }
 
