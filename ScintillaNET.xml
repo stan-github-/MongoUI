@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ScintillaNET>
+  <Language Name="default">
+    <Styles>
+      <Style Name="CHARACTER" ForeColor="Orange" BackColor="Black"/>
+    </Styles>
+  </Language>
+  <Language Name="js">
+    <Indentation TabWidth="4" UseTabs="true"/>
+    <Lexer>
+      <Keywords List="0">print sleep</Keywords>
+    </Lexer>
+    <Styles>
+      <Style Name="COMMENT" ForeColor="DarkGreen" BackColor="Black"/>
+      <Style Name="COMMENTLINE" ForeColor="DarkGreen" BackColor="Black"/>
+      <Style Name="COMMENTDOC" ForeColor="DarkGreen" BackColor="Black"/>
+      <Style Name="NUMBER" ForeColor="Red" BackColor="Black"/>
+      <Style Name="WORD" ForeColor="White" BackColor="Black"/>
+      <Style Name="STRING" ForeColor="LightGreen" BackColor="Black"/>
+      <Style Name="CHARACTER" ForeColor="LightGreen" BackColor="Black"/>
+      <Style Name="OPERATOR" ForeColor="Cyan" BackColor="Black"/>
+      <Style Name="IDENTIFIER" ForeColor="Yellow" BackColor="Black"/>
+      <Style Name="GLOBALCLASS" ForeColor="Magenta" BackColor="Black"/>
+      <style Name="STANDARD" ForeColor="Orange" BackColor="Black" />
+      <style Name="DEFAULT" ForeColor="Orange" BackColor="Black"  />
+      <style Name="BRACELIGHT" ForeColor="Gray" BackColor="Black" />
+      <style Name="BRACEBAD" ForeColor="Gray" BackColor="Black" />
+    </Styles>
+  </Language>
+</ScintillaNET>

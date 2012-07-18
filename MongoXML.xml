@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DocumentElement>
+  <Options comments="linked to UI form">
+    <General>
+      <TempFolder>C:\temp</TempFolder>
+      <DeleteTempFolderContents>true</DeleteTempFolderContents>
+    </General>
+    <Query>
+       <QueryFolder>C:\temp\MongoQueries</QueryFolder>
+    </Query>
+    <CustomJavascriptFiles comments="not linked to Options form, yet">
+      <Path>C:\users\stan\desktop\MongoQueries\.mongorc.js</Path>
+    </CustomJavascriptFiles>
+  </Options>
+  <Servers comments="edit this to fill the combo boxes in application">
+    <Server name="stan-pc">
+      <Database>tt2</Database>
+      <Database>temp</Database>
+      <Database>system</Database>
+    </Server>
+    <Server name="bktt2mongodb01">
+      <Database>tt2</Database>
+      <Database>temp</Database>
+    </Server>
+  </Servers>
+  <Miscellaneous comments="not for configuration; used by application only">
+    <LastOpenedFilePath></LastOpenedFilePath>
+    <CurrentServer name="stan-pc">
+      <CurrentDatabase>tt2</CurrentDatabase>
+    </CurrentServer>
+  </Miscellaneous>
+</DocumentElement>
