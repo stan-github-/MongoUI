@@ -28,11 +28,11 @@
             this.tool_strip = new System.Windows.Forms.ToolStrip();
             this.button_excecute = new System.Windows.Forms.ToolStripButton();
             this.button_translate = new System.Windows.Forms.ToolStripButton();
+            this.OutputTypeComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.text_box = new ScintillaNET.Scintilla();
             this.miniToolStrip = new System.Windows.Forms.ToolStrip();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.scintillaOutput = new ScintillaNET.Scintilla();
-            this.OutputTypeComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.tool_strip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.text_box)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -76,6 +76,12 @@
             this.button_translate.Text = "Translate";
             this.button_translate.Visible = false;
             // 
+            // OutputTypeComboBox
+            // 
+            this.OutputTypeComboBox.Name = "OutputTypeComboBox";
+            this.OutputTypeComboBox.Size = new System.Drawing.Size(121, 28);
+            this.OutputTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.QueryOutputType_Selected);
+            // 
             // text_box
             // 
             this.text_box.Caret.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
@@ -112,7 +118,7 @@
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 28);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -149,12 +155,6 @@
             this.scintillaOutput.Styles.Max.Size = 7F;
             this.scintillaOutput.TabIndex = 8;
             // 
-            // OutputTypeComboBox
-            // 
-            this.OutputTypeComboBox.Name = "OutputTypeComboBox";
-            this.OutputTypeComboBox.Size = new System.Drawing.Size(121, 28);
-            this.OutputTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.QueryOutputType_Selected);
-            // 
             // FormMongoQuery
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -162,7 +162,7 @@
             this.ClientSize = new System.Drawing.Size(1589, 585);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.tool_strip);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormMongoQuery";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form_Closed);
             this.tool_strip.ResumeLayout(false);
