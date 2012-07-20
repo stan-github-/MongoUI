@@ -2,25 +2,26 @@
 <DocumentElement>
   <Options comments="linked to UI form">
     <General>
-      <TempFolder>C:\temp</TempFolder>
+      <TempFolder>%temp%\</TempFolder>
       <DeleteTempFolderContents>true</DeleteTempFolderContents>
     </General>
     <Query>
-       <QueryFolder>C:\temp\MongoQueries</QueryFolder>
+       <QueryFolder>%temp%\\MongoQueries</QueryFolder>
     </Query>
     <CustomJavascriptFiles comments="not linked to Options form, yet">
       <Path>C:\users\stan\desktop\MongoQueries\.mongorc.js</Path>
     </CustomJavascriptFiles>
+    <QueryOutputTypes current="notepad.exe">
+      <T>MongoUI</T>
+      <T>notepad.exe</T>
+      <T>winword.exe</T>
+    </QueryOutputTypes>
   </Options>
   <Servers comments="edit this to fill the combo boxes in application">
     <Server name="stan-pc">
       <Database>tt2</Database>
       <Database>temp</Database>
       <Database>system</Database>
-    </Server>
-    <Server name="bktt2mongodb01">
-      <Database>tt2</Database>
-      <Database>temp</Database>
     </Server>
   </Servers>
   <Miscellaneous comments="not for configuration; used by application only">

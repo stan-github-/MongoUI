@@ -33,7 +33,7 @@ namespace DBUI.Mongo {
 
         private void this_handle_keydown(object sender, KeyEventArgs e) {
             if (e.KeyCode == Keys.F5) {
-                this.execute_query();
+                this.ExecuteQuery();
             }
         }
 
@@ -45,8 +45,8 @@ namespace DBUI.Mongo {
         {
             if (!File.Exists(QueryFilePath))
             {
-                QueryFilePath = Program.MongoXMLManager.TempFolderPath 
-                    + "\\" + Guid.NewGuid() + ".js";
+                QueryFilePath = Environment.ExpandEnvironmentVariables(Program.MongoXMLManager.TempFolderPath 
+                    + "\\" + Guid.NewGuid() + ".js");
                 FileManager.SaveToFile(QueryFilePath, "//new query");
             }
         }
@@ -58,7 +58,7 @@ namespace DBUI.Mongo {
             if (this.mode == Mode.New) {
                 ensureQueryFilePathExists();
             }else if (this.mode == Mode.Existing){
-                this.QueryFilePath = this.ask_for_file_path();
+                this.QueryFilePath = this.OpenFileDialog();
                 ensureQueryFilePathExists();
             }else if (this.mode == Mode.Last){
                 this.QueryFilePath = Program.MongoXMLManager.LastFilePath;
@@ -73,11 +73,22 @@ namespace DBUI.Mongo {
             this.WindowState = FormWindowState.Maximized;
             this.Show();
             
-            //this.scintilla_box.
+            SetQueryOutputDisplayType();
+
             return true; 
         }
+        
+        private void SetQueryOutputDisplayType()
+        {
+            foreach(var t in Program.MongoXMLManager.QueryOutputTypes.Types)
+            {
+                this.OutputTypeComboBox.Items.Add(t);    
+            }
 
-        private string ask_for_file_path() {
+            this.OutputTypeComboBox.Text = Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType;
+        }
+
+        private string OpenFileDialog() {
             this.open_file_dialog.InitialDirectory =
                     Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             this.open_file_dialog.Filter = "JS Files (*.js)|*.js|All Files (*.*)|*.*";
@@ -89,46 +100,58 @@ namespace DBUI.Mongo {
             return this.open_file_dialog.FileName;
         }
 
-        private void execute_query() {
-            //update status
-            string query = ""; // this.text_box.SelectedText;
-            if (query == "") {
-                query = this.text_box.Text;
-            } 
-            this.executeConsoleApp(query);
-            //this.text_box_query_status.Text = DateTime.Now.ToString() ;
+        private void ExecuteQuery()
+        {
+            String query = this.text_box.Text;
+            if(String.IsNullOrEmpty(query))
+            {
+                return;
+            }
             FileManager.SaveToFile(this.QueryFilePath, this.text_box.Text);
+            ExecuteConsoleApp(query);
         }
 
-        private void executeConsoleApp(String javascript) {
+        private void ExecuteConsoleApp(String javascript) {
             //mongo.exe must be in path variable, 
             //mongod must be started as service or console app
             
-            Process compiler = new Process();
-            compiler.StartInfo.FileName = "mongo.exe ";
+            Process process = new Process();
+            process.StartInfo.FileName = "mongo.exe ";
             
             //sets server from combo box
             //sets database from combo box
             //prepends custom javascript from files
 
             String arguments = String.Format(
-                "{0} --host {1} --eval \"{2}\" --quiet",
+                "{0} --host {1} --eval \"{2}\" ",
                 ((FormMainMDI) this.ParentForm).DatabaeName,
                 ((FormMainMDI) this.ParentForm).ServerName,
                 PrependCustomJSCode(javascript));
             
-            compiler.StartInfo.Arguments = arguments;
-            compiler.StartInfo.UseShellExecute = false;
-            compiler.StartInfo.RedirectStandardOutput = true;
-            compiler.Start();
+            process.StartInfo.Arguments = arguments;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.Start();
 
-            splitContainer1.Panel2Collapsed = false;
-            splitContainer1.Panel2.Show();
-            scintillaOutput.Text = compiler.StandardOutput.ReadToEnd();
-            //ErrorManager.write(compiler.StandardOutput.ReadToEnd());
-            //this.executeNotePad(compiler.StandardOutput.ReadToEnd());
+            DispalyQueryOutput(process.StandardOutput.ReadToEnd());
+            
+            process.WaitForExit();
+        }
 
-            compiler.WaitForExit();
+        private void DispalyQueryOutput(String content)
+        {
+            if (!Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType.Contains("MongoUI"))
+            {
+                splitContainer1.Panel2Collapsed = true;
+                splitContainer1.Panel2.Visible = false;
+                DisplayQueryInExe(content, Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType);
+            }
+            else if (Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType == "MongoUI")
+            {
+                splitContainer1.Panel2Collapsed = false;
+                splitContainer1.Panel2.Show();
+                scintillaOutput.Text = content;
+            }
         }
 
         private String PrependCustomJSCode(String script)
@@ -142,29 +165,37 @@ namespace DBUI.Mongo {
             return b.Append(script).ToString();
         }
 
-        private void executeNotePad(String content) {
-            string tempPath = Program.MongoXMLManager.TempFolderPath + "\\"
-                + Guid.NewGuid() + ".json";
+        private void DisplayQueryInExe(String content, String exe) {
+            string tempPath = Environment.ExpandEnvironmentVariables
+                (Program.MongoXMLManager.TempFolderPath + "\\"
+                + Guid.NewGuid() + ".json"); ;
             if (FileManager.SaveToFile(tempPath, content) 
                 == false) { return; }
 
             Process compiler = new Process();
-            compiler.StartInfo.FileName = "notepad.exe";
+            compiler.StartInfo.FileName = exe;
             compiler.StartInfo.Arguments = tempPath;
             compiler.Start();
         }
 
         private void button_excecute_Click(object sender, EventArgs e) {
-            this.execute_query();
+            this.ExecuteQuery();
         }
 
         private void button_execute_highlighted_section_Click(object sender, EventArgs e) {
-            this.execute_query();
+            this.ExecuteQuery();
         }
 
         private void Form_Closed(object sender, FormClosedEventArgs e)
         {
             Program.MongoXMLManager.SaveXml();
+        }
+
+        private void QueryOutputType_Selected(object sender, EventArgs e)
+        {
+            Program.MongoXMLManager.QueryOutputTypes = 
+                new MongoXMLManager.QueryOutputType()
+                {CurrentOutputType = OutputTypeComboBox.Text};
         }
 
     }

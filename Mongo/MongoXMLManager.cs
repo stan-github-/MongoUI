@@ -14,10 +14,11 @@ namespace DBUI.Mongo {
         private const String _tempFolderPath = "Options/General/TempFolder";
         private const String _queryFolderPath = "Options/Query/QueryFolder";
         private const String _deleteTempFolderContents = "Options/General/DeleteTempFolderContents";
-        private const String _startupFilePath = "Options/General/StartupFile";
+        //private const String _startupFilePath = "Options/General/StartupFile";
         private const String _servers = "Servers";
         private const String _currentServer = "Miscellaneous/CurrentServer";
         private const String _customJSFilePaths = "Options/CustomJavascriptFiles";
+        private const String _queryOutputTypes = "Options/QueryOutputTypes";
 
         private String _xmlPath;
 
@@ -151,6 +152,44 @@ namespace DBUI.Mongo {
                          value.CurrentDatabase;
             }
         }
-   
+
+        public class QueryOutputType
+        {
+            public QueryOutputType()
+            {
+                Types = new List<string>();
+            }
+
+            public List<String> Types { get; set; }
+            public String CurrentOutputType { get; set; } 
+        }
+
+        public QueryOutputType QueryOutputTypes{
+           set
+            {
+                XmlNode n = RootNode.SelectSingleNode(_queryOutputTypes);
+                if (n == null)
+                {
+                    return; 
+                }
+                n.SelectSingleNode("@current").InnerText = value.CurrentOutputType;
+                
+            }
+            get
+            {
+                XmlNode n = RootNode.SelectSingleNode(_queryOutputTypes);
+                if (n == null)
+                {
+                    return null;
+                }
+                QueryOutputType q = new QueryOutputType();
+                q.CurrentOutputType = n.SelectSingleNode("@current").Value;
+                foreach (XmlNode m in n.SelectNodes("T"))
+                {
+                    q.Types.Add(m.InnerText);
+                }
+                return q;
+            }
+        }
     }
 }

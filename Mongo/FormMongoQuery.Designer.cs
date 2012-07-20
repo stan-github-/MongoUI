@@ -32,6 +32,7 @@
             this.miniToolStrip = new System.Windows.Forms.ToolStrip();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.scintillaOutput = new ScintillaNET.Scintilla();
+            this.OutputTypeComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.tool_strip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.text_box)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -45,10 +46,11 @@
             // 
             this.tool_strip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.button_excecute,
-            this.button_translate});
+            this.button_translate,
+            this.OutputTypeComboBox});
             this.tool_strip.Location = new System.Drawing.Point(0, 0);
             this.tool_strip.Name = "tool_strip";
-            this.tool_strip.Size = new System.Drawing.Size(1192, 25);
+            this.tool_strip.Size = new System.Drawing.Size(1589, 28);
             this.tool_strip.TabIndex = 6;
             this.tool_strip.Text = "toolStrip1";
             // 
@@ -58,7 +60,7 @@
             this.button_excecute.Image = ((System.Drawing.Image)(resources.GetObject("button_excecute.Image")));
             this.button_excecute.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.button_excecute.Name = "button_excecute";
-            this.button_excecute.Size = new System.Drawing.Size(51, 22);
+            this.button_excecute.Size = new System.Drawing.Size(67, 25);
             this.button_excecute.Text = "E&xecute";
             this.button_excecute.ToolTipText = "Execute (F5)";
             this.button_excecute.Click += new System.EventHandler(this.button_excecute_Click);
@@ -70,7 +72,7 @@
             this.button_translate.Image = ((System.Drawing.Image)(resources.GetObject("button_translate.Image")));
             this.button_translate.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.button_translate.Name = "button_translate";
-            this.button_translate.Size = new System.Drawing.Size(59, 22);
+            this.button_translate.Size = new System.Drawing.Size(78, 25);
             this.button_translate.Text = "Translate";
             this.button_translate.Visible = false;
             // 
@@ -81,9 +83,9 @@
             this.text_box.ConfigurationManager.Language = "js";
             this.text_box.Dock = System.Windows.Forms.DockStyle.Fill;
             this.text_box.Location = new System.Drawing.Point(0, 0);
-            this.text_box.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.text_box.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.text_box.Name = "text_box";
-            this.text_box.Size = new System.Drawing.Size(1192, 225);
+            this.text_box.Size = new System.Drawing.Size(1589, 278);
             this.text_box.Styles.BraceBad.Size = 7F;
             this.text_box.Styles.BraceLight.Size = 7F;
             this.text_box.Styles.ControlChar.Size = 7F;
@@ -109,7 +111,8 @@
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 25);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 28);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -120,8 +123,9 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.scintillaOutput);
-            this.splitContainer1.Size = new System.Drawing.Size(1192, 450);
-            this.splitContainer1.SplitterDistance = 225;
+            this.splitContainer1.Size = new System.Drawing.Size(1589, 557);
+            this.splitContainer1.SplitterDistance = 278;
+            this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 8;
             // 
             // scintillaOutput
@@ -131,9 +135,9 @@
             this.scintillaOutput.ConfigurationManager.Language = "js";
             this.scintillaOutput.Dock = System.Windows.Forms.DockStyle.Fill;
             this.scintillaOutput.Location = new System.Drawing.Point(0, 0);
-            this.scintillaOutput.Margin = new System.Windows.Forms.Padding(2);
+            this.scintillaOutput.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.scintillaOutput.Name = "scintillaOutput";
-            this.scintillaOutput.Size = new System.Drawing.Size(1192, 221);
+            this.scintillaOutput.Size = new System.Drawing.Size(1589, 274);
             this.scintillaOutput.Styles.BraceBad.Size = 7F;
             this.scintillaOutput.Styles.BraceLight.Size = 7F;
             this.scintillaOutput.Styles.ControlChar.Size = 7F;
@@ -145,13 +149,20 @@
             this.scintillaOutput.Styles.Max.Size = 7F;
             this.scintillaOutput.TabIndex = 8;
             // 
+            // OutputTypeComboBox
+            // 
+            this.OutputTypeComboBox.Name = "OutputTypeComboBox";
+            this.OutputTypeComboBox.Size = new System.Drawing.Size(121, 28);
+            this.OutputTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.QueryOutputType_Selected);
+            // 
             // FormMongoQuery
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1192, 475);
+            this.ClientSize = new System.Drawing.Size(1589, 585);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.tool_strip);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "FormMongoQuery";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form_Closed);
             this.tool_strip.ResumeLayout(false);
@@ -177,5 +188,6 @@
         private System.Windows.Forms.ToolStrip miniToolStrip;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private ScintillaNET.Scintilla scintillaOutput;
+        private System.Windows.Forms.ToolStripComboBox OutputTypeComboBox;
     }
 }

@@ -234,7 +234,6 @@ namespace DBUI {
         private void helpToolStripButton_Click(object sender, EventArgs e)
         {
             StringBuilder b = new StringBuilder();
-            b.Append("Add folder containing scintilla.dll to system/user path variable.\n");
             b.Append("Configure MongoXML.xml\n");
             b.Append("Configure ScintillaNET.xml\n");
 
