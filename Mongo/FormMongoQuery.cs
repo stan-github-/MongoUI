@@ -102,7 +102,10 @@ namespace DBUI.Mongo {
 
         private void ExecuteQuery()
         {
-            String query = this.text_box.Text;
+            //String query = this.text_box.Text;
+            String query = string.IsNullOrEmpty(this.text_box.Selection.Text)? 
+            this.text_box.Text :this.text_box.Selection.Text;
+   
             if(String.IsNullOrEmpty(query))
             {
                 return;
