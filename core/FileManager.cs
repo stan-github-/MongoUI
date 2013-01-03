@@ -23,7 +23,19 @@ namespace DBUI {
             return s;
         }
 
-        
+        public static bool AppendToFile(string filePath, String s)
+        {
+            try
+            {
+                File.AppendAllText(filePath, s);
+            }
+            catch (Exception e)
+            {
+                ErrorManager.Write(e);
+            }
+            return true;
+        }
+
         public static bool SaveToFile(string filePath, string s) {
             try {
                 File.WriteAllText(filePath, s);

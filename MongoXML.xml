@@ -9,7 +9,7 @@
        <QueryFolder>%temp%\\MongoQueries</QueryFolder>
     </Query>
     <CustomJavascriptFiles comments="not linked to Options form, yet">
-      <Path>C:\users\stan\desktop\MongoQueries\.mongorc.js</Path>
+      <Path>H:\.mongorc.js</Path>
     </CustomJavascriptFiles>
     <QueryOutputTypes current="notepad.exe">
       <T>MongoUI</T>
