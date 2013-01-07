@@ -22,6 +22,15 @@ namespace DBUI.Mongo {
             set;
         }
 
+        public String tempJSFile
+        {
+            get
+            {
+                return Environment.ExpandEnvironmentVariables(Program.MongoXMLManager.TempFolderPath
+                    + "\\" + Guid.NewGuid() + ".js");
+            }
+        }
+
         public Mode mode { get; set; }
 
         public FormMongoQuery(FormMainMDI parent) {
@@ -45,8 +54,7 @@ namespace DBUI.Mongo {
         {
             if (!File.Exists(QueryFilePath))
             {
-                QueryFilePath = Environment.ExpandEnvironmentVariables(Program.MongoXMLManager.TempFolderPath 
-                    + "\\" + Guid.NewGuid() + ".js");
+                QueryFilePath = tempJSFile;
                 FileManager.SaveToFile(QueryFilePath, "//new query");
             }
         }
@@ -109,11 +117,27 @@ namespace DBUI.Mongo {
             {
                 return;
             }
+            //save file
             FileManager.SaveToFile(this.QueryFilePath, this.text_box.Text);
-            ExecuteConsoleApp(query);
+
+            //execute file
+            var tempFile = tempJSFile;
+            FileManager.SaveToFile(tempFile, PrependCustomJSCode(""));
+            FileManager.AppendToFile(tempFile, this.text_box.Text);
+            
+            ExecuteConsoleApp(tempFile);
+
+            FileManager.DeleteFile(tempFile);
         }
 
-        private void ExecuteConsoleApp(String javascript) {
+        private void DisplayErrorCode(String tempFile, ref String outputMessage)
+        {
+            //use regex to get error line.
+            //read tempFile to get the code.
+            //append text to outputmessage.
+        }
+
+        private void ExecuteConsoleApp(String filePath) {
             //mongo.exe must be in path variable, 
             //mongod must be started as service or console app
             
@@ -125,18 +149,20 @@ namespace DBUI.Mongo {
             //prepends custom javascript from files
 
             String arguments = String.Format(
-                "{0} --host {1} --eval \"{2}\" ",
+                "{0} --host {1} {2} ",
                 ((FormMainMDI) this.ParentForm).DatabaeName,
                 ((FormMainMDI) this.ParentForm).ServerName,
-                PrependCustomJSCode(javascript));
+                filePath);
             
             process.StartInfo.Arguments = arguments;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.Start();
 
-            DispalyQueryOutput(process.StandardOutput.ReadToEnd());
-            
+            var s = process.StandardOutput.ReadToEnd();
+            DisplayErrorCode(filePath, ref s);
+
+            DispalyQueryOutput(s);
             process.WaitForExit();
         }
 
