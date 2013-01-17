@@ -1,52 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using DBUI;
 using System.Diagnostics;
 
 namespace DBUI.Mongo {
-    public partial class FormMongoQuery : Form {
-        public enum Mode { 
-            New,Existing,Last
-        }
-                
-        public string QueryFilePath
+    public partial class FormMongoQuery : Form
+    {
+        private ExecuteQuery _executeQuery;
+
+        public enum Mode
         {
-            get;
-            set;
+            New,
+            Existing,
+            Last
         }
+
+        public string QueryFilePath { get; set; }
 
         public String tempJSFile
         {
             get
             {
                 return Environment.ExpandEnvironmentVariables(Program.MongoXMLManager.TempFolderPath
-                    + "\\" + Guid.NewGuid() + ".js");
+                                                              + "\\" + Guid.NewGuid() + ".js");
             }
         }
 
         public Mode mode { get; set; }
 
-        public FormMongoQuery(FormMainMDI parent) {
+        public FormMongoQuery(FormMainMDI parent)
+        {
             InitializeComponent();
             this.MdiParent = parent;
             splitContainer1.Panel2Collapsed = true;
             splitContainer1.Panel2.Hide();
         }
 
-        private void this_handle_keydown(object sender, KeyEventArgs e) {
-            if (e.KeyCode == Keys.F5) {
-                this.ExecuteQuery();
+        private void this_handle_keydown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F5)
+            {
+                _executeQuery.Execute(this.text_box.Text);
             }
         }
 
-        public bool refresh() {
+        public bool refresh()
+        {
             return true;
         }
 
@@ -59,159 +67,288 @@ namespace DBUI.Mongo {
             }
         }
 
-        public bool init() {
+        public bool init()
+        {
             this.text_box.KeyDown += new System.Windows.Forms.KeyEventHandler
                 (this.this_handle_keydown);
-            
-            if (this.mode == Mode.New) {
+
+            if (this.mode == Mode.New)
+            {
                 ensureQueryFilePathExists();
-            }else if (this.mode == Mode.Existing){
+            }
+            else if (this.mode == Mode.Existing)
+            {
                 this.QueryFilePath = this.OpenFileDialog();
                 ensureQueryFilePathExists();
-            }else if (this.mode == Mode.Last){
+            }
+            else if (this.mode == Mode.Last)
+            {
                 this.QueryFilePath = Program.MongoXMLManager.LastFilePath;
                 ensureQueryFilePathExists();
             }
-            
+
             //form tile
             this.Text = this.QueryFilePath;
             this.text_box.Text = DBUI.FileManager.ReadFromFile(this.QueryFilePath);
-            
+
             //resize window
             this.WindowState = FormWindowState.Maximized;
             this.Show();
-            
+
             SetQueryOutputDisplayType();
 
-            return true; 
+            _executeQuery = new ExecuteQuery(this);
+
+            return true;
         }
-        
+
         private void SetQueryOutputDisplayType()
         {
-            foreach(var t in Program.MongoXMLManager.QueryOutputTypes.Types)
+            foreach (var t in Program.MongoXMLManager.QueryOutputTypes.Types)
             {
-                this.OutputTypeComboBox.Items.Add(t);    
+                this.OutputTypeComboBox.Items.Add(t);
             }
 
             this.OutputTypeComboBox.Text = Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType;
         }
 
-        private string OpenFileDialog() {
+        private string OpenFileDialog()
+        {
             this.open_file_dialog.InitialDirectory =
-                    Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+                Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             this.open_file_dialog.Filter = "JS Files (*.js)|*.js|All Files (*.*)|*.*";
             //minimize window, can't hide
             this.WindowState = FormWindowState.Minimized;
-            if (this.open_file_dialog.ShowDialog(this) != DialogResult.OK) {
+            if (this.open_file_dialog.ShowDialog(this) != DialogResult.OK)
+            {
                 return "";
             }
             return this.open_file_dialog.FileName;
         }
 
-        private void ExecuteQuery()
+        public class ExecuteQuery
         {
-            String query = string.IsNullOrEmpty(this.text_box.Selection.Text)? 
-                this.text_box.Text :this.text_box.Selection.Text;
-            
-            if(String.IsNullOrEmpty(query))
+            //need to get rid of _form variable, just pass in strings...
+            private FormMongoQuery _form;
+            private StringBuilder _queryOutput;
+            private String tempJSFile
             {
-                return;
-            }
-            //save file
-            FileManager.SaveToFile(this.QueryFilePath, this.text_box.Text);
-
-            //execute file
-            var tempFile = tempJSFile;
-            FileManager.SaveToFile(tempFile, PrependCustomJSCode(""));
-            FileManager.AppendToFile(tempFile, this.text_box.Text);
-            
-            ExecuteConsoleApp(tempFile);
-
-            FileManager.DeleteFile(tempFile);
-        }
-
-        private void DisplayErrorCode(String tempFile, ref String outputMessage)
-        {
-            //use regex to get error line.
-            //read tempFile to get the code.
-            //append text to outputmessage.
-        }
-
-        private void ExecuteConsoleApp(String filePath) {
-            //mongo.exe must be in path variable, 
-            //mongod must be started as service or console app
-            
-            Process process = new Process();
-            process.StartInfo.FileName = "mongo.exe ";
-            
-            //sets server from combo box
-            //sets database from combo box
-            //prepends custom javascript from files
-
-            String arguments = String.Format(
-                "{0} --host {1} {2} ",
-                ((FormMainMDI) this.ParentForm).DatabaeName,
-                ((FormMainMDI) this.ParentForm).ServerName,
-                filePath);
-            
-            process.StartInfo.Arguments = arguments;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.Start();
-
-            var s = process.StandardOutput.ReadToEnd();
-            DisplayErrorCode(filePath, ref s);
-
-            DispalyQueryOutput(s);
-            process.WaitForExit();
-        }
-
-        private void DispalyQueryOutput(String content)
-        {
-            if (!Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType.Contains("MongoUI"))
-            {
-                splitContainer1.Panel2Collapsed = true;
-                splitContainer1.Panel2.Visible = false;
-                DisplayQueryInExe(content, Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType);
-            }
-            else if (Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType == "MongoUI")
-            {
-                splitContainer1.Panel2Collapsed = false;
-                splitContainer1.Panel2.Show();
-                scintillaOutput.Text = content;
-            }
-        }
-
-        private String PrependCustomJSCode(String script)
-        {
-            var b =  new StringBuilder();
-            foreach (var path in Program.MongoXMLManager.CustomJSFilePaths)
-            {
-                b.Append(FileManager.ReadFromFile(path)).Append("\n");
+                get
+                {
+                    return Environment.ExpandEnvironmentVariables(Program.MongoXMLManager.TempFolderPath
+                                                                  + "\\" + Guid.NewGuid() + ".js");
+                }
             }
 
-            return b.Append(script).ToString();
-        }
+            public ExecuteQuery(FormMongoQuery form)
+            {
+                _form = form;
+            }
 
-        private void DisplayQueryInExe(String content, String exe) {
-            string tempPath = Environment.ExpandEnvironmentVariables
-                (Program.MongoXMLManager.TempFolderPath + "\\"
-                + Guid.NewGuid() + ".json"); ;
-            if (FileManager.SaveToFile(tempPath, content) 
-                == false) { return; }
+            public void Execute(string text)
+            {
+                String selectedText = text;  //_form.text_box.Selection.Text;
+                String query = string.IsNullOrEmpty(selectedText) ? text : selectedText;
 
-            Process compiler = new Process();
-            compiler.StartInfo.FileName = exe;
-            compiler.StartInfo.Arguments = tempPath;
-            compiler.Start();
+                if (String.IsNullOrEmpty(query))
+                {
+                    return;
+                }
+
+                
+                _queryOutput = new StringBuilder();
+
+                //could use a loop to loop through the query types
+                var sqlQueries = GetExternalQueryResults(QueryType.SQL, query);
+                ExecuteExternalQueries(QueryType.SQL, sqlQueries);
+
+                var cmdlines = GetExternalQueryResults(QueryType.CmdLine, query);
+                ExecuteExternalQueries(QueryType.CmdLine, cmdlines);
+
+                ExecuteMongo(query);
+
+                DispalyQueryOutput(_queryOutput.ToString());
+            }
+
+            private List<String> GetExternalQueryMatches(QueryType type, String query)
+            {
+                var reg = GetExternalQueryRegex(type);
+                var queries = new List<String>();
+
+                foreach (Match q in reg.Matches(query))
+                {
+                    queries.Add(q.ToString());
+                }
+                return queries;
+            }
+
+            private List<String> GetExternalQueryResults(QueryType type, String query)
+            {
+                var reg = GetExternalQueryRegex(type);
+                var queries = new List<String>();
+
+                foreach (Match q in reg.Matches(query))
+                {
+                    queries.Add(q.Result("$1"));
+                }
+                return queries;
+            }
+
+            private void ExecuteExternalQueries(QueryType type, List<String> queries)
+            {
+                String arguments = string.Empty;
+                String fileName = string.Empty;
+
+                if (type == QueryType.SQL)
+                {
+                    foreach (var q in queries)
+                    {
+                        arguments = String.Format("-S localhost -d teachertrack2 -q \"{0}\"", q);
+                        ExecuteConsoleApp("sqlcmd", arguments);
+                    }
+                }
+
+                if (type == QueryType.CmdLine)
+                {
+                    foreach (var q in queries)
+                    {
+                        arguments = "/c " + q;
+                        ExecuteConsoleApp("cmd.exe", arguments);
+                    }
+                }
+            }
+
+            public enum QueryType
+            {
+                Mongo,
+                SQL,
+                CmdLine
+            }
+
+            private Regex GetExternalQueryRegex(QueryType type)
+            {
+                string regex = "\\b" + type.ToString() + "\\b[<]{2}(.*?)[>]{2}";
+                var options = ((RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline) | RegexOptions.IgnoreCase);
+                return new Regex(regex, options);
+            }
+
+            private String StripExternalQueries(String query)
+            {
+                String q = query;
+                foreach (var t in new List<QueryType> { QueryType.SQL, QueryType.CmdLine })
+                {
+                    foreach (var s in GetExternalQueryMatches(t, query))
+                    {
+                        q = q.Replace(s, "");
+                    }
+                }
+                return q;
+            }
+
+            private void DisplayErrorCode(String tempFile, ref String outputMessage)
+            {
+                //use regex to get error line.
+                //read tempFile to get the code.
+                //append text to outputmessage.
+            }
+
+            private void ExecuteConsoleApp(String exeName, String arguments)
+            {
+                Process process = new Process();
+                process.StartInfo.FileName = exeName; //"mongo.exe ";
+
+                process.StartInfo.Arguments = arguments;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.Start();
+
+                _queryOutput.Append(process.StandardOutput.ReadToEnd());
+                process.WaitForExit();
+
+            }
+
+            private void ExecuteMongo(String query)
+            {
+                //mongo.exe must be in path variable, 
+                //mongod must be started as service or console app
+                query = StripExternalQueries(query);
+
+                if (string.IsNullOrWhiteSpace(query))
+                {
+                    return;
+                }
+                //save file
+                FileManager.SaveToFile(_form.QueryFilePath, query);
+
+                //apppend custom code to file
+                var tempFile = tempJSFile;
+                FileManager.SaveToFile(tempFile, PrependCustomJSCode(""));
+                FileManager.AppendToFile(tempFile, query);
+
+                //execute file
+                String arguments = String.Format(
+                    "{0} --host {1} {2} ",
+                    ((FormMainMDI)_form.ParentForm).DatabaeName,
+                    ((FormMainMDI)_form.ParentForm).ServerName,
+                    tempFile);
+
+                ExecuteConsoleApp("mongo.exe", arguments);
+
+                FileManager.DeleteFile(tempFile);
+            }
+
+            private void DispalyQueryOutput(String content)
+            {
+                if (!Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType.Contains("MongoUI"))
+                {
+                    _form.splitContainer1.Panel2Collapsed = true;
+                    _form.splitContainer1.Panel2.Visible = false;
+                    DisplayQueryInExe(content, Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType);
+                }
+                else if (Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType == "MongoUI")
+                {
+                    _form.splitContainer1.Panel2Collapsed = false;
+                    _form.splitContainer1.Panel2.Show();
+                    _form.scintillaOutput.Text = content;
+                }
+            }
+
+            private String PrependCustomJSCode(String script)
+            {
+                var b = new StringBuilder();
+                foreach (var path in Program.MongoXMLManager.CustomJSFilePaths)
+                {
+                    b.Append(FileManager.ReadFromFile(path)).Append("\n");
+                }
+
+                return b.Append(script).ToString();
+            }
+
+            private void DisplayQueryInExe(String content, String exe)
+            {
+                string tempPath = Environment.ExpandEnvironmentVariables
+                    (Program.MongoXMLManager.TempFolderPath + "\\"
+                     + Guid.NewGuid() + ".json");
+                ;
+                if (FileManager.SaveToFile(tempPath, content)
+                    == false)
+                {
+                    return;
+                }
+
+                Process compiler = new Process();
+                compiler.StartInfo.FileName = exe;
+                compiler.StartInfo.Arguments = tempPath;
+                compiler.Start();
+            }
         }
 
         private void button_excecute_Click(object sender, EventArgs e) {
-            this.ExecuteQuery();
+            _executeQuery.Execute(this.text_box.Text);
         }
 
         private void button_execute_highlighted_section_Click(object sender, EventArgs e) {
-            this.ExecuteQuery();
+            _executeQuery.Execute(this.text_box.Text);
         }
 
         private void Form_Closed(object sender, FormClosedEventArgs e)

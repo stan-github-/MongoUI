@@ -14,11 +14,15 @@
     <QueryOutputTypes current="notepad.exe">
       <T>MongoUI</T>
       <T>notepad.exe</T>
-      <T>winword.exe</T>
     </QueryOutputTypes>
   </Options>
   <Servers comments="edit this to fill the combo boxes in application">
     <Server name="stan-pc">
+      <Database>tt2</Database>
+      <Database>temp</Database>
+      <Database>system</Database>
+    </Server>
+    <Server name="bktt2mongodb01">
       <Database>tt2</Database>
       <Database>temp</Database>
       <Database>system</Database>

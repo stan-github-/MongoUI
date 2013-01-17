@@ -136,7 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MongoXML.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Newtonsoft.Json.dll">
