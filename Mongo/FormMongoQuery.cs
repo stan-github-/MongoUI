@@ -155,7 +155,6 @@ namespace DBUI.Mongo {
                     return;
                 }
 
-                
                 _queryOutput = new StringBuilder();
 
                 //could use a loop to loop through the query types
@@ -167,6 +166,11 @@ namespace DBUI.Mongo {
 
                 ExecuteMongo(query);
 
+                //save file
+                FileManager.SaveToFile(_form.QueryFilePath, query);
+
+                //display query output;
+                //todo could be updated to display error line with mongo query
                 DispalyQueryOutput(_queryOutput.ToString());
             }
 
@@ -277,8 +281,6 @@ namespace DBUI.Mongo {
                 {
                     return;
                 }
-                //save file
-                FileManager.SaveToFile(_form.QueryFilePath, query);
 
                 //apppend custom code to file
                 var tempFile = tempJSFile;
