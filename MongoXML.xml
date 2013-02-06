@@ -17,7 +17,7 @@
     </QueryOutputTypes>
   </Options>
   <Servers comments="edit this to fill the combo boxes in application">
-    <Server name="stan-pc">
+    <Server name="localhost">
       <Database>tt2</Database>
       <Database>temp</Database>
       <Database>system</Database>
@@ -30,7 +30,7 @@
   </Servers>
   <Miscellaneous comments="not for configuration; used by application only">
     <LastOpenedFilePath></LastOpenedFilePath>
-    <CurrentServer name="stan-pc">
+    <CurrentServer name="localhost">
       <CurrentDatabase>tt2</CurrentDatabase>
     </CurrentServer>
   </Miscellaneous>

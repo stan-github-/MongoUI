@@ -26,7 +26,7 @@ namespace DBUI.Mongo {
 
         public string QueryFilePath { get; set; }
 
-        public String tempJSFile
+        public String TempJSFile
         {
             get
             {
@@ -45,12 +45,23 @@ namespace DBUI.Mongo {
             splitContainer1.Panel2.Hide();
         }
 
-        private void this_handle_keydown(object sender, KeyEventArgs e)
+        private void KeyDownHandler(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F5)
             {
-                _executeQuery.Execute(this.text_box.Text);
+                ExecuteQueryAndSaveToFile();
             }
+        }
+
+        private void ExecuteQueryAndSaveToFile()
+        {
+            var query = String.IsNullOrEmpty(text_box.Selection.Text)
+                                ? this.text_box.Text
+                                : text_box.Selection.Text;
+            _executeQuery.Execute(query);
+
+            //save file
+            FileManager.SaveToFile(this.QueryFilePath, text_box.Text);
         }
 
         public bool refresh()
@@ -58,38 +69,38 @@ namespace DBUI.Mongo {
             return true;
         }
 
-        private void ensureQueryFilePathExists()
+        private void EnsureQueryFilePathExists()
         {
             if (!File.Exists(QueryFilePath))
             {
-                QueryFilePath = tempJSFile;
+                QueryFilePath = TempJSFile;
                 FileManager.SaveToFile(QueryFilePath, "//new query");
             }
         }
 
-        public bool init()
+        public bool Init()
         {
             this.text_box.KeyDown += new System.Windows.Forms.KeyEventHandler
-                (this.this_handle_keydown);
+                (this.KeyDownHandler);
 
             if (this.mode == Mode.New)
             {
-                ensureQueryFilePathExists();
+                EnsureQueryFilePathExists();
             }
             else if (this.mode == Mode.Existing)
             {
                 this.QueryFilePath = this.OpenFileDialog();
-                ensureQueryFilePathExists();
+                EnsureQueryFilePathExists();
             }
             else if (this.mode == Mode.Last)
             {
                 this.QueryFilePath = Program.MongoXMLManager.LastFilePath;
-                ensureQueryFilePathExists();
+                EnsureQueryFilePathExists();
             }
 
             //form tile
             this.Text = this.QueryFilePath;
-            this.text_box.Text = DBUI.FileManager.ReadFromFile(this.QueryFilePath);
+            this.text_box.Text = FileManager.ReadFromFile(this.QueryFilePath);
 
             //resize window
             this.WindowState = FormWindowState.Maximized;
@@ -117,11 +128,12 @@ namespace DBUI.Mongo {
             this.open_file_dialog.InitialDirectory =
                 Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             this.open_file_dialog.Filter = "JS Files (*.js)|*.js|All Files (*.*)|*.*";
+            
             //minimize window, can't hide
             this.WindowState = FormWindowState.Minimized;
             if (this.open_file_dialog.ShowDialog(this) != DialogResult.OK)
             {
-                return "";
+                return String.Empty;
             }
             return this.open_file_dialog.FileName;
         }
@@ -145,11 +157,8 @@ namespace DBUI.Mongo {
                 _form = form;
             }
 
-            public void Execute(string text)
+            public void Execute(string query)
             {
-                String selectedText = text;  //_form.text_box.Selection.Text;
-                String query = string.IsNullOrEmpty(selectedText) ? text : selectedText;
-
                 if (String.IsNullOrEmpty(query))
                 {
                     return;
@@ -165,9 +174,6 @@ namespace DBUI.Mongo {
                 ExecuteExternalQueries(QueryType.CmdLine, cmdlines);
 
                 ExecuteMongo(query);
-
-                //save file
-                FileManager.SaveToFile(_form.QueryFilePath, query);
 
                 //display query output;
                 //todo could be updated to display error line with mongo query
@@ -346,11 +352,7 @@ namespace DBUI.Mongo {
         }
 
         private void button_excecute_Click(object sender, EventArgs e) {
-            _executeQuery.Execute(this.text_box.Text);
-        }
-
-        private void button_execute_highlighted_section_Click(object sender, EventArgs e) {
-            _executeQuery.Execute(this.text_box.Text);
+            ExecuteQueryAndSaveToFile();
         }
 
         private void Form_Closed(object sender, FormClosedEventArgs e)

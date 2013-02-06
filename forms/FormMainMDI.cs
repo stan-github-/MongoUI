@@ -118,7 +118,7 @@ namespace DBUI {
             var mongoChildForm = new Mongo.FormMongoQuery(this) 
                 {mode = FormMongoQuery.Mode.Last};
             childFormNumber++;
-            mongoChildForm.init();
+            mongoChildForm.Init();
             return;
         }
 
@@ -126,7 +126,7 @@ namespace DBUI {
             var mongoChildForm = new FormMongoQuery(this)
                 { mode = FormMongoQuery.Mode.Existing };
             childFormNumber++;
-            mongoChildForm.init();
+            mongoChildForm.Init();
             return;
         }
 
@@ -185,7 +185,7 @@ namespace DBUI {
             string s = Program.MongoXMLManager.QueryFolderPath + "\\" + Guid.NewGuid() + ".js";
             var childForm = new FormMongoQuery(this) {QueryFilePath = s};
             childFormNumber++;
-            childForm.init();
+            childForm.Init();
         }
 
         #region "not used"
