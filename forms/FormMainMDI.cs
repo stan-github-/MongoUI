@@ -43,9 +43,25 @@ namespace DBUI {
             if (Program.MongoXMLManager.Init() == false) { return false; }
 
             this.SetServerComboBox();
+            this.SetFileHistory();
             this.OpenLastOpendedFile();
-            //this.scintillaTextBox
+
+            this.Closed += new EventHandler(FormMainMDI_Closed);
+            this.historyMenu.DropDownItemClicked += new ToolStripItemClickedEventHandler(historyMenu_DropDownItemClicked);
             return true;
+        }
+
+        void historyMenu_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            new FormMongoQuery(this).Init(FormMongoQuery.Mode.Existing, e.ClickedItem.Text);
+        }
+
+        void FormMainMDI_Closed(object sender, EventArgs e)
+        {
+            var l = new List<String>();
+            MdiChildren.ToList().ForEach(c=> l.Add(((FormMongoQuery)c).QueryFilePath));
+            Program.MongoXMLManager.FileHistory = l;
+            Program.MongoXMLManager.SaveXml();
         }
 
         #region "server database combo boxes"
@@ -114,79 +130,102 @@ namespace DBUI {
 
         #endregion
 
-        private void OpenLastOpendedFile() {
-            var mongoChildForm = new Mongo.FormMongoQuery(this) 
-                {mode = FormMongoQuery.Mode.Last};
-            childFormNumber++;
-            mongoChildForm.Init();
-            return;
+        private void SetFileHistory()
+        {
+            Program.MongoXMLManager.FileHistory.ForEach
+                (f=> this.historyMenu.DropDownItems.Add(f)
+            );
+        }
+
+        private void OpenLastOpendedFile()
+        {
+            new Mongo.FormMongoQuery(this).Init(FormMongoQuery.Mode.Last);
         }
 
         private void OpenFile(object sender, EventArgs e) {
-            var mongoChildForm = new FormMongoQuery(this)
-                { mode = FormMongoQuery.Mode.Existing };
-            childFormNumber++;
-            mongoChildForm.Init();
-            return;
+            var mongoChildForm = new FormMongoQuery(this).Init(FormMongoQuery.Mode.FileDialog);
         }
 
         private void ExitToolsStripMenuItem_Click(object sender, EventArgs e) {
             this.Close();
         }
 
-        private void ToolBarToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void newWindowToolStripMenuItem_Click(object sender, EventArgs e) {
+            //string s = Program.MongoXMLManager.QueryFolderPath + "\\" + Guid.NewGuid() + ".js";
+            new FormMongoQuery(this).Init(FormMongoQuery.Mode.New);
+        }
+
+        
+        #region "miscellaneous UI"
+        private void helpToolStripButton_Click(object sender, EventArgs e)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("Configure MongoXML.xml\n");
+            b.Append("Configure ScintillaNET.xml\n");
+
+            MessageBox.Show(b.ToString());
+        }
+
+        private void ToolBarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             toolStrip.Visible = toolBarToolStripMenuItem.Checked;
         }
 
-        private void StatusBarToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void StatusBarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             status_strip.Visible = statusBarToolStripMenuItem.Checked;
         }
 
-        private void CascadeToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void CascadeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             LayoutMdi(MdiLayout.Cascade);
         }
 
-        private void TileVerticalToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void TileVerticalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             LayoutMdi(MdiLayout.TileVertical);
         }
 
-        private void TileHorizontalToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void TileHorizontalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             LayoutMdi(MdiLayout.TileHorizontal);
         }
 
-        private void ArrangeIconsToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void ArrangeIconsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             LayoutMdi(MdiLayout.ArrangeIcons);
         }
 
-        private void CloseAllToolStripMenuItem_Click(object sender, EventArgs e) {
-            foreach (Form childForm in MdiChildren) {
+        private void CloseAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form childForm in MdiChildren)
+            {
                 childForm.Close();
             }
         }
 
-        private void optionsToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             //MessageBox.Show("Not Implemented");
             //return;
-            if (this.form_options == null) {
+            if (this.form_options == null)
+            {
                 this.form_options = new FormOptions();
             }
-            if (this.form_options.IsDisposed == true) {
+            if (this.form_options.IsDisposed == true)
+            {
                 this.form_options = new FormOptions();
             }
             this.form_options.Show();
-            
+
         }
 
-        private void button_refresh_Click(object sender, EventArgs e) {
+        private void button_refresh_Click(object sender, EventArgs e)
+        {
             MessageBox.Show("Not implemented");
         }
-        
-        private void newWindowToolStripMenuItem_Click(object sender, EventArgs e) {
-            string s = Program.MongoXMLManager.QueryFolderPath + "\\" + Guid.NewGuid() + ".js";
-            var childForm = new FormMongoQuery(this) {QueryFilePath = s};
-            childFormNumber++;
-            childForm.Init();
-        }
+
+        #endregion
 
         #region "not used"
         private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -230,15 +269,5 @@ namespace DBUI {
         }
 
         #endregion
-
-        private void helpToolStripButton_Click(object sender, EventArgs e)
-        {
-            StringBuilder b = new StringBuilder();
-            b.Append("Configure MongoXML.xml\n");
-            b.Append("Configure ScintillaNET.xml\n");
-
-            MessageBox.Show(b.ToString());
-        }
-
     }
 }

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <DocumentElement>
   <Options comments="linked to UI form">
     <General>
@@ -6,17 +6,13 @@
       <DeleteTempFolderContents>true</DeleteTempFolderContents>
     </General>
     <Query>
-       <QueryFolder>%temp%\\MongoQueries</QueryFolder>
+      <QueryFolder>%temp%\\MongoQueries</QueryFolder>
     </Query>
     <CustomJavascriptFiles comments="not linked to Options form, yet">
       <Path>H:\underscore.js</Path>
       <Path>H:\.mongorc.js</Path>
     </CustomJavascriptFiles>
-    <UsefulScriptFiles comments="not linked to Options form, yet">
-      <Path>H:\underscore.js</Path>
-      <Path>H:\.mongorc.js</Path>
-    </UsefulScriptFiles>
-    <QueryOutputTypes current="notepad.exe">
+    <QueryOutputTypes current="MongoUI">
       <T>MongoUI</T>
       <T>notepad.exe</T>
     </QueryOutputTypes>
@@ -32,12 +28,20 @@
       <Database>temp</Database>
       <Database>system</Database>
     </Server>
+    <Server name="bktt2mongotest" withWarning="true">
+      <Database>tt2</Database>
+      <Database>temp</Database>
+      <Database>system</Database>
+    </Server>
+    <Server name="CGTT2STGMNG1" withWarning="true">
+      <Database>tt2</Database>
+      <Database>temp</Database>
+      <Database>system</Database>
+    </Server>
   </Servers>
   <Miscellaneous comments="not for configuration; used by application only">
-    <LastOpenedFilePath></LastOpenedFilePath>
-    <FileHistory>
-    </FileHistory>
-    <CurrentServer name="localhost">
+    <LastOpenedFilePath>C:\Users\STAN~1.TNT\AppData\Local\Temp\\2073efcf-7be5-43ce-95d8-cbb8dd9e0c8b.js</LastOpenedFilePath>
+    <CurrentServer name="bktt2mongodb01">
       <CurrentDatabase>tt2</CurrentDatabase>
     </CurrentServer>
   </Miscellaneous>

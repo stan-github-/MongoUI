@@ -15,11 +15,12 @@ using System.Diagnostics;
 namespace DBUI.Mongo {
     public partial class FormMongoQuery : Form
     {
-        private ExecuteQuery _executeQuery;
+        private QueryExecuter _executeQuery;
 
         public enum Mode
         {
             New,
+            FileDialog,
             Existing,
             Last
         }
@@ -78,25 +79,29 @@ namespace DBUI.Mongo {
             }
         }
 
-        public bool Init()
+        public bool Init(Mode mode, String filePath = null)
         {
-            this.text_box.KeyDown += new System.Windows.Forms.KeyEventHandler
-                (this.KeyDownHandler);
+            this.text_box.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyDownHandler);
 
-            if (this.mode == Mode.New)
+            switch (mode)
             {
-                EnsureQueryFilePathExists();
+                case Mode.New:
+                    EnsureQueryFilePathExists();
+                    break;
+                case Mode.Existing:
+                    this.QueryFilePath = filePath;
+                    EnsureQueryFilePathExists();
+                    break;
+                case Mode.Last:
+                    this.QueryFilePath = Program.MongoXMLManager.LastFilePath;
+                    EnsureQueryFilePathExists();
+                    break;
+                case Mode.FileDialog:
+                    this.QueryFilePath = this.OpenFileDialog();
+                    EnsureQueryFilePathExists();
+                    break;
             }
-            else if (this.mode == Mode.Existing)
-            {
-                this.QueryFilePath = this.OpenFileDialog();
-                EnsureQueryFilePathExists();
-            }
-            else if (this.mode == Mode.Last)
-            {
-                this.QueryFilePath = Program.MongoXMLManager.LastFilePath;
-                EnsureQueryFilePathExists();
-            }
+            
 
             //form tile
             this.Text = this.QueryFilePath;
@@ -108,8 +113,7 @@ namespace DBUI.Mongo {
 
             SetQueryOutputDisplayType();
 
-            _executeQuery = new ExecuteQuery(this);
-
+            _executeQuery = new QueryExecuter(this);
             return true;
         }
 
@@ -138,7 +142,7 @@ namespace DBUI.Mongo {
             return this.open_file_dialog.FileName;
         }
 
-        public class ExecuteQuery
+        public class QueryExecuter
         {
             //need to get rid of _form variable, just pass in strings...
             private FormMongoQuery _form;
@@ -152,14 +156,36 @@ namespace DBUI.Mongo {
                 }
             }
 
-            public ExecuteQuery(FormMongoQuery form)
+            public QueryExecuter(FormMongoQuery form)
             {
                 _form = form;
+            }
+
+            private bool ContinueWithExecutionAfterWarning()
+            {
+                var serverName = ((FormMainMDI) _form.ParentForm).ServerName;
+                
+                if (!Program.MongoXMLManager.Servers.First(s => s.Name == serverName).WithWarning)
+                {
+                    return true;
+                }
+
+                if (MessageBox.Show("Continue query with " + serverName, "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    return true;
+                }
+                
+                return false;
             }
 
             public void Execute(string query)
             {
                 if (String.IsNullOrEmpty(query))
+                {
+                    return;
+                }
+
+                if (ContinueWithExecutionAfterWarning() == false)
                 {
                     return;
                 }
@@ -363,7 +389,7 @@ namespace DBUI.Mongo {
         private void QueryOutputType_Selected(object sender, EventArgs e)
         {
             Program.MongoXMLManager.QueryOutputTypes = 
-                new MongoXMLManager.QueryOutputType()
+                new MongoXMLManagerV2.QueryOutputType()
                 {CurrentOutputType = OutputTypeComboBox.Text};
         }
 
