@@ -7,7 +7,7 @@ namespace DBUI
 {
     static class Program
     {
-        public static Mongo.MongoXMLManagerV2 MongoXMLManager;
+        public static Mongo.MongoXMLManager MongoXMLManager;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -17,7 +17,7 @@ namespace DBUI
         //todo need save file as.
         static void Main()
         {
-            MongoXMLManager = new MongoXMLManagerV2();
+            MongoXMLManager = new MongoXMLManager();
             MongoXMLManager.Init("MongoXML.xml", "DocumentElement");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

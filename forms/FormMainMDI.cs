@@ -43,16 +43,32 @@ namespace DBUI {
             if (Program.MongoXMLManager.Init() == false) { return false; }
 
             this.SetServerComboBox();
-            this.SetFileHistory();
+            this.SetDropDownFileHistory();
+            this.SetDropDownCodeSnippet();
+            this.SetMongoCollectionsOnDataImport();
             this.OpenLastOpendedFile();
 
             this.Closed += new EventHandler(FormMainMDI_Closed);
-            this.historyMenu.DropDownItemClicked += new ToolStripItemClickedEventHandler(historyMenu_DropDownItemClicked);
+            this.historyMenu.DropDownItemClicked += new ToolStripItemClickedEventHandler(javascriptpathClicked);
+            this.snippetsMenu.DropDownItemClicked += new ToolStripItemClickedEventHandler(javascriptpathClicked);
+            this.saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
             return true;
         }
 
-        void historyMenu_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            throw new NotImplementedException();
+        }
+
+        void javascriptpathClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            foreach (FormMongoQuery c in this.MdiChildren)
+            {
+                if (c.QueryFilePath == e.ClickedItem.Text)
+                {
+                    return;
+                }
+            }
             new FormMongoQuery(this).Init(FormMongoQuery.Mode.Existing, e.ClickedItem.Text);
         }
 
@@ -61,6 +77,7 @@ namespace DBUI {
             var l = new List<String>();
             MdiChildren.ToList().ForEach(c=> l.Add(((FormMongoQuery)c).QueryFilePath));
             Program.MongoXMLManager.FileHistory = l;
+
             Program.MongoXMLManager.SaveXml();
         }
 
@@ -90,7 +107,7 @@ namespace DBUI {
             {
                 databaseComboBox.Items.Clear();
                 server.Databases.ForEach
-                    (x => this.databaseComboBox.Items.Add(x));
+                    (x => this.databaseComboBox.Items.Add(x.Name));
             }catch{
                 MessageBox.Show("Server not configured correctly; check configure file.");
                 return;
@@ -130,16 +147,45 @@ namespace DBUI {
 
         #endregion
 
-        private void SetFileHistory()
+        private void SetDropDownFileHistory()
         {
             Program.MongoXMLManager.FileHistory.ForEach
                 (f=> this.historyMenu.DropDownItems.Add(f)
             );
         }
 
+        private void SetDropDownCodeSnippet()
+        {
+            Program.MongoXMLManager.CodeSnippets.ForEach
+                (f => this.snippetsMenu.DropDownItems.Add(f)
+            );
+        }
+
+        private void SetMongoCollectionsOnDataImport()
+        {
+
+            return; //code not working
+            var currentDB = Program.MongoXMLManager.CurrentServer.Databases.FirstOrDefault(
+                d => Name == Program.MongoXMLManager.CurrentServer.CurrentDatabase);
+            if (currentDB == null)
+            {
+                return;
+            }
+
+            foreach (var collection in currentDB.Collections)
+            {
+                importSubMenu.DropDownItems.Add(collection);
+                exportSubMenu.DropDownItems.Add(collection);
+            }
+            
+        }
+
         private void OpenLastOpendedFile()
         {
-            new Mongo.FormMongoQuery(this).Init(FormMongoQuery.Mode.Last);
+            foreach (var path in Program.MongoXMLManager.LastOpenedFilePaths)
+            {
+                new Mongo.FormMongoQuery(this).Init(FormMongoQuery.Mode.Existing, path);        
+            }
         }
 
         private void OpenFile(object sender, EventArgs e) {
@@ -152,6 +198,7 @@ namespace DBUI {
 
         private void newWindowToolStripMenuItem_Click(object sender, EventArgs e) {
             //string s = Program.MongoXMLManager.QueryFolderPath + "\\" + Guid.NewGuid() + ".js";
+            //
             new FormMongoQuery(this).Init(FormMongoQuery.Mode.New);
         }
 

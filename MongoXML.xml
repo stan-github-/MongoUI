@@ -20,21 +20,52 @@
       <T>MongoUI</T>
       <T>notepad.exe</T>
     </QueryOutputTypes>
+    <SQLCmd current="local_datawarehouse">
+      <S name="local_datawarehouse">
+        <ExePath>c:\Program Files\Microsoft SQL Server\110\Tools\Binn\SQLCMD.EXE</ExePath>
+        <Server>localhost</Server>
+        <Database>teachertrack2rw</Database>
+        <Query></Query>
+      </S>
+    </SQLCmd>
+    <CodeSnippets current="3789">
+      <Group name="3789">
+        <Path name="1">C:\Users\stan.TNTP\Desktop\3789\1.txt</Path>
+        <Path name="2">C:\Users\stan.TNTP\Desktop\3789\2.txt</Path>
+        <Path name="3">C:\Users\stan.TNTP\Desktop\3789\3.txt</Path>
+        <Path name="4">C:\Users\stan.TNTP\Desktop\3789\4.txt</Path>
+        <Path name="5">C:\Users\stan.TNTP\Desktop\3789\5.txt</Path>
+      </Group>
+    </CodeSnippets>
   </Options>
   <Servers comments="edit this to fill the combo boxes in application">
     <Server name="localhost" withWarning="false">
-      <Database>tt2</Database>
-      <Database>temp</Database>
-      <Database>system</Database>
+      <Database name="tt2">
+        <Collections folder="f:\temp\tt2">
+          <C name="surveyTemplates"></C>
+          <C name="surveys"></C>
+          <C name="patches"></C>
+        </Collections>
+      </Database>
+      <Database name="temp"></Database>
+      <Database name="system"></Database>
     </Server>
     <Server name="bktt2mongodb01" withWarning="true">
-      <Database>tt2</Database>
-      <Database>temp</Database>
-      <Database>system</Database>
+      <Database name="tt2"></Database>
+      <Database name="temp"></Database>
+      <Database name="system"></Database>
+    </Server>
+    <Server name="CGTT2STGMNG1" withWarning="true">
+      <Database name="tt2"></Database>
+      <Database name="temp"></Database>
+      <Database name="system"></Database>
     </Server>
   </Servers>
   <Miscellaneous comments="not for configuration; used by application only">
-    <LastOpenedFilePath></LastOpenedFilePath>
+    <LastOpenedFilePath>
+    </LastOpenedFilePath>
+    <LastOpenedFilePaths>
+    </LastOpenedFilePaths>
     <FileHistory>
     </FileHistory>
     <CurrentServer name="localhost">

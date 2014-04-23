@@ -11,7 +11,7 @@ using DBUI;
 using DBUI.DataModel;
 
 namespace DBUI.Mongo {
-    class MongoXMLManagerV2 : XMLManagerV2
+   /* class MongoXMLManagerV2 : XMLManagerV2
     {
 
         private const String _lastFilePath = "Miscellaneous/LastOpenedFilePath";
@@ -120,7 +120,6 @@ namespace DBUI.Mongo {
             }
         }
 
-
         public String LastFilePath
         {
             set
@@ -171,12 +170,10 @@ namespace DBUI.Mongo {
             get
             {
                 var n = RootNode.XPathSelectElement(_currentServer);
-                String database = n.XPathSelectElement("CurrentDatabase").Value;
-                
                 var s = new Server()
                 {
                     Name = n.GetAttributeValue("name"),
-                    CurrentDatabase = database
+                    CurrentDatabase = n.XPathSelectElement("CurrentDatabase").Value,
                 };
                 return s;
             }
@@ -217,20 +214,27 @@ namespace DBUI.Mongo {
                 {
                     return null;
                 }
-                var q = new QueryOutputType();
-                q.CurrentOutputType = n.Attribute("current").Value;
+                
+                var q = new QueryOutputType
+                {
+                    CurrentOutputType = n.Attribute("current").Value
+                };
+
                 foreach (var m in n.Descendants("T"))
                 {
                     q.Types.Add(m.Value);
                 }
+
                 return q;
             }
         }
     }
+    */
 
     class MongoXMLManager : XMLManager {
         
         private const String _lastFilePath = "Miscellaneous/LastOpenedFilePath";
+        private const String _lastFilePaths = "Miscellaneous/LastOpenedFilePaths";
         private const String _FileHistory = "Miscellaneous/FileHistory";
         private const String _tempFolderPath = "Options/General/TempFolder";
         private const String _queryFolderPath = "Options/Query/QueryFolder";
@@ -240,6 +244,8 @@ namespace DBUI.Mongo {
         private const String _currentServer = "Miscellaneous/CurrentServer";
         private const String _customJSFilePaths = "Options/CustomJavascriptFiles/Path";
         private const String _queryOutputTypes = "Options/QueryOutputTypes";
+        private const String _sqlcmd = "Options/SQLCmd";
+        private const String _codeSnippets = "Options/CodeSnippets";
 
         private String _xmlPath;
 
@@ -248,23 +254,59 @@ namespace DBUI.Mongo {
             return base.Init(_xmlPath, "DocumentElement");
         }
 
-        public List<Server> Servers {
-            get {
-                var n = RootNode.SelectSingleNode(_servers);
-                List<Server> servers = new List<Server>();
-                foreach(XmlNode m in n.SelectNodes("Server")){
-                    var s = new Server()
-                                {
-                                    Name = m.SelectSingleNode("@name").Value,
-                                    WithWarning = bool.Parse(m.SelectSingleNode("@withWarning").Value)
-                                };
-                    s.Databases = new List<String>();
-                    foreach (XmlNode o in m.SelectNodes("Database")){
-                        s.Databases.Add(o.InnerXml);
-                    }
-                    servers.Add(s);
+        public class SQLCmd
+        {
+            public String ExePath { get; set; }
+            public String Server { get; set; }
+            public String Database { get; set; }
+            public String Query { get; set; }
+        }
+
+        public SQLCmd SQlCmd
+        {
+            get
+            {
+                XmlNode n = RootNode.SelectSingleNode(_sqlcmd);
+                if (n == null)
+                {
+                    return new SQLCmd();
                 }
-               return servers;
+
+                var s = n.SelectNodes("*").ToList().FirstOrDefault
+                        (x => x.SelectSingleNode("@name").Value 
+                        == n.SelectSingleNode("@current").Value);
+
+                return new SQLCmd()
+                    {
+                        ExePath = s.SelectSingleNode("ExePath").InnerText,
+                        Database = s.SelectSingleNode("Database").InnerText,
+                        Server = s.SelectSingleNode("Server").InnerText,
+                    };
+            }
+        }
+
+        public List<String> CodeSnippets
+        {
+            get
+            {
+                XmlNode n = RootNode.SelectSingleNode(_codeSnippets);
+                if (n == null)
+                {
+                    return new List<String>();
+                }
+
+                var currentGroup = n.SelectNodes("*").ToList().FirstOrDefault
+                        (x => x.SelectSingleNode("@name").Value
+                        == n.SelectSingleNode("@current").Value);
+
+                if (currentGroup == null)
+                {
+                    return new List<String>();
+                }
+
+                return currentGroup.SelectNodes("*").
+                    ToList().Select(x=>x.InnerText).ToList();
+
             }
         }
 
@@ -290,12 +332,9 @@ namespace DBUI.Mongo {
             get
             {
                 List<String> sl = new List<string>();
-                XmlNodeList ns = RootNode.SelectNodes(_FileHistory + "/*");
-                foreach (XmlNode n in ns)
-                {
-                    sl.Add(n.InnerText);
-                }
-                return sl;
+                var ns = RootNode.SelectNodes(_FileHistory + "/*").ToList();
+
+                return ns.Select(n => n.InnerText).ToList();
             }
             set
             {
@@ -305,35 +344,27 @@ namespace DBUI.Mongo {
                     return;
                 }
 
-                //append nodes for current list
+                //append nodes from current list
                 var m = this.CreateNode("FileHistory", null);
-                value.ForEach(v => {
-                                       if (n.SelectSingleNode(String.Format("//*[text()='{0}']", v)) != null)
-                                       {
-                                           this.AppendNode(ref m, "f", v);
-                                       }
-                });
+                value.Reverse();
+                value.ForEach(x => this.AppendNode(ref m, "f", x));
 
                 //append nodes from past list
                 foreach (XmlNode x in n.SelectNodes("*"))
                 {
-                    this.AppendNode(ref m, "f", x.Value);
-                }
-
-                //append nodes to n
-                //should convert to linq to xml!!
-                n.RemoveAll();
-                int i = 0;
-                foreach (XmlNode x in m.SelectNodes("*"))
-                {
-                    i++;
-                    if (i > 5)
+                    if (m.SelectSingleNode(String.Format("*[text()='{0}']", x.InnerText)) 
+                        == null)
                     {
-                        break;
+                        this.AppendNode(ref m, "f", x.InnerText);
                     }
-                    this.AppendNode(ref n, "f", x.Value);
                 }
 
+                //remove all nodes from original
+                n.RemoveAll();
+
+                //append new nodes
+                m.SelectNodes("*").ToList().Take(9).ToList()
+                    .ForEach(x => this.AppendNode(ref n, "f", x.InnerText));
             }
 
         }
@@ -414,6 +445,80 @@ namespace DBUI.Mongo {
                 return null;
             }
 
+        }
+
+        public List<Server> Servers
+        {
+            get
+            {
+                var n = RootNode.SelectSingleNode(_servers);
+                List<Server> servers = new List<Server>();
+                foreach (XmlNode m in n.SelectNodes("Server"))
+                {
+                    var s = new Server()
+                    {
+                        Name = m.SelectSingleNode("@name").Value,
+                        WithWarning = bool.Parse(m.SelectSingleNode("@withWarning").Value)
+                    };
+                    s.Databases = BuildDatabase(m);
+                    servers.Add(s);
+                }
+                return servers;
+            }
+        }
+
+        private List<Database> BuildDatabase(XmlNode serverNode)
+        {
+            var l = new List<Database>();
+            foreach (XmlNode o in serverNode.SelectNodes("*"))
+            {
+                l.Add(new Database()
+                {
+                    Name = o.SelectSingleNode("@name").Value,
+                    Collections = BuildCollectionList(o)
+                });
+            }
+            return l;
+        }
+
+        private List<String> BuildCollectionList(XmlNode n)
+        {
+            if (n == null)
+            {
+                return null;
+            }
+
+            var l = new List<String>();
+            foreach (XmlNode o in n.SelectNodes("Collections/*"))
+            {
+                l.Add(o.SelectSingleNode("@name").Value);
+            }
+            return l;
+        }
+
+        public List<String> LastOpenedFilePaths
+        {
+            get
+            {
+                List<String> sl = new List<string>();
+                var ns = RootNode.SelectNodes(_lastFilePaths + "/*").ToList();
+
+                return ns.Select(n => n.InnerText).ToList();
+            }
+            set
+            {
+                XmlNode n = RootNode.SelectSingleNode(_lastFilePaths);
+                if (n == null)
+                {
+                    return;
+                }
+
+                //remove all nodes from original
+                n.RemoveAll();
+
+                //append new nodes
+                value.ForEach(v=>this.AppendNode(ref n, "f", v));
+            }
         }
 
         public Server CurrentServer {

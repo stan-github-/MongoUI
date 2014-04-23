@@ -83,6 +83,7 @@ namespace DBUI.Mongo {
         {
             this.text_box.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyDownHandler);
 
+            //mode whether new or existing
             switch (mode)
             {
                 case Mode.New:
@@ -111,9 +112,12 @@ namespace DBUI.Mongo {
             this.WindowState = FormWindowState.Maximized;
             this.Show();
 
+            //set output type
             SetQueryOutputDisplayType();
 
+            //instantiate child class
             _executeQuery = new QueryExecuter(this);
+
             return true;
         }
 
@@ -141,6 +145,22 @@ namespace DBUI.Mongo {
             }
             return this.open_file_dialog.FileName;
         }
+
+        private string SaveFileDialog()
+        {
+            this.open_file_dialog.InitialDirectory =
+                Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            this.open_file_dialog.Filter = "JS Files (*.js)|*.js|All Files (*.*)|*.*";
+
+            //minimize window, can't hide
+            this.WindowState = FormWindowState.Minimized;
+            if (this.open_file_dialog.ShowDialog(this) != DialogResult.OK)
+            {
+                return String.Empty;
+            }
+            return this.open_file_dialog.FileName;
+        }
+
 
         public class QueryExecuter
         {
@@ -235,12 +255,15 @@ namespace DBUI.Mongo {
                 String arguments = string.Empty;
                 String fileName = string.Empty;
 
+                var sqlCmd = Program.MongoXMLManager.SQlCmd;
+
                 if (type == QueryType.SQL)
                 {
                     foreach (var q in queries)
                     {
-                        arguments = String.Format("-S localhost -d teachertrack2 -q \"{0}\"", q);
-                        ExecuteConsoleApp("sqlcmd", arguments);
+                        arguments = String.Format("-S {0} -d {1} -q \"{2}\"",
+                            sqlCmd.Server, sqlCmd.Database, q);
+                        ExecuteConsoleApp(sqlCmd.ExePath, arguments);
                     }
                 }
 
@@ -389,7 +412,7 @@ namespace DBUI.Mongo {
         private void QueryOutputType_Selected(object sender, EventArgs e)
         {
             Program.MongoXMLManager.QueryOutputTypes = 
-                new MongoXMLManagerV2.QueryOutputType()
+                new MongoXMLManager.QueryOutputType()
                 {CurrentOutputType = OutputTypeComboBox.Text};
         }
 

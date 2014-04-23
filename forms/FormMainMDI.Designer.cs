@@ -1,4 +1,6 @@
-﻿using DBUI.Mongo;
+﻿using System;
+using System.Collections.Generic;
+using DBUI.Mongo;
 
 namespace DBUI {
     partial class FormMainMDI {
@@ -23,13 +25,22 @@ namespace DBUI {
             
         }
 
+        private void SaveOpenedFilePaths()
+        {
+            var paths = new List<String>();
+            foreach (var mdiChild in MdiChildren)
+            {
+                var mf = (FormMongoQuery)mdiChild;
+                paths.Add(mf.QueryFilePath);
+            }
+
+            Program.MongoXMLManager.LastOpenedFilePaths = paths;
+        }
+
         private void dispose() {
-            DBUI.Mongo.FormMongoQuery mf = (FormMongoQuery)this.ActiveMdiChild;
-            if (mf == null) { return; }
-            Program.MongoXMLManager.LastFilePath =  mf.QueryFilePath;
+            SaveOpenedFilePaths();
             Program.MongoXMLManager.SaveXml();
             return;
-            
         }
 
         #region Windows Form Designer generated code
@@ -63,6 +74,9 @@ namespace DBUI {
             this.arrangeIconsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.historyMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.snippetsMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.importSubMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportSubMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.newToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.openToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -89,7 +103,8 @@ namespace DBUI {
             this.toolsMenu,
             this.windowsMenu,
             this.historyMenu,
-            this.snippetsMenu});
+            this.snippetsMenu,
+            this.dataMenu});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.MdiWindowListItem = this.windowsMenu;
             this.menuStrip.Name = "menuStrip";
@@ -135,7 +150,6 @@ namespace DBUI {
             // 
             // saveToolStripMenuItem
             // 
-            this.saveToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripMenuItem.Image")));
             this.saveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
@@ -282,6 +296,27 @@ namespace DBUI {
             this.snippetsMenu.Name = "snippetsMenu";
             this.snippetsMenu.Size = new System.Drawing.Size(97, 25);
             this.snippetsMenu.Text = "Snippets";
+            // 
+            // dataMenu
+            // 
+            this.dataMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.importSubMenu,
+            this.exportSubMenu});
+            this.dataMenu.Name = "dataMenu";
+            this.dataMenu.Size = new System.Drawing.Size(62, 25);
+            this.dataMenu.Text = "Data";
+            // 
+            // importSubMenu
+            // 
+            this.importSubMenu.Name = "importSubMenu";
+            this.importSubMenu.Size = new System.Drawing.Size(140, 26);
+            this.importSubMenu.Text = "Import";
+            // 
+            // exportSubMenu
+            // 
+            this.exportSubMenu.Name = "exportSubMenu";
+            this.exportSubMenu.Size = new System.Drawing.Size(140, 26);
+            this.exportSubMenu.Text = "Export";
             // 
             // toolStrip
             // 
@@ -467,6 +502,9 @@ namespace DBUI {
         private System.Windows.Forms.ToolStripComboBox databaseComboBox;
         private System.Windows.Forms.ToolStripMenuItem historyMenu;
         private System.Windows.Forms.ToolStripMenuItem snippetsMenu;
+        private System.Windows.Forms.ToolStripMenuItem dataMenu;
+        private System.Windows.Forms.ToolStripMenuItem importSubMenu;
+        private System.Windows.Forms.ToolStripMenuItem exportSubMenu;
     }
 }
 

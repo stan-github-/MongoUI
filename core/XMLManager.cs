@@ -22,6 +22,21 @@ namespace DBUI
         {
             return e.Attributes().FirstOrDefault(a => a.Name == name);
         }
+
+        public static List<XmlNode> ToList(this XmlNodeList xmlNodelist)
+        {
+            if (xmlNodelist == null || xmlNodelist.Count == 0)
+            {
+                return new List<XmlNode>();
+            }
+
+            var l = new List<XmlNode>();
+            foreach (XmlNode node in xmlNodelist)
+            {
+                l.Add(node);
+            }
+            return l;
+        }
     }
 
     class XMLManagerV2
