@@ -176,6 +176,15 @@ namespace DBUI.Mongo {
                 }
             }
 
+            private String tempBatFile
+            {
+                get
+                {
+                    return Environment.ExpandEnvironmentVariables(Program.MongoXMLManager.TempFolderPath
+                                                                  + "\\" + Guid.NewGuid() + ".bat");
+                }
+            }
+
             public QueryExecuter(FormMongoQuery form)
             {
                 _form = form;
@@ -245,7 +254,7 @@ namespace DBUI.Mongo {
 
                 foreach (Match q in reg.Matches(query))
                 {
-                    queries.Add(q.Result("$1"));
+                    queries.Add(q.Result("$1").Replace(Environment.NewLine, " "));
                 }
                 return queries;
             }
@@ -271,8 +280,9 @@ namespace DBUI.Mongo {
                 {
                     foreach (var q in queries)
                     {
-                        arguments = "/c " + q;
-                        ExecuteConsoleApp("cmd.exe", arguments);
+                        //arguments = "/c " + q;
+                        //ExecuteConsoleApp("cmd.exe", arguments);
+                        ExecuteCmdLine(q);
                     }
                 }
             }
@@ -286,9 +296,10 @@ namespace DBUI.Mongo {
 
             private Regex GetExternalQueryRegex(QueryType type)
             {
-                string regex = "\\b" + type.ToString() + "\\b[<]{2}(.*?)[>]{2}";
-                var options = ((RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline) | RegexOptions.IgnoreCase);
-                return new Regex(regex, options);
+                string regex = @"\b" + type.ToString() + @"\b[<]{2}(.*?)[>]{2}";
+                var options = RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase | RegexOptions.Singleline;
+                var reg = new Regex(regex, options);
+                return reg;
             }
 
             private String StripExternalQueries(String query)
@@ -319,12 +330,34 @@ namespace DBUI.Mongo {
                 process.StartInfo.Arguments = arguments;
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
                 process.Start();
 
                 _queryOutput.Append(process.StandardOutput.ReadToEnd());
+                _queryOutput.Append(Environment.NewLine);
+                _queryOutput.Append(process.StandardError.ReadToEnd());
                 process.WaitForExit();
 
             }
+
+            private void ExecuteCmdLine(String command)
+            {
+                //mongo.exe must be in path variable, 
+                //mongod must be started as service or console app
+                
+                if (string.IsNullOrWhiteSpace(command))
+                {
+                    return;
+                }
+
+                var tempFile = tempBatFile;              
+                FileManager.SaveToFile(tempFile, "");
+                FileManager.AppendToFile(tempFile, command);
+
+                ExecuteConsoleApp(tempFile, String.Empty);
+                FileManager.DeleteFile(tempFile);
+            }
+
 
             private void ExecuteMongo(String query)
             {
