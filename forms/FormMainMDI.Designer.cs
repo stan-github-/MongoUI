@@ -90,6 +90,7 @@ namespace DBUI {
             this.status_strip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.status_strip.SuspendLayout();
@@ -109,7 +110,7 @@ namespace DBUI {
             this.menuStrip.MdiWindowListItem = this.windowsMenu;
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-            this.menuStrip.Size = new System.Drawing.Size(843, 29);
+            this.menuStrip.Size = new System.Drawing.Size(843, 28);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "MenuStrip";
             // 
@@ -124,7 +125,7 @@ namespace DBUI {
             this.exitToolStripMenuItem});
             this.fileMenu.ImageTransparentColor = System.Drawing.SystemColors.ActiveBorder;
             this.fileMenu.Name = "fileMenu";
-            this.fileMenu.Size = new System.Drawing.Size(52, 25);
+            this.fileMenu.Size = new System.Drawing.Size(44, 24);
             this.fileMenu.Text = "&File";
             // 
             // newToolStripMenuItem
@@ -134,7 +135,7 @@ namespace DBUI {
             this.newToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(194, 26);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(167, 24);
             this.newToolStripMenuItem.Text = "&New";
             this.newToolStripMenuItem.Visible = false;
             // 
@@ -144,7 +145,7 @@ namespace DBUI {
             this.openToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(194, 26);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(167, 24);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenFile);
             // 
@@ -154,7 +155,7 @@ namespace DBUI {
             this.saveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(194, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(167, 24);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Visible = false;
             // 
@@ -165,7 +166,7 @@ namespace DBUI {
             this.printToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.printToolStripMenuItem.Name = "printToolStripMenuItem";
             this.printToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.printToolStripMenuItem.Size = new System.Drawing.Size(194, 26);
+            this.printToolStripMenuItem.Size = new System.Drawing.Size(167, 24);
             this.printToolStripMenuItem.Text = "&Print";
             this.printToolStripMenuItem.Visible = false;
             // 
@@ -175,14 +176,14 @@ namespace DBUI {
             this.printPreviewToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("printPreviewToolStripMenuItem.Image")));
             this.printPreviewToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
-            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(194, 26);
+            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(167, 24);
             this.printPreviewToolStripMenuItem.Text = "Print Pre&view";
             this.printPreviewToolStripMenuItem.Visible = false;
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(194, 26);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(167, 24);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolsStripMenuItem_Click);
             // 
@@ -192,7 +193,7 @@ namespace DBUI {
             this.toolBarToolStripMenuItem,
             this.statusBarToolStripMenuItem});
             this.viewMenu.Name = "viewMenu";
-            this.viewMenu.Size = new System.Drawing.Size(63, 25);
+            this.viewMenu.Size = new System.Drawing.Size(53, 24);
             this.viewMenu.Text = "&View";
             // 
             // toolBarToolStripMenuItem
@@ -201,7 +202,7 @@ namespace DBUI {
             this.toolBarToolStripMenuItem.CheckOnClick = true;
             this.toolBarToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolBarToolStripMenuItem.Name = "toolBarToolStripMenuItem";
-            this.toolBarToolStripMenuItem.Size = new System.Drawing.Size(169, 26);
+            this.toolBarToolStripMenuItem.Size = new System.Drawing.Size(144, 24);
             this.toolBarToolStripMenuItem.Text = "&Toolbar";
             this.toolBarToolStripMenuItem.Click += new System.EventHandler(this.ToolBarToolStripMenuItem_Click);
             // 
@@ -211,7 +212,7 @@ namespace DBUI {
             this.statusBarToolStripMenuItem.CheckOnClick = true;
             this.statusBarToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.statusBarToolStripMenuItem.Name = "statusBarToolStripMenuItem";
-            this.statusBarToolStripMenuItem.Size = new System.Drawing.Size(169, 26);
+            this.statusBarToolStripMenuItem.Size = new System.Drawing.Size(144, 24);
             this.statusBarToolStripMenuItem.Text = "&Status Bar";
             this.statusBarToolStripMenuItem.Click += new System.EventHandler(this.StatusBarToolStripMenuItem_Click);
             // 
@@ -220,13 +221,13 @@ namespace DBUI {
             this.toolsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.optionsToolStripMenuItem});
             this.toolsMenu.Name = "toolsMenu";
-            this.toolsMenu.Size = new System.Drawing.Size(68, 25);
+            this.toolsMenu.Size = new System.Drawing.Size(57, 24);
             this.toolsMenu.Text = "&Tools";
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(147, 26);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(130, 24);
             this.optionsToolStripMenuItem.Text = "&Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
@@ -240,61 +241,61 @@ namespace DBUI {
             this.closeAllToolStripMenuItem,
             this.arrangeIconsToolStripMenuItem});
             this.windowsMenu.Name = "windowsMenu";
-            this.windowsMenu.Size = new System.Drawing.Size(101, 25);
+            this.windowsMenu.Size = new System.Drawing.Size(82, 24);
             this.windowsMenu.Text = "&Windows";
             // 
             // newWindowToolStripMenuItem
             // 
             this.newWindowToolStripMenuItem.Name = "newWindowToolStripMenuItem";
-            this.newWindowToolStripMenuItem.Size = new System.Drawing.Size(204, 26);
+            this.newWindowToolStripMenuItem.Size = new System.Drawing.Size(176, 24);
             this.newWindowToolStripMenuItem.Text = "&New Window";
             this.newWindowToolStripMenuItem.Click += new System.EventHandler(this.newWindowToolStripMenuItem_Click);
             // 
             // cascadeToolStripMenuItem
             // 
             this.cascadeToolStripMenuItem.Name = "cascadeToolStripMenuItem";
-            this.cascadeToolStripMenuItem.Size = new System.Drawing.Size(204, 26);
+            this.cascadeToolStripMenuItem.Size = new System.Drawing.Size(176, 24);
             this.cascadeToolStripMenuItem.Text = "&Cascade";
             this.cascadeToolStripMenuItem.Click += new System.EventHandler(this.CascadeToolStripMenuItem_Click);
             // 
             // tileVerticalToolStripMenuItem
             // 
             this.tileVerticalToolStripMenuItem.Name = "tileVerticalToolStripMenuItem";
-            this.tileVerticalToolStripMenuItem.Size = new System.Drawing.Size(204, 26);
+            this.tileVerticalToolStripMenuItem.Size = new System.Drawing.Size(176, 24);
             this.tileVerticalToolStripMenuItem.Text = "Tile &Vertical";
             this.tileVerticalToolStripMenuItem.Click += new System.EventHandler(this.TileVerticalToolStripMenuItem_Click);
             // 
             // tileHorizontalToolStripMenuItem
             // 
             this.tileHorizontalToolStripMenuItem.Name = "tileHorizontalToolStripMenuItem";
-            this.tileHorizontalToolStripMenuItem.Size = new System.Drawing.Size(204, 26);
+            this.tileHorizontalToolStripMenuItem.Size = new System.Drawing.Size(176, 24);
             this.tileHorizontalToolStripMenuItem.Text = "Tile &Horizontal";
             this.tileHorizontalToolStripMenuItem.Click += new System.EventHandler(this.TileHorizontalToolStripMenuItem_Click);
             // 
             // closeAllToolStripMenuItem
             // 
             this.closeAllToolStripMenuItem.Name = "closeAllToolStripMenuItem";
-            this.closeAllToolStripMenuItem.Size = new System.Drawing.Size(204, 26);
+            this.closeAllToolStripMenuItem.Size = new System.Drawing.Size(176, 24);
             this.closeAllToolStripMenuItem.Text = "C&lose All";
             this.closeAllToolStripMenuItem.Click += new System.EventHandler(this.CloseAllToolStripMenuItem_Click);
             // 
             // arrangeIconsToolStripMenuItem
             // 
             this.arrangeIconsToolStripMenuItem.Name = "arrangeIconsToolStripMenuItem";
-            this.arrangeIconsToolStripMenuItem.Size = new System.Drawing.Size(204, 26);
+            this.arrangeIconsToolStripMenuItem.Size = new System.Drawing.Size(176, 24);
             this.arrangeIconsToolStripMenuItem.Text = "&Arrange Icons";
             this.arrangeIconsToolStripMenuItem.Click += new System.EventHandler(this.ArrangeIconsToolStripMenuItem_Click);
             // 
             // historyMenu
             // 
             this.historyMenu.Name = "historyMenu";
-            this.historyMenu.Size = new System.Drawing.Size(84, 25);
+            this.historyMenu.Size = new System.Drawing.Size(68, 24);
             this.historyMenu.Text = "History";
             // 
             // snippetsMenu
             // 
             this.snippetsMenu.Name = "snippetsMenu";
-            this.snippetsMenu.Size = new System.Drawing.Size(97, 25);
+            this.snippetsMenu.Size = new System.Drawing.Size(78, 24);
             this.snippetsMenu.Text = "Snippets";
             // 
             // dataMenu
@@ -303,19 +304,19 @@ namespace DBUI {
             this.importSubMenu,
             this.exportSubMenu});
             this.dataMenu.Name = "dataMenu";
-            this.dataMenu.Size = new System.Drawing.Size(62, 25);
+            this.dataMenu.Size = new System.Drawing.Size(53, 24);
             this.dataMenu.Text = "Data";
             // 
             // importSubMenu
             // 
             this.importSubMenu.Name = "importSubMenu";
-            this.importSubMenu.Size = new System.Drawing.Size(140, 26);
+            this.importSubMenu.Size = new System.Drawing.Size(123, 24);
             this.importSubMenu.Text = "Import";
             // 
             // exportSubMenu
             // 
             this.exportSubMenu.Name = "exportSubMenu";
-            this.exportSubMenu.Size = new System.Drawing.Size(140, 26);
+            this.exportSubMenu.Size = new System.Drawing.Size(123, 24);
             this.exportSubMenu.Text = "Export";
             // 
             // toolStrip
@@ -330,9 +331,9 @@ namespace DBUI {
             this.button_refresh,
             this.serverComboBox,
             this.databaseComboBox});
-            this.toolStrip.Location = new System.Drawing.Point(0, 29);
+            this.toolStrip.Location = new System.Drawing.Point(0, 28);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(843, 29);
+            this.toolStrip.Size = new System.Drawing.Size(843, 28);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "ToolStrip";
             // 
@@ -343,7 +344,7 @@ namespace DBUI {
             this.newToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripButton.Image")));
             this.newToolStripButton.ImageTransparentColor = System.Drawing.Color.Black;
             this.newToolStripButton.Name = "newToolStripButton";
-            this.newToolStripButton.Size = new System.Drawing.Size(23, 26);
+            this.newToolStripButton.Size = new System.Drawing.Size(23, 25);
             this.newToolStripButton.Text = "New";
             this.newToolStripButton.Visible = false;
             // 
@@ -353,18 +354,17 @@ namespace DBUI {
             this.openToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripButton.Image")));
             this.openToolStripButton.ImageTransparentColor = System.Drawing.Color.Black;
             this.openToolStripButton.Name = "openToolStripButton";
-            this.openToolStripButton.Size = new System.Drawing.Size(23, 26);
+            this.openToolStripButton.Size = new System.Drawing.Size(23, 25);
             this.openToolStripButton.Text = "Open";
             this.openToolStripButton.Click += new System.EventHandler(this.OpenFile);
             // 
             // saveToolStripButton
             // 
             this.saveToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.saveToolStripButton.Enabled = false;
             this.saveToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripButton.Image")));
             this.saveToolStripButton.ImageTransparentColor = System.Drawing.Color.Black;
             this.saveToolStripButton.Name = "saveToolStripButton";
-            this.saveToolStripButton.Size = new System.Drawing.Size(23, 26);
+            this.saveToolStripButton.Size = new System.Drawing.Size(23, 25);
             this.saveToolStripButton.Text = "Save";
             this.saveToolStripButton.Visible = false;
             // 
@@ -375,7 +375,7 @@ namespace DBUI {
             this.printToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("printToolStripButton.Image")));
             this.printToolStripButton.ImageTransparentColor = System.Drawing.Color.Black;
             this.printToolStripButton.Name = "printToolStripButton";
-            this.printToolStripButton.Size = new System.Drawing.Size(23, 26);
+            this.printToolStripButton.Size = new System.Drawing.Size(23, 25);
             this.printToolStripButton.Text = "Print";
             this.printToolStripButton.Visible = false;
             // 
@@ -386,7 +386,7 @@ namespace DBUI {
             this.printPreviewToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("printPreviewToolStripButton.Image")));
             this.printPreviewToolStripButton.ImageTransparentColor = System.Drawing.Color.Black;
             this.printPreviewToolStripButton.Name = "printPreviewToolStripButton";
-            this.printPreviewToolStripButton.Size = new System.Drawing.Size(23, 26);
+            this.printPreviewToolStripButton.Size = new System.Drawing.Size(23, 25);
             this.printPreviewToolStripButton.Text = "Print Preview";
             this.printPreviewToolStripButton.Visible = false;
             // 
@@ -396,7 +396,7 @@ namespace DBUI {
             this.helpToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("helpToolStripButton.Image")));
             this.helpToolStripButton.ImageTransparentColor = System.Drawing.Color.Black;
             this.helpToolStripButton.Name = "helpToolStripButton";
-            this.helpToolStripButton.Size = new System.Drawing.Size(23, 26);
+            this.helpToolStripButton.Size = new System.Drawing.Size(23, 25);
             this.helpToolStripButton.Text = "Help";
             this.helpToolStripButton.Click += new System.EventHandler(this.helpToolStripButton_Click);
             // 
@@ -407,7 +407,7 @@ namespace DBUI {
             this.button_refresh.Image = ((System.Drawing.Image)(resources.GetObject("button_refresh.Image")));
             this.button_refresh.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.button_refresh.Name = "button_refresh";
-            this.button_refresh.Size = new System.Drawing.Size(23, 26);
+            this.button_refresh.Size = new System.Drawing.Size(23, 25);
             this.button_refresh.Text = "refresh";
             this.button_refresh.Visible = false;
             this.button_refresh.Click += new System.EventHandler(this.button_refresh_Click);
@@ -415,30 +415,30 @@ namespace DBUI {
             // serverComboBox
             // 
             this.serverComboBox.Name = "serverComboBox";
-            this.serverComboBox.Size = new System.Drawing.Size(121, 29);
+            this.serverComboBox.Size = new System.Drawing.Size(121, 28);
             this.serverComboBox.SelectedIndexChanged += new System.EventHandler(this.serverComboBox_Select);
             // 
             // databaseComboBox
             // 
             this.databaseComboBox.Name = "databaseComboBox";
-            this.databaseComboBox.Size = new System.Drawing.Size(121, 29);
+            this.databaseComboBox.Size = new System.Drawing.Size(121, 28);
             this.databaseComboBox.SelectedIndexChanged += new System.EventHandler(this.databaseComboBox_Select);
             // 
             // status_strip
             // 
             this.status_strip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel});
-            this.status_strip.Location = new System.Drawing.Point(0, 532);
+            this.status_strip.Location = new System.Drawing.Point(0, 533);
             this.status_strip.Name = "status_strip";
             this.status_strip.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
-            this.status_strip.Size = new System.Drawing.Size(843, 26);
+            this.status_strip.Size = new System.Drawing.Size(843, 25);
             this.status_strip.TabIndex = 2;
             this.status_strip.Text = "StatusStrip";
             // 
             // toolStripStatusLabel
             // 
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(65, 21);
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(49, 20);
             this.toolStripStatusLabel.Text = "Status";
             // 
             // FormMainMDI
@@ -505,6 +505,7 @@ namespace DBUI {
         private System.Windows.Forms.ToolStripMenuItem dataMenu;
         private System.Windows.Forms.ToolStripMenuItem importSubMenu;
         private System.Windows.Forms.ToolStripMenuItem exportSubMenu;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 

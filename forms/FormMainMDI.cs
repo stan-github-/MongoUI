@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -51,13 +52,35 @@ namespace DBUI {
             this.Closed += new EventHandler(FormMainMDI_Closed);
             this.historyMenu.DropDownItemClicked += new ToolStripItemClickedEventHandler(javascriptpathClicked);
             this.snippetsMenu.DropDownItemClicked += new ToolStripItemClickedEventHandler(javascriptpathClicked);
-            this.saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
+            this.saveToolStripButton.Click += SaveToolStripButtonOnClick;
+            this.saveToolStripButton.Visible = true;
+
+            this.saveFileDialog1.FileOk += SaveFileDialog1OnFileOk;   
             return true;
         }
 
-        void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaveToolStripButtonOnClick(object sender, EventArgs eventArgs)
         {
-            throw new NotImplementedException();
+            var activeChild = (FormMongoQuery)this.ActiveMdiChild;
+            if (activeChild != null)
+            {
+                saveFileDialog1.InitialDirectory = Path.GetDirectoryName(activeChild.Text);
+            }
+            
+            this.saveFileDialog1.ShowDialog();
+        }
+
+        //all of this should be done in the child form, but the designer has some issues
+        private void SaveFileDialog1OnFileOk(object sender, CancelEventArgs cancelEventArgs)
+        {
+            var activeChild = (FormMongoQuery)this.ActiveMdiChild;
+            if (activeChild == null)
+            {
+                return;
+            }
+            //saveFileDialog1.Filter = "JS Files (*.js)|*.js|All Files (*.*)|*.*";
+            FileManager.SaveToFile(saveFileDialog1.FileName, activeChild.GetTextBoxText());
+            new FormMongoQuery(this).Init(FormMongoQuery.Mode.Existing, saveFileDialog1.FileName);
         }
 
         void javascriptpathClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -316,5 +339,7 @@ namespace DBUI {
         }
 
         #endregion
+
+        
     }
 }

@@ -25,6 +25,12 @@ namespace DBUI.Mongo {
             Last
         }
 
+        #region "exposure to outside"
+        public String GetTextBoxText()
+        {
+            return this.text_box.Text;
+        }
+        #endregion
         public string QueryFilePath { get; set; }
 
         public String TempJSFile
@@ -138,6 +144,11 @@ namespace DBUI.Mongo {
             this.open_file_dialog.Filter = "JS Files (*.js)|*.js|All Files (*.*)|*.*";
             
             //minimize window, can't hide
+            if (this.MdiParent != null && this.MdiParent.ActiveMdiChild != null)
+            {
+                this.open_file_dialog.InitialDirectory = 
+                    Path.GetDirectoryName(this.MdiParent.ActiveMdiChild.Text);
+            }
             this.WindowState = FormWindowState.Minimized;
             if (this.open_file_dialog.ShowDialog(this) != DialogResult.OK)
             {
