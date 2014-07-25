@@ -58,33 +58,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="core\ErrorManager.cs" />
-    <Compile Include="core\FileManager.cs" />
-    <Compile Include="core\FormError.cs">
+    <Compile Include="Core\ErrorManager.cs" />
+    <Compile Include="Core\FileManager.cs" />
+    <Compile Include="Core\FormError.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="core\FormError.Designer.cs">
+    <Compile Include="Core\FormError.Designer.cs">
       <DependentUpon>FormError.cs</DependentUpon>
     </Compile>
-    <Compile Include="core\XMLManager.cs" />
+    <Compile Include="Core\XMLManager.cs" />
     <Compile Include="DataModel\Enums.cs" />
     <Compile Include="DataModel\Server.cs" />
-    <Compile Include="forms\AboutDBUI.cs">
+    <Compile Include="Forms\AboutDBUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="forms\AboutDBUI.Designer.cs">
+    <Compile Include="Forms\AboutDBUI.Designer.cs">
       <DependentUpon>AboutDBUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="forms\FormMainMDI.cs">
+    <Compile Include="Forms\FormMainMDI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="forms\FormMainMDI.Designer.cs">
+    <Compile Include="Forms\FormMainMDI.Designer.cs">
       <DependentUpon>FormMainMDI.cs</DependentUpon>
     </Compile>
-    <Compile Include="forms\FormOptions.cs">
+    <Compile Include="Forms\FormOptions.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="forms\FormOptions.Designer.cs">
+    <Compile Include="Forms\FormOptions.Designer.cs">
       <DependentUpon>FormOptions.cs</DependentUpon>
     </Compile>
     <Compile Include="Mongo\FormMongoQuery.cs">
@@ -93,21 +93,21 @@
     <Compile Include="Mongo\FormMongoQuery.Designer.cs">
       <DependentUpon>FormMongoQuery.cs</DependentUpon>
     </Compile>
-    <Compile Include="Mongo\MongoXMLManager.cs">
+    <Compile Include="Mongo\MongoXMLRepository.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="core\FormError.resx">
+    <EmbeddedResource Include="Core\FormError.resx">
       <DependentUpon>FormError.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="forms\AboutDBUI.resx">
+    <EmbeddedResource Include="Forms\AboutDBUI.resx">
       <DependentUpon>AboutDBUI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="forms\FormMainMDI.resx">
+    <EmbeddedResource Include="Forms\FormMainMDI.resx">
       <DependentUpon>FormMainMDI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="forms\FormOptions.resx">
+    <EmbeddedResource Include="Forms\FormOptions.resx">
       <DependentUpon>FormOptions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Mongo\FormMongoQuery.resx">

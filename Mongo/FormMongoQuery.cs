@@ -51,39 +51,6 @@ namespace DBUI.Mongo {
             splitContainer1.Panel2.Hide();
         }
 
-        private void KeyDownHandler(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.F5)
-            {
-                ExecuteQueryAndSaveToFile();
-            }
-        }
-
-        private void ExecuteQueryAndSaveToFile()
-        {
-            var query = String.IsNullOrEmpty(text_box.Selection.Text)
-                                ? this.text_box.Text
-                                : text_box.Selection.Text;
-            _executeQuery.Execute(query);
-
-            //save file
-            FileManager.SaveToFile(this.QueryFilePath, text_box.Text);
-        }
-
-        public bool refresh()
-        {
-            return true;
-        }
-
-        private void EnsureQueryFilePathExists()
-        {
-            if (!File.Exists(QueryFilePath))
-            {
-                QueryFilePath = TempJSFile;
-                FileManager.SaveToFile(QueryFilePath, "//new query");
-            }
-        }
-
         public bool Init(Mode mode, String filePath = null)
         {
             this.text_box.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyDownHandler);
@@ -107,7 +74,7 @@ namespace DBUI.Mongo {
                     EnsureQueryFilePathExists();
                     break;
             }
-            
+
 
             //form tile
             this.Text = this.QueryFilePath;
@@ -126,6 +93,7 @@ namespace DBUI.Mongo {
             return true;
         }
 
+        #region "control init"
         private void SetQueryOutputDisplayType()
         {
             foreach (var t in Program.MongoXMLManager.QueryOutputTypes.Types)
@@ -136,6 +104,57 @@ namespace DBUI.Mongo {
             this.OutputTypeComboBox.Text = Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType;
         }
 
+        #endregion
+
+        #region "control event handlers"
+
+        private void KeyDownHandler(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F5)
+            {
+                ExecuteQueryAndSaveToFile();
+            }
+        }
+
+        private void button_excecute_Click(object sender, EventArgs e)
+        {
+            ExecuteQueryAndSaveToFile();
+        }
+
+        private void Form_Closed(object sender, FormClosedEventArgs e)
+        {
+            Program.MongoXMLManager.SaveXml();
+        }
+
+        private void QueryOutputType_Selected(object sender, EventArgs e)
+        {
+            Program.MongoXMLManager.QueryOutputTypes =
+                new MongoXMLRepository.QueryOutputType() { CurrentOutputType = OutputTypeComboBox.Text };
+        }
+
+        #endregion
+
+        #region "file/query handlers"
+        private void ExecuteQueryAndSaveToFile()
+        {
+            var query = String.IsNullOrEmpty(text_box.Selection.Text)
+                                ? this.text_box.Text
+                                : text_box.Selection.Text;
+            _executeQuery.Execute(query);
+
+            //save file
+            FileManager.SaveToFile(this.QueryFilePath, text_box.Text);
+        }
+
+        private void EnsureQueryFilePathExists()
+        {
+            if (!File.Exists(QueryFilePath))
+            {
+                QueryFilePath = TempJSFile;
+                FileManager.SaveToFile(QueryFilePath, "//new query");
+            }
+        }
+        
         private string OpenOpenFileDialog()
         {
             this.open_file_dialog.InitialDirectory =
@@ -155,23 +174,15 @@ namespace DBUI.Mongo {
             }
             return this.open_file_dialog.FileName;
         }
+        #endregion
 
-        //private string OpenSaveFileDialog()
-        //{
-        //    this.open_file_dialog.InitialDirectory =
-        //        Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-        //    this.open_file_dialog.Filter = "JS Files (*.js)|*.js|All Files (*.*)|*.*";
-
-        //    //minimize window, can't hide
-        //    this.WindowState = FormWindowState.Minimized;
-        //    if (this.open_file_dialog.ShowDialog(this) != DialogResult.OK)
-        //    {
-        //        return String.Empty;
-        //    }
-        //    return this.open_file_dialog.FileName;
-        //}
-
-
+        /// <summary>
+        /// Query (Mongo, SQL) Execution Handler
+        /// </summary>
+        
+        //todo
+        //mongo/sql/dos cmds should be executed in sequence, 
+        //additionally should just split the queryies with special tokens
         public class QueryExecuter
         {
             //need to get rid of _form variable, just pass in strings...
@@ -195,28 +206,6 @@ namespace DBUI.Mongo {
                 }
             }
 
-            public QueryExecuter(FormMongoQuery form)
-            {
-                _form = form;
-            }
-
-            private bool ContinueWithExecutionAfterWarning()
-            {
-                var serverName = ((FormMainMDI) _form.ParentForm).ServerName;
-                
-                if (!Program.MongoXMLManager.Servers.First(s => s.Name == serverName).WithWarning)
-                {
-                    return true;
-                }
-
-                if (MessageBox.Show("Continue query with " + serverName, "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    return true;
-                }
-                
-                return false;
-            }
-
             public void Execute(string query)
             {
                 if (String.IsNullOrEmpty(query))
@@ -231,6 +220,7 @@ namespace DBUI.Mongo {
 
                 _queryOutput = new StringBuilder();
 
+             
                 //could use a loop to loop through the query types
                 var sqlQueries = GetExternalQueryResults(QueryType.SQL, query);
                 ExecuteExternalQueries(QueryType.SQL, sqlQueries);
@@ -244,6 +234,29 @@ namespace DBUI.Mongo {
                 //todo could be updated to display error line with mongo query
                 DispalyQueryOutput(_queryOutput.ToString());
             }
+            public QueryExecuter(FormMongoQuery form)
+            {
+                _form = form;
+            }
+
+            private bool ContinueWithExecutionAfterWarning()
+            {
+                var serverName = ((FormMainMDI)_form.ParentForm).ServerName;
+
+                if (!Program.MongoXMLManager.Servers.First(s => s.Name == serverName).WithWarning)
+                {
+                    return true;
+                }
+
+                if (MessageBox.Show("Continue query with " + serverName, "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            
 
             private List<String> GetExternalQueryMatches(QueryType type, String query)
             {
@@ -354,13 +367,13 @@ namespace DBUI.Mongo {
             {
                 //mongo.exe must be in path variable, 
                 //mongod must be started as service or console app
-                
+
                 if (string.IsNullOrWhiteSpace(command))
                 {
                     return;
                 }
 
-                var tempFile = tempBatFile;              
+                var tempFile = tempBatFile;
                 FileManager.SaveToFile(tempFile, "");
                 FileManager.AppendToFile(tempFile, command);
 
@@ -441,22 +454,6 @@ namespace DBUI.Mongo {
                 compiler.StartInfo.Arguments = tempPath;
                 compiler.Start();
             }
-        }
-
-        private void button_excecute_Click(object sender, EventArgs e) {
-            ExecuteQueryAndSaveToFile();
-        }
-
-        private void Form_Closed(object sender, FormClosedEventArgs e)
-        {
-            Program.MongoXMLManager.SaveXml();
-        }
-
-        private void QueryOutputType_Selected(object sender, EventArgs e)
-        {
-            Program.MongoXMLManager.QueryOutputTypes = 
-                new MongoXMLManager.QueryOutputType()
-                {CurrentOutputType = OutputTypeComboBox.Text};
         }
 
     }

@@ -39,114 +39,115 @@ namespace DBUI
         }
     }
 
-    class XMLManagerV2
-    {
+    //class XMLManagerV2
+    //{
 
-        public XDocument _domDoc;
-        private String _xmlFileName;
+    //    public XDocument _domDoc;
+    //    private String _xmlFileName;
 
-        public XElement RootNode { get; private set; }
-        public XPathNavigator Navigator { get; private set; }
-        /*
-        public bool Init(ref string xmlString, string rootName)
-        {
-            try
-            {
-                _domDoc = XDocument.Load(xmlString);
-                RootNode = _domDoc.Root;
-                if (RootNode == null) { return false; }
+    //    public XElement RootNode { get; private set; }
+    //    public XPathNavigator Navigator { get; private set; }
+    //    /*
+    //    public bool Init(ref string xmlString, string rootName)
+    //    {
+    //        try
+    //        {
+    //            _domDoc = XDocument.Load(xmlString);
+    //            RootNode = _domDoc.Root;
+    //            if (RootNode == null) { return false; }
 
-            }
-            catch (Exception ex) { this.ShowError(ex); }
-            return true;
-        }*/
+    //        }
+    //        catch (Exception ex) { this.ShowError(ex); }
+    //        return true;
+    //    }*/
 
-        public bool Init(string xmlFileName, string rootName)
-        {
-            _xmlFileName = xmlFileName;
-            return LoadXmlFromFile(rootName);
-        }
+    //    public bool Init(string xmlFileName, string rootName)
+    //    {
+    //        _xmlFileName = xmlFileName;
+    //        return LoadXmlFromFile(rootName);
+    //    }
 
-        private bool LoadXmlFromFile(string rootName)
-        {
-            if (System.IO.File.Exists(_xmlFileName) == false)
-            {
-                this.ShowError("file: " + _xmlFileName + " not found");
-                return false;
-            }
+    //    private bool LoadXmlFromFile(string rootName)
+    //    {
+    //        if (System.IO.File.Exists(_xmlFileName) == false)
+    //        {
+    //            this.ShowError("file: " + _xmlFileName + " not found");
+    //            return false;
+    //        }
 
-            try
-            {
-                _domDoc = XDocument.Load(_xmlFileName);
-                RootNode = _domDoc.Root;
-                Navigator = RootNode.CreateNavigator();
-                if (RootNode == null) { return false; }
-            }
-            catch (Exception ex)
-            {
-                this.ShowError(ex);
-            }
-            return true;
-        }
+    //        try
+    //        {
+    //            _domDoc = XDocument.Load(_xmlFileName);
+    //            RootNode = _domDoc.Root;
+    //            Navigator = RootNode.CreateNavigator();
+    //            if (RootNode == null) { return false; }
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            this.ShowError(ex);
+    //        }
+    //        return true;
+    //    }
 
-        public bool SaveXml(string fileName)
-        {
-            try
-            {
-                _domDoc.Save(fileName);
-            }
-            catch (Exception ex)
-            {
-                this.ShowError(ex);
-            }
-            return true;
-        }
+    //    public bool SaveXml(string fileName)
+    //    {
+    //        try
+    //        {
+    //            _domDoc.Save(fileName);
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            this.ShowError(ex);
+    //        }
+    //        return true;
+    //    }
 
-        public bool SaveXml()
-        {
-            SaveXml(_xmlFileName);
-            return true;
-        }
+    //    public bool SaveXml()
+    //    {
+    //        SaveXml(_xmlFileName);
+    //        return true;
+    //    }
 
-        /*
+    //    /*
 
-        public XmlNode AppendNode(ref XmlNode parentNode, string nodeName, string nodeValue)
-        {
-            if (parentNode == null) { return null; }
-            XmlNode n = this.CreateNode(nodeName, nodeValue);
-            parentNode.AppendChild(n);
-            return n;
-        }
+    //    public XmlNode AppendNode(ref XmlNode parentNode, string nodeName, string nodeValue)
+    //    {
+    //        if (parentNode == null) { return null; }
+    //        XmlNode n = this.CreateNode(nodeName, nodeValue);
+    //        parentNode.AppendChild(n);
+    //        return n;
+    //    }
 
-        public XmlNode CreateNode(string nodeName, string nodeValue)
-        {
-            XmlNode node = _domDoc.(XmlNodeType.Element, nodeName, "");
-            node.InnerXml = nodeValue;
-            return node;
-        }
+    //    public XmlNode CreateNode(string nodeName, string nodeValue)
+    //    {
+    //        XmlNode node = _domDoc.(XmlNodeType.Element, nodeName, "");
+    //        node.InnerXml = nodeValue;
+    //        return node;
+    //    }
 
-        public XmlNode AppendAttribute
-            (ref XmlNode node, string attributeName, string attributeValue)
-        {
-            if (node == null) { return null; }
-            XmlAttribute a = _domDoc.CreateAttribute(attributeName);
-            a.InnerText = attributeValue;
-            if (node.Attributes != null) node.Attributes.Append(a);
-            return a;
-        }*/
+    //    public XmlNode AppendAttribute
+    //        (ref XmlNode node, string attributeName, string attributeValue)
+    //    {
+    //        if (node == null) { return null; }
+    //        XmlAttribute a = _domDoc.CreateAttribute(attributeName);
+    //        a.InnerText = attributeValue;
+    //        if (node.Attributes != null) node.Attributes.Append(a);
+    //        return a;
+    //    }*/
 
-        #region error handling
-        private void ShowError(string errorMessage)
-        {
-            MessageBox.Show(errorMessage);
-        }
+    //    #region error handling
+    //    private void ShowError(string errorMessage)
+    //    {
+    //        MessageBox.Show(errorMessage);
+    //    }
 
-        private void ShowError(Exception ex)
-        {
-            MessageBox.Show(ex.ToString());
-        }
-        #endregion
-    }
+    //    private void ShowError(Exception ex)
+    //    {
+    //        MessageBox.Show(ex.ToString());
+    //    }
+    //    #endregion
+    //}
+
     class XMLManager{
 
         private XmlDocument _domDoc;

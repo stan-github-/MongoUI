@@ -14,7 +14,7 @@
     <UsefulScriptFiles comments="not linked to Options form, yet">
       <Path>H:\underscore.js</Path>
     </UsefulScriptFiles>
-    <QueryOutputTypes current="notepad.exe">
+    <QueryOutputTypes current="MongoUI">
       <T>MongoUI</T>
       <T>notepad.exe</T>
     </QueryOutputTypes>

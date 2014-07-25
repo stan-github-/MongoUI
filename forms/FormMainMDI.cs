@@ -10,19 +10,14 @@ using System.Windows.Forms;
 using DBUI;
 using DBUI.Mongo;
 using DBUI.DataModel;
-//using ScintillaNET.Configuration;
 
+//using ScintillaNET.Configuration;
 //delete output files
-//switch between databases, okay for now, the .mongo file handles that
-//implement options form
 //handle F5 at the topmost level and pass down to the child form.
-//
+
 namespace DBUI {
     public partial class FormMainMDI : Form {
-        //private int childFormNumber = 0;
-        //private DBType dbType = DBType.MongoDB;
-
-        //public static XMLManager ini_xml;
+        
         private FormOptions form_options;
 
         public String ServerName
@@ -37,32 +32,32 @@ namespace DBUI {
 
         public FormMainMDI() {
             InitializeComponent();
-            init();
+            Init();
         }
 
-        private bool init() {
+        private bool Init() {
             if (Program.MongoXMLManager.Init() == false) { return false; }
 
             this.SetServerComboBox();
             this.SetDropDownFileHistory();
             this.SetDropDownCodeSnippet();
             this.SetMongoCollectionsOnDataImport();
-            this.OpenLastOpendedFile();
+            this.OpenLastOpendedFiles();
 
             this.Closed += new EventHandler(FormMainMDI_Closed);
-            this.historyMenu.DropDownItemClicked += new ToolStripItemClickedEventHandler(javascriptpathClicked);
-            this.snippetsMenu.DropDownItemClicked += new ToolStripItemClickedEventHandler(javascriptpathClicked);
+            this.historyMenu.DropDownItemClicked += new ToolStripItemClickedEventHandler(OpenExistingFile);
+            this.snippetsMenu.DropDownItemClicked += new ToolStripItemClickedEventHandler(OpenExistingFile);
             
             //new file button
-            this.newToolStripButton.Click += OpenNewQueryWindow;
-            this.newToolStripMenuItem.Click += OpenNewQueryWindow;
+            this.newToolStripButton.Click += OpenNewQueryFile;
+            this.newToolStripMenuItem.Click += OpenNewQueryFile;
 
             //save file button functions
-            this.saveToolStripButton.Click += SaveQueryWindow;
-            this.saveToolStripMenuItem.Click += SaveQueryWindow;
+            this.saveToolStripButton.Click += SaveQueryFile;
+            this.saveToolStripMenuItem.Click += SaveQueryFile;
 
             this.saveToolStripButton.Visible = true;
-            this.saveFileDialog1.FileOk += SaveFileDialog1OnFileOk;   
+            this.saveFileDialog1.FileOk += SaveQueryWithFileDialog;   
 
             
             //future features
@@ -72,12 +67,9 @@ namespace DBUI {
             return true;
         }
 
-        void OpenNewQueryWindow(object sender, EventArgs e)
-        {
-            new FormMongoQuery(this).Init(FormMongoQuery.Mode.New);
-        }
+        #region "query file open/save"
 
-        private void SaveQueryWindow(object sender, EventArgs eventArgs)
+        private void SaveQueryFile(object sender, EventArgs eventArgs)
         {
             var activeChild = (FormMongoQuery)this.ActiveMdiChild;
             if (activeChild != null)
@@ -88,7 +80,7 @@ namespace DBUI {
             this.saveFileDialog1.ShowDialog();
         }
 
-        private void SaveFileDialog1OnFileOk(object sender, CancelEventArgs cancelEventArgs)
+        private void SaveQueryWithFileDialog(object sender, CancelEventArgs cancelEventArgs)
         {
             var activeChild = (FormMongoQuery)this.ActiveMdiChild;
             if (activeChild == null)
@@ -100,7 +92,7 @@ namespace DBUI {
             new FormMongoQuery(this).Init(FormMongoQuery.Mode.Existing, saveFileDialog1.FileName);
         }
 
-        void javascriptpathClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void OpenExistingFile(object sender, ToolStripItemClickedEventArgs e)
         {
             foreach (FormMongoQuery c in this.MdiChildren)
             {
@@ -112,6 +104,27 @@ namespace DBUI {
             new FormMongoQuery(this).Init(FormMongoQuery.Mode.Existing, e.ClickedItem.Text);
         }
 
+        private void OpenLastOpendedFiles()
+        {
+            foreach (var path in Program.MongoXMLManager.LastOpenedFilePaths)
+            {
+                new Mongo.FormMongoQuery(this).Init(FormMongoQuery.Mode.Existing, path);
+            }
+        }
+
+        private void OpenFileWithFileDialog(object sender, EventArgs e)
+        {
+            var mongoChildForm = new FormMongoQuery(this).Init(FormMongoQuery.Mode.FileDialog);
+        }
+
+        private void OpenNewQueryFile(object sender, EventArgs e)
+        {
+            new FormMongoQuery(this).Init(FormMongoQuery.Mode.New);
+        }
+
+        #endregion
+
+        #region "on exit"
         void FormMainMDI_Closed(object sender, EventArgs e)
         {
             var l = new List<String>();
@@ -120,6 +133,13 @@ namespace DBUI {
 
             Program.MongoXMLManager.SaveXml();
         }
+
+        private void ExitToolsStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        #endregion
 
         #region "server database combo boxes"
 
@@ -187,6 +207,7 @@ namespace DBUI {
 
         #endregion
 
+        #region "drop down snippet code files etc"
         private void SetDropDownFileHistory()
         {
             Program.MongoXMLManager.FileHistory.ForEach
@@ -201,6 +222,9 @@ namespace DBUI {
             );
         }
 
+        #endregion
+
+        #region "new features"
         private void SetMongoCollectionsOnDataImport()
         {
 
@@ -219,30 +243,8 @@ namespace DBUI {
             }
             
         }
+        #endregion
 
-        private void OpenLastOpendedFile()
-        {
-            foreach (var path in Program.MongoXMLManager.LastOpenedFilePaths)
-            {
-                new Mongo.FormMongoQuery(this).Init(FormMongoQuery.Mode.Existing, path);        
-            }
-        }
-
-        private void OpenFile(object sender, EventArgs e) {
-            var mongoChildForm = new FormMongoQuery(this).Init(FormMongoQuery.Mode.FileDialog);
-        }
-
-        private void ExitToolsStripMenuItem_Click(object sender, EventArgs e) {
-            this.Close();
-        }
-
-        private void newWindowToolStripMenuItem_Click(object sender, EventArgs e) {
-            //string s = Program.MongoXMLManager.QueryFolderPath + "\\" + Guid.NewGuid() + ".js";
-            //
-            new FormMongoQuery(this).Init(FormMongoQuery.Mode.New);
-        }
-
-        
         #region "miscellaneous UI"
         private void helpToolStripButton_Click(object sender, EventArgs e)
         {
