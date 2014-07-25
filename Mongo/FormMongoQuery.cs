@@ -25,20 +25,19 @@ namespace DBUI.Mongo {
             Last
         }
 
-        #region "exposure to outside"
-        public String GetTextBoxText()
-        {
-            return this.text_box.Text;
+        public String Title {
+            get { return this.text_box.Text; }
         }
-        #endregion
-        public string QueryFilePath { get; set; }
+
+        public String QueryFilePath { get; set; }
 
         public String TempJSFile
         {
             get
             {
-                return Environment.ExpandEnvironmentVariables(Program.MongoXMLManager.TempFolderPath
-                                                              + "\\" + Guid.NewGuid() + ".js");
+                return Environment.ExpandEnvironmentVariables(
+                    Program.MongoXMLManager.TempFolderPath
+                    + "\\" + Guid.NewGuid() + ".js");
             }
         }
 
@@ -104,7 +103,7 @@ namespace DBUI.Mongo {
                     EnsureQueryFilePathExists();
                     break;
                 case Mode.FileDialog:
-                    this.QueryFilePath = this.OpenFileDialog();
+                    this.QueryFilePath = this.OpenOpenFileDialog();
                     EnsureQueryFilePathExists();
                     break;
             }
@@ -137,7 +136,7 @@ namespace DBUI.Mongo {
             this.OutputTypeComboBox.Text = Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType;
         }
 
-        private string OpenFileDialog()
+        private string OpenOpenFileDialog()
         {
             this.open_file_dialog.InitialDirectory =
                 Environment.GetFolderPath(Environment.SpecialFolder.Personal);
@@ -157,20 +156,20 @@ namespace DBUI.Mongo {
             return this.open_file_dialog.FileName;
         }
 
-        private string SaveFileDialog()
-        {
-            this.open_file_dialog.InitialDirectory =
-                Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            this.open_file_dialog.Filter = "JS Files (*.js)|*.js|All Files (*.*)|*.*";
+        //private string OpenSaveFileDialog()
+        //{
+        //    this.open_file_dialog.InitialDirectory =
+        //        Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+        //    this.open_file_dialog.Filter = "JS Files (*.js)|*.js|All Files (*.*)|*.*";
 
-            //minimize window, can't hide
-            this.WindowState = FormWindowState.Minimized;
-            if (this.open_file_dialog.ShowDialog(this) != DialogResult.OK)
-            {
-                return String.Empty;
-            }
-            return this.open_file_dialog.FileName;
-        }
+        //    //minimize window, can't hide
+        //    this.WindowState = FormWindowState.Minimized;
+        //    if (this.open_file_dialog.ShowDialog(this) != DialogResult.OK)
+        //    {
+        //        return String.Empty;
+        //    }
+        //    return this.open_file_dialog.FileName;
+        //}
 
 
         public class QueryExecuter

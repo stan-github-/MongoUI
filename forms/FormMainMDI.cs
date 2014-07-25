@@ -19,8 +19,8 @@ using DBUI.DataModel;
 //
 namespace DBUI {
     public partial class FormMainMDI : Form {
-        private int childFormNumber = 0;
-        private DBType dbType = DBType.MongoDB;
+        //private int childFormNumber = 0;
+        //private DBType dbType = DBType.MongoDB;
 
         //public static XMLManager ini_xml;
         private FormOptions form_options;
@@ -52,14 +52,32 @@ namespace DBUI {
             this.Closed += new EventHandler(FormMainMDI_Closed);
             this.historyMenu.DropDownItemClicked += new ToolStripItemClickedEventHandler(javascriptpathClicked);
             this.snippetsMenu.DropDownItemClicked += new ToolStripItemClickedEventHandler(javascriptpathClicked);
-            this.saveToolStripButton.Click += SaveToolStripButtonOnClick;
-            this.saveToolStripButton.Visible = true;
+            
+            //new file button
+            this.newToolStripButton.Click += OpenNewQueryWindow;
+            this.newToolStripMenuItem.Click += OpenNewQueryWindow;
 
+            //save file button functions
+            this.saveToolStripButton.Click += SaveQueryWindow;
+            this.saveToolStripMenuItem.Click += SaveQueryWindow;
+
+            this.saveToolStripButton.Visible = true;
             this.saveFileDialog1.FileOk += SaveFileDialog1OnFileOk;   
+
+            
+            //future features
+            this.historyMenu.Enabled = false;
+            this.historyMenu.Visible = false;
+
             return true;
         }
 
-        private void SaveToolStripButtonOnClick(object sender, EventArgs eventArgs)
+        void OpenNewQueryWindow(object sender, EventArgs e)
+        {
+            new FormMongoQuery(this).Init(FormMongoQuery.Mode.New);
+        }
+
+        private void SaveQueryWindow(object sender, EventArgs eventArgs)
         {
             var activeChild = (FormMongoQuery)this.ActiveMdiChild;
             if (activeChild != null)
@@ -70,7 +88,6 @@ namespace DBUI {
             this.saveFileDialog1.ShowDialog();
         }
 
-        //all of this should be done in the child form, but the designer has some issues
         private void SaveFileDialog1OnFileOk(object sender, CancelEventArgs cancelEventArgs)
         {
             var activeChild = (FormMongoQuery)this.ActiveMdiChild;
@@ -79,7 +96,7 @@ namespace DBUI {
                 return;
             }
             //saveFileDialog1.Filter = "JS Files (*.js)|*.js|All Files (*.*)|*.*";
-            FileManager.SaveToFile(saveFileDialog1.FileName, activeChild.GetTextBoxText());
+            FileManager.SaveToFile(saveFileDialog1.FileName, activeChild.Title);
             new FormMongoQuery(this).Init(FormMongoQuery.Mode.Existing, saveFileDialog1.FileName);
         }
 
