@@ -220,18 +220,23 @@ namespace DBUI.Mongo {
 
                 _queryOutput = new StringBuilder();
 
+                var queries = SplitQueries(query);
              
-                //could use a loop to loop through the query types
-                var sqlQueries = GetExternalQueryResults(QueryType.SQL, query);
-                ExecuteExternalQueries(QueryType.SQL, sqlQueries);
+                foreach(Tuple<QueryType, String> q in queries){
+                    _queryOutput.Append("--------------------")
+                        .Append(q.Item1.ToString())
+                        .Append("---------------------")
+                        .Append(Environment.NewLine);
 
-                var cmdlines = GetExternalQueryResults(QueryType.CmdLine, query);
-                ExecuteExternalQueries(QueryType.CmdLine, cmdlines);
+                    if (q.Item1 == QueryType.SQL || q.Item1 == QueryType.DOS)
+                    {
+                        ExecuteExternalQueries(q.Item1, new List<String> { q.Item2 });
+                    }
+                    else {
+                        ExecuteMongo(q.Item2);
+                    }
+                }
 
-                ExecuteMongo(query);
-
-                //display query output;
-                //todo could be updated to display error line with mongo query
                 DispalyQueryOutput(_queryOutput.ToString());
             }
             public QueryExecuter(FormMongoQuery form)
@@ -239,6 +244,67 @@ namespace DBUI.Mongo {
                 _form = form;
             }
 
+            //first split query into individual components
+            //make sure which is which
+            //run through the queries.
+            
+            public List<Tuple<QueryType, String>> SplitQueries(String query)
+            {
+                string regex = @"\#\#DOS\#\#|\#\#MONGO\#\#|\#\#SQL\#\#";
+                var options = RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase | RegexOptions.Singleline;
+
+                var tokens = new List<String> { "##DOS##", "##MONGO##", "##SQL##" };
+                var dict = new List<Tuple<QueryType, String>>();
+
+                var reg = new Regex(regex, options);
+                var s = query.Trim();
+
+                try
+                {
+                    var queries = reg.Split(s);
+                    if (queries == null || queries.Length == 0)
+                    {
+                        return null;
+                    }
+
+                    if (queries.Length == 1)
+                    {
+                        return new List<Tuple<QueryType, String>>{ 
+                          new Tuple<QueryType,String>(QueryType.MONGO, queries[0])};
+                    }
+
+                    var c = reg.Matches(s);
+
+                    int i = 0;
+                    foreach (Match q in c)
+                    {
+                        //if the first query has no token assume it's mongo
+                        if (i == 0)
+                        {
+                            if (q.Index != 0)
+                            {
+                                dict.Add(new Tuple<QueryType, String>
+                                    (QueryType.MONGO, queries[0]));
+                            }
+                        }
+
+                        QueryType queryType;
+                        var queryType_ = q.Groups[0].ToString().Replace("#", "");
+                        if (!Enum.TryParse<QueryType>(queryType_, out queryType)){
+                            throw new Exception(queryType_ + " is not valid query type");
+                        }
+
+                        dict.Add(new Tuple<QueryType, String>(
+                            queryType, queries[i + 1]));
+                        i++;
+                    }
+                }
+                catch (Exception ex) {
+                    ErrorManager.Write(ex);
+                }
+                return dict;
+            }
+            
             private bool ContinueWithExecutionAfterWarning()
             {
                 var serverName = ((FormMainMDI)_form.ParentForm).ServerName;
@@ -254,32 +320,6 @@ namespace DBUI.Mongo {
                 }
 
                 return false;
-            }
-
-            
-
-            private List<String> GetExternalQueryMatches(QueryType type, String query)
-            {
-                var reg = GetExternalQueryRegex(type);
-                var queries = new List<String>();
-
-                foreach (Match q in reg.Matches(query))
-                {
-                    queries.Add(q.ToString());
-                }
-                return queries;
-            }
-
-            private List<String> GetExternalQueryResults(QueryType type, String query)
-            {
-                var reg = GetExternalQueryRegex(type);
-                var queries = new List<String>();
-
-                foreach (Match q in reg.Matches(query))
-                {
-                    queries.Add(q.Result("$1").Replace(Environment.NewLine, " "));
-                }
-                return queries;
             }
 
             private void ExecuteExternalQueries(QueryType type, List<String> queries)
@@ -299,7 +339,7 @@ namespace DBUI.Mongo {
                     }
                 }
 
-                if (type == QueryType.CmdLine)
+                if (type == QueryType.DOS)
                 {
                     foreach (var q in queries)
                     {
@@ -312,30 +352,9 @@ namespace DBUI.Mongo {
 
             public enum QueryType
             {
-                Mongo,
+                MONGO,
                 SQL,
-                CmdLine
-            }
-
-            private Regex GetExternalQueryRegex(QueryType type)
-            {
-                string regex = @"\b" + type.ToString() + @"\b[<]{2}(.*?)[>]{2}";
-                var options = RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase | RegexOptions.Singleline;
-                var reg = new Regex(regex, options);
-                return reg;
-            }
-
-            private String StripExternalQueries(String query)
-            {
-                String q = query;
-                foreach (var t in new List<QueryType> { QueryType.SQL, QueryType.CmdLine })
-                {
-                    foreach (var s in GetExternalQueryMatches(t, query))
-                    {
-                        q = q.Replace(s, "");
-                    }
-                }
-                return q;
+                DOS
             }
 
             private void DisplayErrorCode(String tempFile, ref String outputMessage)
@@ -380,13 +399,12 @@ namespace DBUI.Mongo {
                 ExecuteConsoleApp(tempFile, String.Empty);
                 FileManager.DeleteFile(tempFile);
             }
-
-
+            
             private void ExecuteMongo(String query)
             {
                 //mongo.exe must be in path variable, 
                 //mongod must be started as service or console app
-                query = StripExternalQueries(query);
+                //query = StripExternalQueries(query);
 
                 if (string.IsNullOrWhiteSpace(query))
                 {
