@@ -208,7 +208,7 @@ namespace DBUI.Mongo {
 
             public void Execute(string query)
             {
-                if (String.IsNullOrEmpty(query))
+                if (String.IsNullOrWhiteSpace(query))
                 {
                     return;
                 }
@@ -384,9 +384,7 @@ namespace DBUI.Mongo {
 
             private void ExecuteCmdLine(String command)
             {
-                //mongo.exe must be in path variable, 
-                //mongod must be started as service or console app
-
+           
                 if (string.IsNullOrWhiteSpace(command))
                 {
                     return;
