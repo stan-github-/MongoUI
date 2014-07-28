@@ -97,6 +97,125 @@ namespace DBUI.Mongo {
         
         #region "autocomplete"
 
+        public class Method
+        {
+            public String Name { get; set; }
+            public List<String> ChildMethods { get; set; }
+        }
+
+        public class MongoCollection {
+            public readonly static List<String> collectionMethods =
+                new List<String> { 
+                    //"_dbCommand",
+                    //"_distinct",
+                    //"_genIndexName",
+                    //"_indexSpec",
+                    //"_massageObject",
+                    //"_printExtraInfo",
+                    //"_validateForStorage",
+                    //"_validateObject",
+                    "aggregate",
+                    "clean",
+                    "convertToCapped",
+                    "convertToSingleObject",
+                    "copyTo",
+                    "count",
+                    "createIndex",
+                    "dataSize",
+                    "diskStorageStats",
+                    "distinct",
+                    "drop",
+                    "dropIndex",
+                    "dropIndexes",
+                    "ensureIndex",
+                    "exists",
+                    "find",
+                    "findAndModify",
+                    "findOne",
+                    "getCollection",
+                    "getDB",
+                    "getDiskStorageStats",
+                    "getFullName",
+                    "getIndexes",
+                    "getIndexKeys",
+                    "getIndexSpecs",
+                    "getIndexStats",
+                    "getIndices",
+                };
+
+            public readonly static List<String> findChildMethods = 
+                new List<String>
+            {
+                //"_addSpecial",
+                //"_checkModify",
+                //"_ensureSpecial",
+                //"_exec",
+                "addOption",
+                "arrayAccess",
+                "batchSize",
+                "clone",
+                "comment",
+                "count",
+                "countReturn",
+                "explain",
+                "forEach",
+                "hasNext",
+                "help",
+                "hint",
+                "itcount",
+                "length",
+                "limit",
+                "map",
+                "max",
+                "min",
+                "next",
+                "objsLeftInBatch",
+                "pretty",
+                "readOnly",
+                "readPref",
+                "shellPrint",
+                "showDiskLoc",
+                "size",
+                "skip",
+                "snapshot",
+                "sort",
+                "toArray",
+                "toString",
+            };
+
+            public readonly static List<Method> Methods =
+                new List<Method>()
+                {
+                    new Method  {
+                        Name = "find",
+                        ChildMethods = findChildMethods,
+                    },
+                };
+
+            public String Name { get; set; }
+
+            public MongoCollection() {
+            }
+        }
+        
+        /*public class MongoMethodTree {
+            
+            public List<Collection> Collections { get; set;}
+
+            public MongoMethodTree() {
+                Collections = new List<Collection>
+                {
+                    new Collection() {
+                        Name = "survey",
+                    },
+                    new Collection(){
+                        Name = "surveyTemplates"
+                    }
+
+                };
+            }
+        }*/
+
         void text_box_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode != Keys.OemPeriod)
@@ -107,7 +226,15 @@ namespace DBUI.Mongo {
             //this.text_box.AutoComplete.List = new List<String>() { "asf", "badf", "sdfc" };
             //this.text_box.AutoComplete.Show(0, new List<String>() { "asf", "badf", "sdfc" });
 
-            //var methodName = MethodFinder.Run(this.text_box);
+            var methodName = MethodFinder.Run(this.text_box);
+            var method = MongoCollection.Methods.Find(x => x.Name == methodName);
+            if (method == null) {
+                return;
+            }
+
+            this.text_box.AutoComplete.MaxHeight = 10;
+            this.text_box.AutoComplete.List = method.ChildMethods;
+            this.text_box.AutoComplete.Show(0, method.ChildMethods);
         }
 
         //dot after a name, dot after a close parenthesis
@@ -116,7 +243,7 @@ namespace DBUI.Mongo {
 
         public class MethodFinder {
 
-            public static String Run(ScintillaNET.Scintilla text_box) {
+            public static String Run(ScintillaNET.Scintilla text_box, bool debug = false) {
 
                 var s = text_box.Text.Substring(0, text_box.CurrentPos - 1);
                 var brackets = MethodFinder.GetQueryDelimiters(s);
@@ -131,15 +258,17 @@ namespace DBUI.Mongo {
                     methodName = GetMethodName(bracketsToRemove.First(), s);
                 }
 
-                foreach (var b in bracketsToRemove.OrderBy(x => x.Index))
+                if (debug)
                 {
-                    ErrorManager.Write(b.Index.ToString());
-                    ErrorManager.Write(b.Groups[0].ToString());
-                }
+                    foreach (var b in bracketsToRemove.OrderBy(x => x.Index))
+                    {
+                        ErrorManager.Write(b.Index.ToString());
+                        ErrorManager.Write(b.Groups[0].ToString());
+                    }
 
-                ErrorManager.Write(matchFound ? "match found" : "not matching delimiters");
-                ErrorManager.Write(methodName);
-                
+                    ErrorManager.Write(matchFound ? "match found" : "not matching delimiters");
+                    ErrorManager.Write(methodName);
+                }
                 return methodName;
             }
 
