@@ -25,3 +25,5 @@ MongoUI is a bear-bone mongo mananger modeled after sql server manager, where mu
   <tr><td></td><td>a) separated by "##MONGO##", "##DOS##", or "##SQL##"</td></tr>
   <tr><td></td><td>b) does not support sql server switching based on environment.</td></tr>
 </table>
+
+<img src="Images/AppSnapShot.jpg"></image>
