@@ -55,7 +55,7 @@ namespace DBUI.Mongo {
         {
             this.text_box.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyDownHandler);
             this.text_box.KeyUp += text_box_KeyUp;
-
+            text_box.Margins[0].Width = 20;
             //mode whether new or existing
             switch (mode)
             {
