@@ -15,5 +15,7 @@ Additional features:
 3) Stores static list of files for quick access.
 
 Features in progress:
-1) Executes DOS and SQL cmd (partially complete).
-
+1) Autocomplete (implemented "db.collection." and "db.collection.find()")
+2) Executes DOS and SQL cmds 
+  a) separated by "##MONGO##", "##DOS##", or "##SQL##"
+  b) does not support sql server switching based on environment.
