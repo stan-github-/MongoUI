@@ -40,13 +40,25 @@
     <Server name="localhost" withWarning="false">
       <Database name="test">
         <Collections folder="">
-          <C name=""></C>
-          <C name=""></C>
-          <C name=""></C>
+          <C name="testCollection1"></C>
+          <C name="testCollection2"></C>
+          <C name="testCollection3"></C>
         </Collections>
       </Database>
-      <Database name="temp"></Database>
-      <Database name="system"></Database>
+      <Database name="temp">
+        <Collections folder="">
+          <C name="temptCollection1"></C>
+          <C name="tempCollection2"></C>
+          <C name="tempCollection3"></C>
+        </Collections>
+      </Database>
+      <Database name="system">
+        <Collections folder="">
+          <C name="systemCollection1"></C>
+          <C name="systemCollection2"></C>
+          <C name="systemCollection3"></C>
+        </Collections>
+      </Database>
     </Server>
     <Server name="alpha" withWarning="true">
       <Database name="test"></Database>

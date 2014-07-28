@@ -223,6 +223,22 @@ namespace DBUI.Mongo {
                 if (IsQueryEndingInCollectionName(s) == true) {
                     SetList(text_box, MongoMethods.CollectionObjectMethods);
                 }
+
+                if (IsQueryEndingInDB(s) == true) {
+                    var currentServer = Program.MongoXMLManager.CurrentServer;
+                    List<String> collections = null;
+                    try
+                    {
+                        collections = Program.MongoXMLManager.Servers
+                            .First(z => z.Name == currentServer.Name)
+                            .Databases.First(z => z.Name == currentServer.CurrentDatabase.Name)
+                            .Collections;
+                    }
+                    catch (Exception ex) {
+                        ErrorManager.Write(ex);
+                    }
+                    SetList(text_box, collections);
+                }
             }
 
             private static void SetList(ScintillaNET.Scintilla text_box, bool debug, string s)
@@ -270,6 +286,27 @@ namespace DBUI.Mongo {
                 text_box.AutoComplete.MaxHeight = 10;
                 //text_box.AutoComplete.List = method.ChildMethods;
                 text_box.AutoComplete.Show(0, method.ChildMethods);
+            }
+
+            public static bool IsQueryEndingInDB(String s)
+            {
+                //catched "db .   temp", "db.temp", "db. temp", "db .temp"
+                //preceded by " ", "=", "(", or "{" or ";"
+                //or at the begining of line
+
+                string regex = @"(^|(\s)+|\=|\(|\{|\;)(db)(\s)*$";
+                var options = RegexOptions.IgnoreCase | RegexOptions.Singleline;
+                var reg = new Regex(regex, options);
+                try
+                {
+                    var c = reg.Matches(s);
+                    return c.Count > 0;
+                }
+                catch (Exception ex)
+                {
+                    ErrorManager.Write(ex);
+                }
+                return false;
             }
 
             public static bool IsQueryEndingInCollectionName(String s)

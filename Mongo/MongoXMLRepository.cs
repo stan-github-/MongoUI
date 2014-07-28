@@ -526,14 +526,16 @@ namespace DBUI.Mongo {
                 XmlNode n = RootNode.SelectSingleNode(_currentServer);
                 String database = n.SelectSingleNode("CurrentDatabase").InnerXml;
                 Server s = new Server()
-                    {Name = n.SelectSingleNode("@name").Value, 
-                     CurrentDatabase = database};
+                    {
+                        Name = n.SelectSingleNode("@name").Value,
+                        CurrentDatabase = new Database { Name = database }
+                    };
                 return s;
             }
             set {
                 RootNode.SelectSingleNode(_currentServer + "/@name").Value = value.Name;
                 RootNode.SelectSingleNode(_currentServer + "/CurrentDatabase").InnerXml =
-                         value.CurrentDatabase;
+                         value.CurrentDatabase.Name;
             }
         }
 

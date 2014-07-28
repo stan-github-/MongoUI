@@ -10,7 +10,7 @@ namespace DBUI.DataModel {
         public List<Database> Databases { get; set;}
         public List<String> CustomFilePaths {get; set;}
         //update this to database object
-        public String CurrentDatabase {get; set;}
+        public Database CurrentDatabase {get; set;}
         public bool WithWarning { get; set; }
     }
 

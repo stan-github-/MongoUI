@@ -173,7 +173,7 @@ namespace DBUI {
                 return;
             }
 
-            this.databaseComboBox.Text = Program.MongoXMLManager.CurrentServer.CurrentDatabase;
+            this.databaseComboBox.Text = Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name;
         }
 
         #region "saving server and databae setting"
@@ -200,7 +200,7 @@ namespace DBUI {
                 new Server
                 {
                     Name = serverComboBox.Text,
-                    CurrentDatabase = databaseComboBox.Text
+                    CurrentDatabase = new Database { Name = databaseComboBox.Text }
                 };
         }
         #endregion
@@ -230,7 +230,7 @@ namespace DBUI {
 
             return; //code not working
             var currentDB = Program.MongoXMLManager.CurrentServer.Databases.FirstOrDefault(
-                d => Name == Program.MongoXMLManager.CurrentServer.CurrentDatabase);
+                d => Name == Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name);
             if (currentDB == null)
             {
                 return;
