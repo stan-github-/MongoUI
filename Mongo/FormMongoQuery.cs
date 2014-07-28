@@ -94,6 +94,18 @@ namespace DBUI.Mongo {
             return true;
         }
 
+        private void text_box_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.OemPeriod)
+            {
+                return;
+            }
+
+            //this.text_box.AutoComplete.List = new List<String>() { "asf", "badf", "sdfc" };
+            //this.text_box.AutoComplete.Show(0, new List<String>() { "asf", "badf", "sdfc" });
+
+            MethodFinder.Run(this.text_box);
+        }
         
         #region "autocomplete"
 
@@ -103,8 +115,8 @@ namespace DBUI.Mongo {
             public List<String> ChildMethods { get; set; }
         }
 
-        public class MongoCollection {
-            public readonly static List<String> collectionMethods =
+        public class MongoMethods {
+            public readonly static List<String> CollectionObjectMethods =
                 new List<String> { 
                     //"_dbCommand",
                     //"_distinct",
@@ -143,7 +155,7 @@ namespace DBUI.Mongo {
                     "getIndices",
                 };
 
-            public readonly static List<String> findChildMethods = 
+            public readonly static List<String> FindObjectMethods = 
                 new List<String>
             {
                 //"_addSpecial",
@@ -183,80 +195,51 @@ namespace DBUI.Mongo {
                 "toString",
             };
 
-            public readonly static List<Method> Methods =
+            public readonly static List<Method> GeneralMethods =
                 new List<Method>()
                 {
                     new Method  {
                         Name = "find",
-                        ChildMethods = findChildMethods,
+                        ChildMethods = FindObjectMethods,
                     },
                 };
-
-            public String Name { get; set; }
-
-            public MongoCollection() {
-            }
         }
         
-        /*public class MongoMethodTree {
-            
-            public List<Collection> Collections { get; set;}
-
-            public MongoMethodTree() {
-                Collections = new List<Collection>
-                {
-                    new Collection() {
-                        Name = "survey",
-                    },
-                    new Collection(){
-                        Name = "surveyTemplates"
-                    }
-
-                };
-            }
-        }*/
-
-        void text_box_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode != Keys.OemPeriod)
-            {
-                return;
-            }
-
-            //this.text_box.AutoComplete.List = new List<String>() { "asf", "badf", "sdfc" };
-            //this.text_box.AutoComplete.Show(0, new List<String>() { "asf", "badf", "sdfc" });
-
-            var methodName = MethodFinder.Run(this.text_box);
-            var method = MongoCollection.Methods.Find(x => x.Name == methodName);
-            if (method == null) {
-                return;
-            }
-
-            this.text_box.AutoComplete.MaxHeight = 10;
-            this.text_box.AutoComplete.List = method.ChildMethods;
-            this.text_box.AutoComplete.Show(0, method.ChildMethods);
-        }
-
         //dot after a name, dot after a close parenthesis
         //build collection of method name, mongo and underscore
         //build collection of db collections
 
         public class MethodFinder {
 
-            public static String Run(ScintillaNET.Scintilla text_box, bool debug = false) {
+            public static void Run(ScintillaNET.Scintilla text_box, bool debug = false) {
 
                 var s = text_box.Text.Substring(0, text_box.CurrentPos - 1);
+
+                if (IsQueryEndingInClosingParenthesis(s) == true)
+                {
+                    SetList(text_box, debug, s);
+                }
+
+                if (IsQueryEndingInCollectionName(s) == true) {
+                    SetList(text_box, MongoMethods.CollectionObjectMethods);
+                }
+            }
+
+            private static void SetList(ScintillaNET.Scintilla text_box, bool debug, string s)
+            {
                 var brackets = MethodFinder.GetQueryDelimiters(s);
                 int itemsTaken;
                 bool matchFound = false;
 
                 var bracketsToRemove = RemoveMatchingBrackets(brackets, out itemsTaken, out matchFound).OrderBy(x => x.Index);
-                
+
                 String methodName = String.Empty;
                 if (matchFound == true)
                 {
                     methodName = GetMethodName(bracketsToRemove.First(), s);
                 }
+
+                SetList(text_box, methodName);
 
                 if (debug)
                 {
@@ -269,9 +252,67 @@ namespace DBUI.Mongo {
                     ErrorManager.Write(matchFound ? "match found" : "not matching delimiters");
                     ErrorManager.Write(methodName);
                 }
-                return methodName;
             }
 
+            private static void SetList(ScintillaNET.Scintilla text_box, List<String> methods)
+            {
+                text_box.AutoComplete.MaxHeight = 10;
+                text_box.AutoComplete.Show(0, methods);
+            }
+
+            private static void SetList(ScintillaNET.Scintilla text_box, String methodName){
+                //var methodName = MethodFinder.Run(text_box);
+                var method = MongoMethods.GeneralMethods.Find(x => x.Name == methodName);
+                if (method == null) {
+                    return;
+                }
+
+                text_box.AutoComplete.MaxHeight = 10;
+                //text_box.AutoComplete.List = method.ChildMethods;
+                text_box.AutoComplete.Show(0, method.ChildMethods);
+            }
+
+            public static bool IsQueryEndingInCollectionName(String s)
+            {
+                //catched "db .   temp", "db.temp", "db. temp", "db .temp"
+                //preceded by " ", "=", "(", or "{" or ";"
+                //or at the begining of line
+
+                string regex = @"(^|(\s)+|\=|\(|\{|\;)(db)(\s)*\.(\s)*([a-zA-Z0-9]*)$";
+                var options = RegexOptions.IgnoreCase | RegexOptions.Singleline;
+                var reg = new Regex(regex, options);
+                try
+                {
+                    var c = reg.Matches(s);
+                    return c.Count > 0;
+                }
+                catch (Exception ex)
+                {
+                    ErrorManager.Write(ex);
+                }
+                return false;
+            }
+
+            #region "functions for handling general methods: find, etc"
+            public static bool IsQueryEndingInClosingParenthesis(String s)
+            {
+                //var s = text_box.Text.Substring(0, text_box.CurrentPos - 1);
+                //catch "db .   temp", "db.temp", "db. temp", "db .temp"
+                string regex = @"\)$";
+                var options = RegexOptions.IgnoreCase | RegexOptions.Singleline;
+                var reg = new Regex(regex, options);
+                try
+                {
+                    var c = reg.Matches(s);
+                    return c.Count > 0;
+                }
+                catch (Exception ex)
+                {
+                    ErrorManager.Write(ex);
+                }
+                return false;
+            }
+        
             private static String GetMethodName(Match firstBracket, String s)
             {
                 var word = new List<char>();
@@ -309,8 +350,6 @@ namespace DBUI.Mongo {
 
                     var c = reg.Matches(s);
                     var list = new List<Match>();
-
-                    int i = 0;
 
                     foreach (Match q in c)
                     {
@@ -453,8 +492,10 @@ namespace DBUI.Mongo {
                 itemsTaken = length;
                 return toRemove;
             }
+            #endregion
 
         }
+
         #endregion
 
 
