@@ -460,14 +460,31 @@ namespace DBUI.Mongo {
                         Name = m.SelectSingleNode("@name").Value,
                         WithWarning = bool.Parse(m.SelectSingleNode("@withWarning").Value)
                     };
-                    s.Databases = BuildDatabase(m);
+                    s.Databases = GetDatabase(m);
                     servers.Add(s);
                 }
                 return servers;
             }
         }
 
-        private List<Database> BuildDatabase(XmlNode serverNode)
+        public void SetCollectionList(List<String> l, String server, String database) {
+            var serverNode = RootNode.SelectNodes(_servers + "/*").ToList().FirstOrDefault(
+                     x => x.SelectSingleNode("@name").Value == server);
+            if (serverNode == null) { 
+                return; 
+            }
+
+            var databaseNode = serverNode.SelectNodes("Database").ToList().FirstOrDefault(
+                     x => x.SelectSingleNode("@name").Value == database);
+
+            if (databaseNode == null)
+            {
+                return;
+            }
+                        
+        }
+
+        private List<Database> GetDatabase(XmlNode serverNode)
         {
             var l = new List<Database>();
             foreach (XmlNode o in serverNode.SelectNodes("*"))
@@ -475,13 +492,13 @@ namespace DBUI.Mongo {
                 l.Add(new Database()
                 {
                     Name = o.SelectSingleNode("@name").Value,
-                    Collections = BuildCollectionList(o)
+                    Collections = GetCollectionList(o)
                 });
             }
             return l;
         }
 
-        private List<String> BuildCollectionList(XmlNode n)
+        private List<String> GetCollectionList(XmlNode n)
         {
             if (n == null)
             {

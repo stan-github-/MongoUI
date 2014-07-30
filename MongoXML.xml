@@ -9,7 +9,7 @@
        <QueryFolder>%temp%\\MongoQueries</QueryFolder>
     </Query>
     <CustomJavascriptFiles comments="not linked to Options form, yet">
-      <Path>H:\underscore.js</Path>
+      <Path>.\Scripts\AutoCompleter.js</Path>
     </CustomJavascriptFiles>
     <UsefulScriptFiles comments="not linked to Options form, yet">
       <Path>H:\underscore.js</Path>

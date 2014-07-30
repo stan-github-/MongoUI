@@ -19,6 +19,10 @@ namespace DBUI
         {
             MongoXMLManager = new MongoXMLRepository();
             MongoXMLManager.Init("MongoXML.xml", "DocumentElement");
+
+            var x = new AutoCompleter();
+            x.GetCollectionNames();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMainMDI());
