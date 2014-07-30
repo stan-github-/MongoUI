@@ -9,6 +9,7 @@
        <QueryFolder>%temp%\\MongoQueries</QueryFolder>
     </Query>
     <CustomJavascriptFiles comments="not linked to Options form, yet">
+      <Path>.\Scripts\underscore.js</Path>
       <Path>.\Scripts\AutoCompleter.js</Path>
     </CustomJavascriptFiles>
     <UsefulScriptFiles comments="not linked to Options form, yet">
@@ -39,25 +40,10 @@
   <Servers comments="edit this to fill the combo boxes in application">
     <Server name="localhost" withWarning="false">
       <Database name="test">
-        <Collections folder="">
-          <C name="testCollection1"></C>
-          <C name="testCollection2"></C>
-          <C name="testCollection3"></C>
-        </Collections>
       </Database>
       <Database name="temp">
-        <Collections folder="">
-          <C name="temptCollection1"></C>
-          <C name="tempCollection2"></C>
-          <C name="tempCollection3"></C>
-        </Collections>
       </Database>
       <Database name="system">
-        <Collections folder="">
-          <C name="systemCollection1"></C>
-          <C name="systemCollection2"></C>
-          <C name="systemCollection3"></C>
-        </Collections>
       </Database>
     </Server>
     <Server name="alpha" withWarning="true">

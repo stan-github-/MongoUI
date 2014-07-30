@@ -355,7 +355,7 @@ namespace DBUI.Mongo {
                     if (m.SelectSingleNode(String.Format("*[text()='{0}']", x.InnerText)) 
                         == null)
                     {
-                        this.AppendNode(ref m, "f", x.InnerText);
+                        this.AppendNode (ref m, "f", x.InnerText);
                     }
                 }
 
@@ -481,7 +481,22 @@ namespace DBUI.Mongo {
             {
                 return;
             }
-                        
+
+            var collectionNodeNew = this.CreateNode("Collections", null);
+            foreach (var collection in l) {
+                var n = this.AppendNode(ref collectionNodeNew, "C", "");
+                var attr = this.AppendAttribute(ref n, "name", collection);
+            }
+
+            var collectionNodeOld = databaseNode.SelectSingleNode("Collections");
+
+            if (collectionNodeOld == null) {
+                databaseNode.AppendChild(collectionNodeNew);
+                return;
+            }
+
+            databaseNode.ReplaceChild(collectionNodeNew, collectionNodeOld);
+
         }
 
         private List<Database> GetDatabase(XmlNode serverNode)

@@ -203,6 +203,7 @@ namespace DBUI.Mongo
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
+            process.StartInfo.CreateNoWindow = true;
             process.Start();
 
             _queryOutput.Append(process.StandardOutput.ReadToEnd());

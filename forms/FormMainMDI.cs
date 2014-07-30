@@ -35,8 +35,10 @@ namespace DBUI {
             Init();
         }
 
+        private AutoCompleter _autoCompleter = new AutoCompleter();
+
         private bool Init() {
-            if (Program.MongoXMLManager.Init() == false) { return false; }
+            //if (Program.MongoXMLManager.Init() == false) { return false; }
 
             this.SetServerComboBox();
             this.SetDropDownFileHistory();
@@ -57,9 +59,10 @@ namespace DBUI {
             this.saveToolStripMenuItem.Click += SaveQueryFile;
 
             this.saveToolStripButton.Visible = true;
-            this.saveFileDialog1.FileOk += SaveQueryWithFileDialog;   
+            this.saveFileDialog1.FileOk += SaveQueryWithFileDialog;
 
-            
+            _autoCompleter.RefreshCurrentDBCollectionNames();
+        
             //future features
             this.historyMenu.Enabled = false;
             this.historyMenu.Visible = false;
@@ -181,11 +184,14 @@ namespace DBUI {
         {
             SetDatabaseComboBox();
             SaveCurrentServerAndDatabase();
+            _autoCompleter.RefreshCurrentDBCollectionNames();
+        
         }
 
         private void databaseComboBox_Select(object sender, EventArgs e)
         {
             SaveCurrentServerAndDatabase();
+            _autoCompleter.RefreshCurrentDBCollectionNames();
         }
 
         private void SaveCurrentServerAndDatabase()

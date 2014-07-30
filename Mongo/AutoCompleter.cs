@@ -7,7 +7,7 @@ namespace DBUI.Mongo
 {
     class AutoCompleter
     {
-        public List<String> GetCollectionNames(String server, String database) { 
+        public List<String> GetCurrentDBCollectionNames() { 
             
             //var server = Program.MongoXMLManager.CurrentServer.Name;
             //var database = Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name;
@@ -21,14 +21,16 @@ namespace DBUI.Mongo
                 .Skip(3).ToList();
         }
 
-        public void RefreshCollectionNames() {
-            var servers = Program.MongoXMLManager.Servers;
-            foreach (var s in servers) {
-                foreach (var d in s.Databases) {
-                    var collectionNames = GetCollectionNames(s.Name, d.Name);
-                    d.Collections = collectionNames;
-                }
-            }
+        public void RefreshCurrentDBCollectionNames() {
+            //var servers = Program.MongoXMLManager.Servers;
+            //foreach (var s in servers) {
+            //    foreach (var d in s.Databases) {
+            var server = Program.MongoXMLManager.CurrentServer.Name;
+            var database = Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name;
+            var collectionNames = GetCurrentDBCollectionNames();
+            Program.MongoXMLManager.SetCollectionList
+                        (collectionNames, server, database);
+         
         }
     }
 }
