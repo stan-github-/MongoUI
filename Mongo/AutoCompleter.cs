@@ -12,7 +12,7 @@ namespace DBUI.Mongo
             //var server = Program.MongoXMLManager.CurrentServer.Name;
             //var database = Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name;
 
-            var executor = new QueryExecuter();
+            var executor = new QueryExecuter() { NoWindows = true};
             var func = "GetCollectionNames();";
 
             var results = executor.Execute(func);

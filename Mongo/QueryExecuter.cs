@@ -13,6 +13,9 @@ namespace DBUI.Mongo
         //need to get rid of _form variable, just pass in strings...
         //private FormMongoQuery _form;
         private StringBuilder _queryOutput;
+
+        public bool NoWindows { get; set; }
+
         private String tempJSFile
         {
             get
@@ -203,7 +206,7 @@ namespace DBUI.Mongo
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.CreateNoWindow = NoWindows;
             process.Start();
 
             _queryOutput.Append(process.StandardOutput.ReadToEnd());
