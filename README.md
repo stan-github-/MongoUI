@@ -22,8 +22,8 @@ MongoUI is a bear-bone mongo mananger modeled after sql server manager, where mu
 <table>
   <tr><td colspan=2>1) Autocomplete (implemented "db.collection." and "db.collection.find()")</td></tr>
   <tr><td colspan=2>2) Executes DOS and SQL cmds</td></tr>
-  <tr><td></td><td>a) separated by "##MONGO##", "##DOS##", or "##SQL##"</td></tr>
-  <tr><td></td><td>b) does not support sql server switching based on environment.</td></tr>
+  <tr><td></td><td>a) separates queries by "##MONGO##", "##DOS##", or "##SQL##"</td></tr>
+  <tr><td></td><td>b) supports single sql server only.</td></tr>
 </table>
 
 <img src="Images/AppSnapShot.jpg"></image>
