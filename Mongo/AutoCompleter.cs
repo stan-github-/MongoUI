@@ -12,10 +12,15 @@ namespace DBUI.Mongo
             //var server = Program.MongoXMLManager.CurrentServer.Name;
             //var database = Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name;
 
-            var executor = new QueryExecuter() { NoWindows = true};
+            var executor = new QueryExecuter() { NoWindows = true, NoConfirmation= true};
             var func = "GetCollectionNames();";
 
             var results = executor.Execute(func);
+            
+            if (!String.IsNullOrWhiteSpace(executor.QueryError)) {
+                ErrorManager.Write(executor.QueryError);
+            }
+
             return results.Split(
                 new String[]{"\r\n"}, StringSplitOptions.RemoveEmptyEntries)
                 .Skip(3).ToList();

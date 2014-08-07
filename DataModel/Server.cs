@@ -6,6 +6,7 @@ using System.Text;
 namespace DBUI.DataModel {
     class Server {
         public String Name { get; set; }
+        public String Alias { get; set; }
         public String StartupFile { get; set; }
         public List<Database> Databases { get; set;}
         public List<String> CustomFilePaths {get; set;}

@@ -38,7 +38,7 @@
     </CodeSnippets>
   </Options>
   <Servers comments="edit this to fill the combo boxes in application">
-    <Server name="localhost" withWarning="false">
+    <Server name="localhost" alias="localhost" withWarning="false">
       <Database name="test">
       </Database>
       <Database name="temp">
@@ -46,12 +46,12 @@
       <Database name="system">
       </Database>
     </Server>
-    <Server name="alpha" withWarning="true">
+    <Server name="alpha" alias="alpha" withWarning="true">
       <Database name="test"></Database>
       <Database name="temp"></Database>
       <Database name="system"></Database>
     </Server>
-    <Server name="beta" withWarning="true">
+    <Server name="beta" alias="beta" withWarning="true">
       <Database name="test"></Database>
       <Database name="temp"></Database>
       <Database name="system"></Database>

@@ -12,9 +12,14 @@ namespace DBUI.Mongo
     {
         //need to get rid of _form variable, just pass in strings...
         //private FormMongoQuery _form;
-        private StringBuilder _queryOutput;
+        private StringBuilder _queryOutputAll;
+        private StringBuilder _queryOutputError;
 
         public bool NoWindows { get; set; }
+        //overrides server configuration
+        //for querying collection names
+        public bool NoConfirmation { get; set; }
+        public String QueryError { get { return _queryOutputError.ToString(); } }
 
         private String tempJSFile
         {
@@ -46,13 +51,15 @@ namespace DBUI.Mongo
                 return String.Empty;
             }
 
-            _queryOutput = new StringBuilder();
+            //used to store console app outputs
+            _queryOutputAll = new StringBuilder();
+            _queryOutputError = new StringBuilder();
 
             var queries = SplitQueries(query);
 
             foreach (Tuple<QueryType, String> q in queries)
             {
-                _queryOutput.Append("--------------------")
+                _queryOutputAll.Append("--------------------")
                     .Append(q.Item1.ToString())
                     .Append("---------------------")
                     .Append(Environment.NewLine);
@@ -67,8 +74,7 @@ namespace DBUI.Mongo
                 }
             }
 
-            return _queryOutput.ToString();
-            //DispalyQueryOutput(_queryOutput.ToString());
+            return _queryOutputAll.ToString();
         }
         public QueryExecuter()
         {
@@ -140,6 +146,10 @@ namespace DBUI.Mongo
 
         private bool ContinueWithExecutionAfterWarning()
         {
+            if (NoConfirmation){
+                return true;
+            }
+
             var serverName = Program.MongoXMLManager.CurrentServer.Name;
 
             if (!Program.MongoXMLManager.Servers.First(s => s.Name == serverName).WithWarning)
@@ -208,10 +218,15 @@ namespace DBUI.Mongo
             process.StartInfo.RedirectStandardError = true;
             process.StartInfo.CreateNoWindow = NoWindows;
             process.Start();
+            
+            //error output
+            _queryOutputError.Append(process.StandardError.ReadToEnd());
 
-            _queryOutput.Append(process.StandardOutput.ReadToEnd());
-            _queryOutput.Append(Environment.NewLine);
-            _queryOutput.Append(process.StandardError.ReadToEnd());
+            //query output + error output
+            _queryOutputAll.Append(process.StandardOutput.ReadToEnd());
+            _queryOutputAll.Append(Environment.NewLine);
+            _queryOutputAll.Append(_queryOutputError.ToString());
+            
             process.WaitForExit();
 
         }
