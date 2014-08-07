@@ -3,27 +3,27 @@ MongoUI
 
 MongoUI is a bear-bone mongo mananger modeled after sql server manager, where multiple queries and query results are handled in separate windows.  
 
-<span style="font-weight:bold">Core features:</span>
-<table>
-  <tr><td colspan=2>1) Opens queries in separate windows.</td></tr>
-  <tr><td colspan=2>2) Switches easily amongst servers and databases.</td></tr>
-  <tr><td colspan=2>3) Outputs results to desired exe (notepad) or inside a pane.</td></tr>
-  <tr><td colspan=2>4) Allows inclusion of libraries such as Underscore.js.</td></tr>
-</table>
+###Core features: ###
 
-<span style="font-weight:bold">Additional features:</span>
-<table>
-  <tr><td colspan=2>1) Pops confirmation dialog before query execution, depending on server configuration.</td></tr>
-  <tr><td colspan=2>2) Reopens all files opened in previous session.</td></tr>
-  <tr><td colspan=2>3) Stores static list of files for quick access.</td></tr>
-</table>
+  - Opens queries in separate windows.
+  - Switches easily amongst servers and databases.
+  - Outputs results to desired exe (notepad) or inside a pane.
+  - Allows inclusion of libraries such as Underscore.js.
 
-<span style="font-weight:bold">Features in progress:</span>
-<table>
-  <tr><td colspan=2>1) Autocomplete (implemented "db.collection." and "db.collection.find()")</td></tr>
-  <tr><td colspan=2>2) Executes DOS and SQL cmds</td></tr>
-  <tr><td></td><td>a) separates queries by "##MONGO##", "##DOS##", or "##SQL##"</td></tr>
-  <tr><td></td><td>b) supports single sql server only.</td></tr>
-</table>
 
+###Additional features: ###
+
+  - Pops confirmation dialog before query execution, depending on server configuration.</td></tr>
+  - Reopens all files opened in previous session.</td></tr>
+  - Stores static list of files for quick access.</td></tr>
+
+###Features in progress: ###
+
+  - Autocomplete (implemented "db.collection." and "db.collection.find()")
+  - Executes DOS and SQL cmds
+    1. separates queries by "##MONGO##", "##DOS##", or "##SQL##"
+    2. supports single sql server only.
+
+
+###Snapshot: ###
 <img src="Images/AppSnapShot.jpg"></image>
