@@ -177,6 +177,7 @@ namespace DBUI {
             }
 
             this.databaseComboBox.Text = Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name;
+            //_autoCompleter.RefreshCurrentDBCollectionNames();
         }
 
         #region "saving server and databae setting"
@@ -184,7 +185,7 @@ namespace DBUI {
         {
             SetDatabaseComboBox();
             SaveCurrentServerAndDatabase();
-            _autoCompleter.RefreshCurrentDBCollectionNames();
+            //_autoCompleter.RefreshCurrentDBCollectionNames();
         
         }
 
