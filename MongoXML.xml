@@ -11,6 +11,7 @@
     <CustomJavascriptFiles comments="not linked to Options form, yet">
       <Path>.\Scripts\underscore.js</Path>
       <Path>.\Scripts\AutoCompleter.js</Path>
+      <Path>.\Scripts\Custom.js</Path>
     </CustomJavascriptFiles>
     <UsefulScriptFiles comments="not linked to Options form, yet">
       <Path>H:\underscore.js</Path>
@@ -19,8 +20,8 @@
       <T>MongoUI</T>
       <T>notepad.exe</T>
     </QueryOutputTypes>
-    <SQLCmd current="local_datawarehouse">
-      <S name="local_datawarehouse">
+    <SQLCmd current="localhost">
+      <S name="localhost">
         <ExePath>c:\Program Files\Microsoft SQL Server\110\Tools\Binn\SQLCMD.EXE</ExePath>
         <Server>localhost</Server>
         <Database>test</Database>

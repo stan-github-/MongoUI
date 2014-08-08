@@ -315,6 +315,7 @@ namespace DBUI.Mongo {
                 //preceded by " ", "=", "(", or "{" or ";"
                 //or at the begining of line
 
+                //use [] instead of | to group characters.
                 string regex = @"(^|(\s)+|\=|\(|\{|\;)(db)(\s)*\.(\s)*([a-zA-Z0-9]*)$";
                 var options = RegexOptions.IgnoreCase | RegexOptions.Singleline;
                 var reg = new Regex(regex, options);
@@ -335,7 +336,7 @@ namespace DBUI.Mongo {
             {
                 //var s = text_box.Text.Substring(0, text_box.CurrentPos - 1);
                 //catch "db .   temp", "db.temp", "db. temp", "db .temp"
-                string regex = @"\)$";
+                string regex = @"\)([\s, \t, \r, \n]*)$";
                 var options = RegexOptions.IgnoreCase | RegexOptions.Singleline;
                 var reg = new Regex(regex, options);
                 try
