@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DocumentElement>
+  <Options comments="linked to UI form">
+    <General>
+      <TempFolder>%temp%\</TempFolder>
+      <DeleteTempFolderContents>true</DeleteTempFolderContents>
+    </General>
+    <Query>
+      <QueryFolder>%temp%\\MongoQueries</QueryFolder>
+    </Query>
+    <CustomJavascriptFiles comments="not linked to Options form, yet">
+      <Path>.\Scripts\underscore.js</Path>
+      <Path>.\Scripts\AutoCompleter.js</Path>
+      <Path>.\Scripts\Custom.js</Path>
+    </CustomJavascriptFiles>
+    <UsefulScriptFiles comments="not linked to Options form, yet">
+      <Path>H:\underscore.js</Path>
+    </UsefulScriptFiles>
+    <QueryOutputTypes current="MongoUI">
+      <T>MongoUI</T>
+      <T>notepad.exe</T>
+    </QueryOutputTypes>
+    <SQLCmd current="localhost">
+      <S name="localhost">
+        <ExePath>c:\Program Files\Microsoft SQL Server\110\Tools\Binn\SQLCMD.EXE</ExePath>
+        <Server>localhost</Server>
+        <Database>test</Database>
+        <Query>
+        </Query>
+      </S>
+    </SQLCmd>
+    <CodeSnippets current="3789">
+      <Group name="3789">
+        <Path name="1">e:\Users\ztan\Desktop\demo\1.txt</Path>
+        <Path name="2">e:\Users\ztan\Desktop\demo\2.txt</Path>
+        <Path name="3">e:\Users\ztan\Desktop\demo\3.txt</Path>
+      </Group>
+    </CodeSnippets>
+  </Options>
+  <Servers comments="edit this to fill the combo boxes in application">
+    <Server name="localhost" alias="localhost" withWarning="false">
+      <Database name="test">
+        <Collections>
+          <C name="system.indexes" />
+          <C name="t1" />
+          <C name="t2" />
+          <C name="t3" />
+          <C name="t4" />
+          <C name="temp1" />
+        </Collections>
+      </Database>
+      <Database name="temp">
+      </Database>
+      <Database name="system">
+      </Database>
+    </Server>
+    <Server name="alpha" alias="alpha" withWarning="true">
+      <Database name="test">
+      </Database>
+      <Database name="temp">
+      </Database>
+      <Database name="system">
+      </Database>
+    </Server>
+    <Server name="beta" alias="beta" withWarning="true">
+      <Database name="test">
+      </Database>
+      <Database name="temp">
+      </Database>
+      <Database name="system">
+      </Database>
+    </Server>
+  </Servers>
+  <Miscellaneous comments="not for configuration; used by application only">
+    <LastOpenedFilePath>
+    </LastOpenedFilePath>
+    <LastOpenedFilePaths>
+    </LastOpenedFilePaths>
+    <FileHistory>
+    </FileHistory>
+    <CurrentServer name="localhost">
+      <CurrentDatabase>test</CurrentDatabase>
+    </CurrentServer>
+  </Miscellaneous>
+</DocumentElement>
