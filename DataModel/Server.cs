@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace DBUI.DataModel {
-    class Server {
+    public class Server {
         public String Name { get; set; }
         public String Alias { get; set; }
         public String StartupFile { get; set; }
@@ -15,7 +15,7 @@ namespace DBUI.DataModel {
         public bool WithWarning { get; set; }
     }
 
-    internal class Database
+    public class Database
     {
         public String Name { get; set; }
         public List<String> Collections { get; set; }

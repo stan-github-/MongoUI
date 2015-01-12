@@ -231,7 +231,7 @@ namespace DBUI.Mongo {
     }
     */
 
-    class MongoXMLRepository : XMLManager {
+    public class MongoXMLRepository : XMLManager {
         
         private const String _lastFilePath = "Miscellaneous/LastOpenedFilePath";
         private const String _lastFilePaths = "Miscellaneous/LastOpenedFilePaths";

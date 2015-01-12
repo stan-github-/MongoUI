@@ -597,7 +597,7 @@ namespace DBUI.Mongo {
             {
                 this.splitContainer1.Panel2Collapsed = true;
                 this.splitContainer1.Panel2.Visible = false;
-                QueryExecuter.DisplayQueryInExe(content, Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType);
+                 _queryExecuter.DisplayQueryInExe(content, Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType);
             }
             else if (Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType == "MongoUI")
             {

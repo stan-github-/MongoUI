@@ -148,7 +148,7 @@ namespace DBUI
     //    #endregion
     //}
 
-    class XMLManager{
+    public class XMLManager{
 
         private XmlDocument _domDoc;
         private String _xmlFileName;

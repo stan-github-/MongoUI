@@ -19,24 +19,32 @@ namespace DBUI.Mongo
         //overrides server configuration
         //for querying collection names
         public bool NoConfirmation { get; set; }
+        public bool NoOutputPrefix { get; set; }
         public String QueryError { get { return _queryOutputError.ToString(); } }
 
-        private String tempJSFile
-        {
-            get
-            {
-                return Environment.ExpandEnvironmentVariables(Program.MongoXMLManager.TempFolderPath
-                                                              + "\\" + Guid.NewGuid() + ".js");
-            }
+        public MongoXMLRepository MongoXMLManager {get; set; }
+        private String TempJSFile { get; set;}
+        private String TempBatFile { get; set; }
+
+
+        public QueryExecuter(MongoXMLRepository mongoxmlRepository) {
+            MongoXMLManager = mongoxmlRepository == null
+                ? Program.MongoXMLManager : mongoxmlRepository;
+
+            SetTempFilePaths();
         }
 
-        private String tempBatFile
+        public QueryExecuter()
         {
-            get
-            {
-                return Environment.ExpandEnvironmentVariables(Program.MongoXMLManager.TempFolderPath
+            MongoXMLManager = Program.MongoXMLManager;
+            SetTempFilePaths();
+        }
+
+        private void SetTempFilePaths() { 
+                TempJSFile = Environment.ExpandEnvironmentVariables(MongoXMLManager.TempFolderPath
+                                                              + "\\" + Guid.NewGuid() + ".js");
+            TempBatFile = Environment.ExpandEnvironmentVariables(MongoXMLManager.TempFolderPath
                                                               + "\\" + Guid.NewGuid() + ".bat");
-            }
         }
 
         public String Execute(string query)
@@ -59,10 +67,13 @@ namespace DBUI.Mongo
 
             foreach (Tuple<QueryType, String> q in queries)
             {
-                _queryOutputAll.Append("--------------------")
-                    .Append(q.Item1.ToString())
-                    .Append("---------------------")
-                    .Append(Environment.NewLine);
+                if (NoOutputPrefix == false)
+                {
+                    _queryOutputAll.Append("--------------------")
+                        .Append(q.Item1.ToString())
+                        .Append("---------------------")
+                        .Append(Environment.NewLine);
+                }
 
                 if (q.Item1 == QueryType.SQL || q.Item1 == QueryType.DOS)
                 {
@@ -76,11 +87,7 @@ namespace DBUI.Mongo
 
             return _queryOutputAll.ToString();
         }
-        public QueryExecuter()
-        {
-            //_form = form;
-        }
-
+        
         //first split query into individual components
         //make sure which is which
         //run through the queries.
@@ -150,9 +157,9 @@ namespace DBUI.Mongo
                 return true;
             }
 
-            var serverName = Program.MongoXMLManager.CurrentServer.Name;
+            var serverName = MongoXMLManager.CurrentServer.Name;
 
-            if (!Program.MongoXMLManager.Servers.First(s => s.Name == serverName).WithWarning)
+            if (!MongoXMLManager.Servers.First(s => s.Name == serverName).WithWarning)
             {
                 return true;
             }
@@ -170,7 +177,7 @@ namespace DBUI.Mongo
             String arguments = string.Empty;
             String fileName = string.Empty;
 
-            var sqlCmd = Program.MongoXMLManager.SQlCmd;
+            var sqlCmd = MongoXMLManager.SQlCmd;
 
             if (type == QueryType.SQL)
             {
@@ -239,7 +246,7 @@ namespace DBUI.Mongo
                 return;
             }
 
-            var tempFile = tempBatFile;
+            var tempFile = TempBatFile;
             FileManager.SaveToFile(tempFile, "");
             FileManager.AppendToFile(tempFile, command);
 
@@ -259,15 +266,15 @@ namespace DBUI.Mongo
             }
 
             //apppend custom code to file
-            var tempFile = tempJSFile;
+            var tempFile = TempJSFile;
             FileManager.SaveToFile(tempFile, PrependCustomJSCode(""));
             FileManager.AppendToFile(tempFile, query);
 
             //execute file
             String arguments = String.Format(
-                "{0} --host {1} {2} ",
-                Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name,
-                Program.MongoXMLManager.CurrentServer.Name,
+                "{0} --quiet --host {1} {2} ",
+                MongoXMLManager.CurrentServer.CurrentDatabase.Name,
+                MongoXMLManager.CurrentServer.Name,
                 //((FormMainMDI)_form.ParentForm).DatabaeName,
                 //((FormMainMDI)_form.ParentForm).ServerName,
                 tempFile);
@@ -279,13 +286,13 @@ namespace DBUI.Mongo
 
         //private void DispalyQueryOutput(String content)
         //{
-        //    if (!Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType.Contains("MongoUI"))
+        //    if (!MongoXMLManager.QueryOutputTypes.CurrentOutputType.Contains("MongoUI"))
         //    {
         //        _form.splitContainer1.Panel2Collapsed = true;
         //        _form.splitContainer1.Panel2.Visible = false;
-        //        DisplayQueryInExe(content, Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType);
+        //        DisplayQueryInExe(content, MongoXMLManager.QueryOutputTypes.CurrentOutputType);
         //    }
-        //    else if (Program.MongoXMLManager.QueryOutputTypes.CurrentOutputType == "MongoUI")
+        //    else if (MongoXMLManager.QueryOutputTypes.CurrentOutputType == "MongoUI")
         //    {
         //        _form.splitContainer1.Panel2Collapsed = false;
         //        _form.splitContainer1.Panel2.Show();
@@ -296,7 +303,7 @@ namespace DBUI.Mongo
         private String PrependCustomJSCode(String script)
         {
             var b = new StringBuilder();
-            foreach (var path in Program.MongoXMLManager.CustomJSFilePaths)
+            foreach (var path in MongoXMLManager.CustomJSFilePaths)
             {
                 b.Append(FileManager.ReadFromFile(path)).Append("\n");
             }
@@ -304,10 +311,10 @@ namespace DBUI.Mongo
             return b.Append(script).ToString();
         }
 
-        public static void DisplayQueryInExe(String content, String exe)
+        public void DisplayQueryInExe(String content, String exe)
         {
             string tempPath = Environment.ExpandEnvironmentVariables
-                (Program.MongoXMLManager.TempFolderPath + "\\"
+                (MongoXMLManager.TempFolderPath + "\\"
                  + Guid.NewGuid() + ".json");
             ;
             if (FileManager.SaveToFile(tempPath, content)
