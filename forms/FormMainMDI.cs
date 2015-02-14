@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using DBUI;
-using DBUI.Mongo;
+using DBUI.Queries;
 using DBUI.DataModel;
 
 //using ScintillaNET.Configuration;
@@ -35,7 +35,7 @@ namespace DBUI {
             Init();
         }
 
-        private AutoCompleter _autoCompleter = new AutoCompleter();
+        private CollectionAutoCompleter _autoCompleter = new CollectionAutoCompleter();
 
         private bool Init() {
             //if (Program.MongoXMLManager.Init() == false) { return false; }
@@ -111,7 +111,7 @@ namespace DBUI {
         {
             foreach (var path in Program.MongoXMLManager.LastOpenedFilePaths)
             {
-                new Mongo.FormMongoQuery(this).Init(FormMongoQuery.Mode.Existing, path);
+                new Queries.FormMongoQuery(this).Init(FormMongoQuery.Mode.Existing, path);
             }
         }
 

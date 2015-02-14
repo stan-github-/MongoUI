@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DBUI.Mongo
+namespace DBUI.Queries
 {
-    class AutoCompleter
+    public class CollectionAutoCompleter
     {
         public List<String> GetCurrentDBCollectionNames() { 
             
@@ -13,6 +13,9 @@ namespace DBUI.Mongo
             //var database = Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name;
 
             var executor = new QueryExecuter() { NoWindows = true, NoConfirmation= true};
+            
+            //custom function defined in script file!
+            
             var func = "GetCollectionNames();";
 
             var results = executor.Execute(func);

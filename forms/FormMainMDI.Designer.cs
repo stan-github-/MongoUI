@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using DBUI.Mongo;
+using DBUI.Queries;
 
 namespace DBUI {
     partial class FormMainMDI {

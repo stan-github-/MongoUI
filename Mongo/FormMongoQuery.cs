@@ -12,7 +12,7 @@ using System.Windows.Forms;
 using DBUI;
 using System.Diagnostics;
 
-namespace DBUI.Mongo {
+namespace DBUI.Queries {
     public partial class FormMongoQuery : Form
     {
         private QueryExecuter _queryExecuter;
@@ -213,11 +213,19 @@ namespace DBUI.Mongo {
 
             public static void Run(ScintillaNET.Scintilla text_box, bool debug = false) {
 
+                var currentPos = text_box.CurrentPos;
+                var text = text_box.Text;
+                //this should be extension classes
                 var s = text_box.Text.Substring(0, text_box.CurrentPos - 1);
 
+                var e = currentPos == text.Length ? "" : text_box.Text.Substring(
+                     text_box.CurrentPos + 1,  //skipping the dot
+                     text_box.Text.Length - 1);
+                
+                
                 if (IsQueryEndingInClosingParenthesis(s) == true)
                 {
-                    SetList(text_box, debug, s);
+                    SetList(text_box, s, e, debug);
                 }
 
                 if (IsQueryEndingInCollectionName(s) == true) {
@@ -241,7 +249,18 @@ namespace DBUI.Mongo {
                 }
             }
 
-            private static void SetList(ScintillaNET.Scintilla text_box, bool debug, string s)
+            private static void SetList
+                (ScintillaNET.Scintilla text_box, 
+                 String queryFirstHalf, 
+                 String querySecondHalf, bool debug = false)
+            {
+                var properties = QueryAutoCompleter
+                    .GetMethodArray(queryFirstHalf, querySecondHalf);
+
+                SetList(text_box, properties);
+            }
+
+            private static void SetList2(ScintillaNET.Scintilla text_box, bool debug, string s)
             {
                 var brackets = MethodFinder.GetQueryDelimiters(s);
                 int itemsTaken;

@@ -1,4 +1,4 @@
-﻿namespace DBUI.Mongo {
+﻿namespace DBUI.Queries {
     partial class FormMongoQuery {
         /// <summary>
         /// Required designer variable.

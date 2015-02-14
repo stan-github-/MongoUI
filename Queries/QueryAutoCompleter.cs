@@ -4,92 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace ConsoleApplication
+namespace DBUI.Queries
 {
-    class Program
+    public class QueryAutoCompleter
     {
-        static void Main(string[] args)
-        {
-            Test.CaseOne();
-        }
-    }
-
-    public static class Test
-    {
-        public static QueryExecuter QueryExecuter {
-            get {
-                var mongoXMLManager = new MongoXMLRepository();
-                mongoXMLManager.Init("MongoXML.xml", "DocumentElement");
-
-                return new QueryExecuter(mongoXMLManager) { NoOutputPrefix = true };
-            }
-        }
-     
-        public static void CaseOne(){
-            var s = @"var x = db.test.find()";
-
-            String query = String.Empty;
-            AutoCompleter.GetReflectionQuery(s, "", out query);
-            Console.Write(query);
-            
-            var output = QueryExecuter.Execute(query);
-
-            var array = output.Split('\r').ToArray()[9].Trim().Replace("\"", "");
-            Console.Write(output);
-            Console.ReadKey();
-        }
-
-        public static void CaseTwo()
-        {
-            var s = @"function xxx() { var x = db.test.find()";
-
-            String query = String.Empty;
-            AutoCompleter.GetReflectionQuery(s, "", out query);
-            Console.Write(query);
-
-            var output = QueryExecuter.Execute(query + "}; zzz();");
-
-            Console.Write(output);
-            Console.ReadKey();
-        }
-    }
-
-    public class ErrorManager {
-        public static void Write(Exception ex){
-            Console.Write(ex.InnerException);
-            Console.Write(ex.StackTrace);
-        }
-
-        public static void Write(String s) {
-            Console.Write(s + Environment.NewLine);
-        }
-    }
-
-    //todo case one
-    //  find method
-    //  insert reflection function
-    //hum what to do with this???
-    /*
-     function test2(){
-	    function test() {
-		    var z = db.test.find();
-
-		    (function(){
-			    var x = db.test.find();
-			    for (p in x){
-				    printz(p);
-			    }
-		    })();
-	    };
-	    test();
-    };
-
-    test2(); 
-     */
-
-    public class AutoCompleter {
         static String ReflectionString =
                 @";
                     (function(){
@@ -101,10 +20,11 @@ namespace ConsoleApplication
                 ";
         static bool Debug = true;
 
-        public static List<String> GetMethodArray(String query) {
+        public static List<String> GetMethodArray(String queryFirstHalf, string querySecondHalf)
+        {
             String queryOut;
-            GetReflectionQuery(query, "", out queryOut);
-            
+            GetReflectionQuery(queryFirstHalf, querySecondHalf, out queryOut);
+
             var output = new QueryExecuter().Execute(queryOut);
 
             var array = output.Split('\r').ToList();
@@ -113,16 +33,18 @@ namespace ConsoleApplication
         }
 
         public static bool GetReflectionQuery
-            (String firstHalf, String secondHalf, out String query) {
-            
+            (String firstHalf, String secondHalf, out String query)
+        {
+
             query = String.Empty;
-            if (!IsQueryEndingInClosingParenthesis(firstHalf)) {
+            if (!IsQueryEndingInClosingParenthesis(firstHalf))
+            {
                 return false;
             }
 
             var methodName = GetMethodName(firstHalf);
 
-            var reflectionString = AutoCompleter.ReflectionString
+            var reflectionString = QueryAutoCompleter.ReflectionString
                 .Replace("{zzzz}", methodName + "()");
 
             query = String.Format("{0}{1}{2}", firstHalf, reflectionString, secondHalf);
@@ -134,7 +56,8 @@ namespace ConsoleApplication
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public static String GetMethodName(String query) {
+        public static String GetMethodName(String query)
+        {
             var brackets = GetQueryDelimiters(query);
             int itemsTaken;
             bool matchFound = false;
@@ -170,7 +93,7 @@ namespace ConsoleApplication
             for (int i = firstBracket.Groups[0].Index - 1; i > -1; i--)
             {
                 var c = chars[i];
-                if (Char.IsLetter(c) || Char.IsNumber(c) 
+                if (Char.IsLetter(c) || Char.IsNumber(c)
                     || Char.IsWhiteSpace(c) || c == '.')
                 {
                     word.Add(c);

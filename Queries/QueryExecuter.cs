@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace DBUI.Mongo
+namespace DBUI.Queries
 {
     public class QueryExecuter
     {

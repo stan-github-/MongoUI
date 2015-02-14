@@ -69,6 +69,7 @@
     <Compile Include="Core\XMLManager.cs" />
     <Compile Include="DataModel\Enums.cs" />
     <Compile Include="DataModel\Server.cs" />
+    <Compile Include="Extensions\Scintilla.cs" />
     <Compile Include="Forms\AboutDBUI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,7 +88,7 @@
     <Compile Include="Forms\FormOptions.Designer.cs">
       <DependentUpon>FormOptions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Mongo\AutoCompleter.cs" />
+    <Compile Include="Queries\CollectionAutoCompleter.cs" />
     <Compile Include="Mongo\FormMongoQuery.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,7 +98,8 @@
     <Compile Include="Mongo\MongoXMLRepository.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Mongo\QueryExecuter.cs" />
+    <Compile Include="Queries\QueryAutoCompleter.cs" />
+    <Compile Include="Queries\QueryExecuter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Core\FormError.resx">

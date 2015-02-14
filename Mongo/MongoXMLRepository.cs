@@ -10,7 +10,7 @@ using System.Xml.XPath;
 using DBUI;
 using DBUI.DataModel;
 
-namespace DBUI.Mongo {
+namespace DBUI.Queries {
    /* class MongoXMLManagerV2 : XMLManagerV2
     {
 

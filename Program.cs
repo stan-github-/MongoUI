@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using DBUI.Mongo;
+using DBUI.Queries;
 
 namespace DBUI
 {
     static class Program
     {
-        public static Mongo.MongoXMLRepository MongoXMLManager;
+        public static Queries.MongoXMLRepository MongoXMLManager;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
