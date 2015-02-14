@@ -12,7 +12,7 @@ namespace ConsoleApplication
     {
         static void Main(string[] args)
         {
-            Test.CaseTwo();
+            Test.CaseOne();
         }
     }
 
@@ -31,24 +31,25 @@ namespace ConsoleApplication
             var s = @"var x = db.test.find()";
 
             String query = String.Empty;
-            AutoCompleter.HandleMethodReflection(s, "", out query);
+            AutoCompleter.GetReflectionQuery(s, "", out query);
             Console.Write(query);
             
             var output = QueryExecuter.Execute(query);
 
+            var array = output.Split('\r').ToArray()[9].Trim().Replace("\"", "")
             Console.Write(output);
             Console.ReadKey();
         }
 
         public static void CaseTwo()
         {
-            var s = @"function() { var x = db.test.find()";
+            var s = @"function xxx() { var x = db.test.find()";
 
             String query = String.Empty;
-            AutoCompleter.HandleMethodReflection(s, "", out query);
+            AutoCompleter.GetReflectionQuery(s, "", out query);
             Console.Write(query);
 
-            var output = QueryExecuter.Execute(query + "}");
+            var output = QueryExecuter.Execute(query + "}; zzz();");
 
             Console.Write(output);
             Console.ReadKey();
@@ -92,7 +93,7 @@ namespace ConsoleApplication
         static String ReflectionString =
                 @";
                     (function(){
-	                var x = zzz;
+	                var x = {zzzz};
 	                    for (p in x){
 		                    printz(p);
 	                    }
@@ -100,7 +101,7 @@ namespace ConsoleApplication
                 ";
         static bool Debug = true;
 
-        public static bool HandleMethodReflection
+        public static bool GetReflectionQuery
             (String firstHalf, String secondHalf, out String query) {
             
             query = String.Empty;
@@ -111,7 +112,7 @@ namespace ConsoleApplication
             var methodName = GetMethodName(firstHalf);
 
             var reflectionString = AutoCompleter.ReflectionString
-                .Replace("zzz", methodName + "()");
+                .Replace("{zzzz}", methodName + "()");
 
             query = String.Format("{0}{1}{2}", firstHalf, reflectionString, secondHalf);
             return true;
@@ -278,6 +279,10 @@ namespace ConsoleApplication
         }
 
         //recursively remove brackets
+        //find(
+        //        function()
+        //          {{...}, {...}, [...]}
+        //     ).
         private static List<Match> RemoveMatchingBrackets(List<Match> delimiters, out int itemsTaken, out bool matchFound)
         {
             int length = delimiters.Count;
