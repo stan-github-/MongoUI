@@ -109,11 +109,11 @@ namespace DBUI.Queries {
         
         #region "autocomplete"
 
-        public class Method
-        {
-            public String Name { get; set; }
-            public List<String> ChildMethods { get; set; }
-        }
+        //public class Method
+        //{
+        //    public String Name { get; set; }
+        //    public List<String> ChildMethods { get; set; }
+        //}
 
         public class MongoMethods {
             //            function test(){
@@ -212,7 +212,10 @@ namespace DBUI.Queries {
 
                 if (IsQueryEndingInClosingParenthesis(text_box.TextBeforeCursor()) == true)
                 {
-                    SetList(text_box, text_box.TextBeforeCursor(), text_box.TextAfterCursor(), debug);
+                    var properties = QueryAutoCompleter
+                    .GetMethodArray(text_box.TextBeforeCursor(), text_box.TextAfterCursor());
+
+                    SetList(text_box, properties);
                 }
 
                 if (IsQueryEndingInCollectionName(text_box.TextBeforeCursor()) == true) {
@@ -236,17 +239,6 @@ namespace DBUI.Queries {
                 }
             }
 
-            private static void SetList
-                (ScintillaNET.Scintilla text_box, 
-                 String queryFirstHalf, 
-                 String querySecondHalf, bool debug = false)
-            {
-                var properties = QueryAutoCompleter
-                    .GetMethodArray(queryFirstHalf, querySecondHalf);
-
-                SetList(text_box, properties);
-            }
-
             private static void SetList(ScintillaNET.Scintilla text_box, List<String> methods)
             {
                 text_box.AutoComplete.MaxHeight = 10;
@@ -254,8 +246,7 @@ namespace DBUI.Queries {
             }
 
 
-
-            public static bool IsQueryEndingInDB(String s)
+            private static bool IsQueryEndingInDB(String s)
             {
                 //catched "db .   temp", "db.temp", "db. temp", "db .temp"
                 //preceded by " ", "=", "(", or "{" or ";"
@@ -276,7 +267,7 @@ namespace DBUI.Queries {
                 return false;
             }
 
-            public static bool IsQueryEndingInCollectionName(String s)
+            private static bool IsQueryEndingInCollectionName(String s)
             {
                 //catched "db .   temp", "db.temp", "db. temp", "db .temp"
                 //preceded by " ", "=", "(", or "{" or ";"
@@ -299,7 +290,7 @@ namespace DBUI.Queries {
             }
 
             //#region "functions for handling general methods: find, etc"
-            public static bool IsQueryEndingInClosingParenthesis(String s)
+            private static bool IsQueryEndingInClosingParenthesis(String s)
             {
                 //var s = text_box.Text.Substring(0, text_box.CurrentPos - 1);
                 //catch "db .   temp", "db.temp", "db. temp", "db .temp"
