@@ -200,56 +200,6 @@ namespace DBUI.Queries {
                     "validate",
                     "verify"
                 };
-
-            public readonly static List<String> FindObjectMethods = 
-                new List<String>
-            {
-
-                //"_addSpecial",
-                //"_checkModify",
-                //"_ensureSpecial",
-                //"_exec",
-                "addOption",
-                "arrayAccess",
-                "batchSize",
-                "clone",
-                "comment",
-                "count",
-                "countReturn",
-                "explain",
-                "forEach",
-                "hasNext",
-                "help",
-                "hint",
-                "itcount",
-                "length",
-                "limit",
-                "map",
-                "max",
-                "min",
-                "next",
-                "objsLeftInBatch",
-                "pretty",
-                "readOnly",
-                "readPref",
-                "shellPrint",
-                "showDiskLoc",
-                "size",
-                "skip",
-                "snapshot",
-                "sort",
-                "toArray",
-                "toString",
-            };
-
-            public readonly static List<Method> GeneralMethods =
-                new List<Method>()
-                {
-                    new Method  {
-                        Name = "find",
-                        ChildMethods = FindObjectMethods,
-                    },
-                };
         }
         
         //dot after a name, dot after a close parenthesis
@@ -297,52 +247,13 @@ namespace DBUI.Queries {
                 SetList(text_box, properties);
             }
 
-            private static void SetList2(ScintillaNET.Scintilla text_box, bool debug, string s)
-            {
-                var brackets = MethodFinder.GetQueryDelimiters(s);
-                int itemsTaken;
-                bool matchFound = false;
-
-                var bracketsToRemove = RemoveMatchingBrackets(brackets, out itemsTaken, out matchFound).OrderBy(x => x.Index);
-
-                String methodName = String.Empty;
-                if (matchFound == true)
-                {
-                    methodName = GetMethodName(bracketsToRemove.First(), s);
-                }
-
-                SetList(text_box, methodName);
-
-                if (debug)
-                {
-                    foreach (var b in bracketsToRemove.OrderBy(x => x.Index))
-                    {
-                        ErrorManager.Write(b.Index.ToString());
-                        ErrorManager.Write(b.Groups[0].ToString());
-                    }
-
-                    ErrorManager.Write(matchFound ? "match found" : "not matching delimiters");
-                    ErrorManager.Write(methodName);
-                }
-            }
-
             private static void SetList(ScintillaNET.Scintilla text_box, List<String> methods)
             {
                 text_box.AutoComplete.MaxHeight = 10;
                 text_box.AutoComplete.Show(0, methods);
             }
 
-            private static void SetList(ScintillaNET.Scintilla text_box, String methodName){
-                //var methodName = MethodFinder.Run(text_box);
-                var method = MongoMethods.GeneralMethods.Find(x => x.Name == methodName);
-                if (method == null) {
-                    return;
-                }
 
-                text_box.AutoComplete.MaxHeight = 10;
-                //text_box.AutoComplete.List = method.ChildMethods;
-                text_box.AutoComplete.Show(0, method.ChildMethods);
-            }
 
             public static bool IsQueryEndingInDB(String s)
             {
@@ -387,7 +298,7 @@ namespace DBUI.Queries {
                 return false;
             }
 
-            #region "functions for handling general methods: find, etc"
+            //#region "functions for handling general methods: find, etc"
             public static bool IsQueryEndingInClosingParenthesis(String s)
             {
                 //var s = text_box.Text.Substring(0, text_box.CurrentPos - 1);
@@ -407,191 +318,10 @@ namespace DBUI.Queries {
                 return false;
             }
         
-            private static String GetMethodName(Match firstBracket, String s)
-            {
-                var word = new List<char>();
-                var chars = s.ToArray<char>();
-
-                for (int i = firstBracket.Groups[0].Index - 1; i > -1; i--)
-                {
-                    var c = chars[i];
-                    if (Char.IsLetter(c) || Char.IsNumber(c) || Char.IsWhiteSpace(c))
-                    {
-                        word.Add(c);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-
-                var Word = new StringBuilder();
-                word.Reverse();
-                word.ForEach(x => Word.Append(x.ToString()));
-
-                return Word.ToString().Trim();
-            }
-            
-            //delimiters = quotes + brackets
-            private static List<Match> GetQueryDelimiters(String s)
-            {
-                string regex = @"\{|\}|\(|\)|\'|\""|\[|\]";
-                var options = RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase | RegexOptions.Singleline;
-                var reg = new Regex(regex, options);
-                try
-                {
-                    var delimiters = reg.Split(s);
-
-                    var c = reg.Matches(s);
-                    var list = new List<Match>();
-
-                    foreach (Match q in c)
-                    {
-                        list.Add(q);
-                    }
-                    return list;
-                }
-                catch (Exception ex)
-                {
-                    ErrorManager.Write(ex);
-                }
-
-                return new List<Match>();
-            }
-
-            private static List<Match> RemoveMatchingQuotes(List<Match> delimiters, out int itemsTaken, out bool matchFound)
-            {
-                var quotes = new List<String> { @"""", "'" };
-                if (delimiters.Count == 0 ||
-                    !quotes.Contains(delimiters.Last().Groups[0].ToString()))
-                {
-                    itemsTaken = 0;
-                    matchFound = true;
-                    return delimiters;
-                }
-
-                int length = delimiters.Count;
-                var toRemove = new List<Match>();
-
-                Match closeDelimiter = null;
-                Match delimiter = null;
-
-                String closeDelimiterString = String.Empty;
-                String delimiterString = String.Empty;
-
-                for (int i = length - 1; i > -1; i--)
-                {
-                    delimiter = delimiters[i];
-                    delimiterString = delimiter.Groups[0].ToString();
-
-                    //first delimiter,
-                    if (i == length - 1)
-                    {
-                        closeDelimiter = delimiter;
-                        closeDelimiterString = closeDelimiter.Groups[0].ToString();
-                        toRemove.Add(closeDelimiter);
-                        continue;
-                    }
-
-                    //if close quote, return items
-                    if (delimiterString == closeDelimiterString)
-                    {
-                        toRemove.Add(delimiter);
-                        itemsTaken = toRemove.Count;
-                        matchFound = true;
-                        return toRemove;
-                    }
-                    else
-                    {
-                        toRemove.Add(delimiter);
-                        continue;
-                    }
-                }
-
-                itemsTaken = length;
-                matchFound = false;
-                return toRemove;
-            }
-
-            //recursively remove brackets
-            private static List<Match> RemoveMatchingBrackets(List<Match> delimiters, out int itemsTaken, out bool matchFound)
-            {
-                int length = delimiters.Count;
-                var bracketDict = new Dictionary<String, String>()
-                {
-                    {")", "("},  {@"}", @"{"}, {@"]", @"["}
-                };
-                var quotes = new List<String> { @"""", "'" };
-
-                var closeBrackets = new List<String> { @"}", @")", @"]" };
-                var toRemove = new List<Match>();
-
-                Match closeDelimiter = null;
-                Match delimiter = null;
-
-                String closeDelimiterString = String.Empty;
-                String delimiterString = String.Empty;
-
-                for (int i = length - 1; i > -1; i--)
-                {
-                    delimiter = delimiters[i];
-                    delimiterString = delimiter.Groups[0].ToString();
-                    //first bracket, assume it's a close bracket
-                    if (i == length - 1)
-                    {
-                        closeDelimiter = delimiter;
-                        closeDelimiterString = closeDelimiter.Groups[0].ToString();
-                        toRemove.Add(delimiter);
-                        continue;
-                    }
-
-                    //if open bracket, return items
-                    if (bracketDict.Keys.Contains(closeDelimiterString) &&
-                        bracketDict[closeDelimiterString] == delimiterString)
-                    {
-                        toRemove.Add(delimiter);
-                        itemsTaken = toRemove.Count;
-                        matchFound = true;
-                        return toRemove;
-                    }
-
-                    //if hits quotes, call remvoing matching quotes
-                    if (quotes.Contains(delimiterString))
-                    {
-                        int itemsToSkip;
-                        toRemove.AddRange(
-                            RemoveMatchingQuotes(delimiters.Take(i + 1).ToList(), out itemsToSkip,
-                            out matchFound));
-                        i = i - itemsToSkip + 1;
-                        continue;
-                    }
-
-                    //if hits close bracket, remove matching bracket
-                    if (closeBrackets.Contains(delimiterString))
-                    {
-                        int itemsToSkip;
-                        toRemove.AddRange(
-                            RemoveMatchingBrackets(delimiters.Take(i + 1).ToList(), out itemsToSkip, out matchFound));
-                        i = i - itemsToSkip + 1;
-                        continue;
-                    }
-                    else
-                    {
-                        toRemove.Add(delimiter);
-                        continue;
-                    }
-                }
-
-                matchFound = false;
-                itemsTaken = length;
-                return toRemove;
-            }
-            #endregion
 
         }
 
         #endregion
-
 
         #region "control init"
         private void SetQueryOutputDisplayType()
