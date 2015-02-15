@@ -13,9 +13,11 @@ namespace DBUI.Queries
                 @";
                     (function(){
 	                var x = {zzzz};
+                        printz('{uuuuuuuuuuuu}');
 	                    for (p in x){
 		                    printz(p);
 	                    }
+                        printz('{vvvvvvvvvvvv}');
                     })();
                 ";
         static bool Debug = false;
@@ -26,12 +28,26 @@ namespace DBUI.Queries
             GetReflectionQuery(queryFirstHalf, querySecondHalf, out queryOut);
 
             var output = new QueryExecuter() { NoFeedBack = true}.Execute(queryOut);
+            
+            //get the reflection output out of the query output (could contain other stuff)
+            var outputList =  output.Split
+                (new String[]{"{uuuuuuuuuuuu}", "{vvvvvvvvvvvv}"}, 
+                StringSplitOptions.RemoveEmptyEntries).
+                ToList();
 
-            var array = output.Split(new String[]{"\r\n"}, StringSplitOptions.RemoveEmptyEntries)
+            if (outputList==null || outputList.Count <2){
+                return new List<string>();
+            }
+
+            //split output into a list
+            var array = outputList[1]
+                .Split(new String[]{"\r\n"}, StringSplitOptions.RemoveEmptyEntries)
                 .ToList();
 
+            //replace quotes with blank
             var o = new List<String>();
             array.ForEach(s => o.Add(s.Trim().Replace("\"", "")));
+
             return o.OrderBy(s=>s).ToList();
         }
 

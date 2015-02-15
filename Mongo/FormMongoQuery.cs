@@ -116,14 +116,28 @@ namespace DBUI.Queries {
         }
 
         public class MongoMethods {
+            //            function test(){
+            //    var x = db.c1;
+            //    var a = [];
+            //    for ( p in db.c1){
+            //        a.push(p);
+            //    }
+            //    var z = _.sortBy(a, function(n){return n;});
+	
+            //    printz(z);
+            //}
             public readonly static List<String> CollectionObjectMethods =
                 new List<String> { 
+                    //"_db",
                     //"_dbCommand",
                     //"_distinct",
+                    //"_fullName",
                     //"_genIndexName",
                     //"_indexSpec",
                     //"_massageObject",
+                    //"_mongo",
                     //"_printExtraInfo",
+                    //"_shortName",
                     //"_validateForStorage",
                     //"_validateObject",
                     "aggregate",
@@ -148,16 +162,49 @@ namespace DBUI.Queries {
                     "getDB",
                     "getDiskStorageStats",
                     "getFullName",
-                    "getIndexes",
                     "getIndexKeys",
                     "getIndexSpecs",
                     "getIndexStats",
+                    "getIndexes",
                     "getIndices",
+                    "getMongo",
+                    "getName",
+                    "getPagesInRAM",
+                    "getQueryOptions",
+                    "getShardDistribution",
+                    "getShardVersion",
+                    "getSlaveOk",
+                    "getSplitKeysForChunks",
+                    "group",
+                    "groupcmd",
+                    "help",
+                    "indexStats",
+                    "insert",
+                    "isCapped",
+                    "mapReduce",
+                    "pagesInRAM",
+                    "reIndex",
+                    "remove",
+                    "renameCollection",
+                    "runCommand",
+                    "save",
+                    "setSlaveOk",
+                    "shellPrint",
+                    "stats",
+                    "storageSize",
+                    "toString",
+                    "tojson",
+                    "totalIndexSize",
+                    "totalSize",
+                    "update",
+                    "validate",
+                    "verify"
                 };
 
             public readonly static List<String> FindObjectMethods = 
                 new List<String>
             {
+
                 //"_addSpecial",
                 //"_checkModify",
                 //"_ensureSpecial",

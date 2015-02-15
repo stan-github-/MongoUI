@@ -16,7 +16,7 @@ public static class Scintilla
                 
         var e = currentPos == text.Length ? "" : text_box.Text.Substring(
                     text_box.CurrentPos + 1,  //skipping the dot
-                    text_box.Text.Length - 1);
+                    text_box.Text.Length - text_box.CurrentPos - 1);
         return e;
     }
 }
