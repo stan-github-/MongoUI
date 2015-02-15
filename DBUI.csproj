@@ -88,7 +88,8 @@
     <Compile Include="Forms\FormOptions.Designer.cs">
       <DependentUpon>FormOptions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Queries\CollectionAutoCompleter.cs" />
+    <Compile Include="Queries\AutoComplete\AutoCompleteMain.cs" />
+    <Compile Include="Queries\AutoComplete\CollectionAutoCompleter.cs" />
     <Compile Include="Mongo\FormMongoQuery.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,7 +99,8 @@
     <Compile Include="Mongo\MongoXMLRepository.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Queries\QueryAutoCompleter.cs" />
+    <Compile Include="Queries\AutoComplete\MongoMethods.cs" />
+    <Compile Include="Queries\AutoComplete\ObjectAutoCompleter.cs" />
     <Compile Include="Queries\QueryExecuter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -7,9 +7,16 @@ using System.Text.RegularExpressions;
 
 namespace DBUI.Queries
 {
-    public class QueryAutoCompleter
+    //functions and classes
+    public class ObjectAutoCompleter
     {
-        static String ReflectionString =
+        //todo
+        //override internal print, get rid of printz!!!
+        
+        //make underscore intellisence, 
+        //modify findmethod class to handle string without brackets
+
+        private readonly static String ReflectionString =
                 @";
                     (function(){
 	                var x = {zzzz};
@@ -20,62 +27,82 @@ namespace DBUI.Queries
                         printz('{vvvvvvvvvvvv}');
                     })();
                 ";
-        static bool Debug = false;
+        private static bool Debug = false;
 
-        public static List<String> GetMethodArray(String queryFirstHalf, string querySecondHalf)
+        public static List<String> Main(String queryFirstHalf, string querySecondHalf)
         {
-            String queryOut;
-            GetReflectionQuery(queryFirstHalf, querySecondHalf, out queryOut);
+            var methodName = GetMethodOrClassName(queryFirstHalf);
+            
+            var queryOut = GetReflectionQuery(queryFirstHalf, querySecondHalf, methodName);
 
             var output = new QueryExecuter() { NoFeedBack = true}.Execute(queryOut);
-            
+
+            var properties = GetMethodProperties(output);
+
+            return properties;
+        }
+
+        private static List<String> GetMethodProperties(string input) {
+
+            //var output = new QueryExecuter() { NoFeedBack = true }.Execute(input);
+
             //get the reflection output out of the query output (could contain other stuff)
-            var outputList =  output.Split
-                (new String[]{"{uuuuuuuuuuuu}", "{vvvvvvvvvvvv}"}, 
+            var inputList = input.Split
+                (new String[] { "{uuuuuuuuuuuu}", "{vvvvvvvvvvvv}" },
                 StringSplitOptions.RemoveEmptyEntries).
                 ToList();
 
-            if (outputList==null || outputList.Count <2){
+            if (inputList == null || inputList.Count < 2)
+            {
                 return new List<string>();
             }
 
             //split output into a list
-            var array = outputList[1]
-                .Split(new String[]{"\r\n"}, StringSplitOptions.RemoveEmptyEntries)
+            var array = inputList[1]
+                .Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
                 .ToList();
 
             //replace quotes with blank
             var o = new List<String>();
             array.ForEach(s => o.Add(s.Trim().Replace("\"", "")));
 
-            return o.OrderBy(s=>s).ToList();
+            return o.OrderBy(s => s).ToList();
         }
 
-        public static bool GetReflectionQuery
-            (String firstHalf, String secondHalf, out String query)
+        public static String GetReflectionQuery
+            (String firstHalf, String secondHalf, String objectName)
         {
 
-            query = String.Empty;
-            if (!IsQueryEndingInClosingParenthesis(firstHalf))
-            {
-                return false;
-            }
+            var reflectionString = ObjectAutoCompleter.ReflectionString
+                .Replace("{zzzz}", objectName + "()");
 
-            var methodName = GetMethodName(firstHalf);
-
-            var reflectionString = QueryAutoCompleter.ReflectionString
-                .Replace("{zzzz}", methodName + "()");
-
-            query = String.Format("{0}{1}{2}", firstHalf, reflectionString, secondHalf);
-            return true;
+            return String.Format("{0}{1}{2}", firstHalf, reflectionString, secondHalf);
         }
 
-        /// <summary>
-        /// main get method name function
-        /// </summary>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static String GetMethodName(String query)
+        //not the most elegant!!
+        private static String GetMethodOrClassName(String query) {
+            String name = String.Empty;
+            name = GetMethodName(query);
+
+            if (name == String.Empty) {
+                name = GetClassName(query);
+            }
+
+            return name;
+        }
+
+        private static String GetClassName(String query) {
+            var array = query.Split(
+                new char[] { ';', '=', '\r', '\n', '{', '}', ']', '[', ')', '(' }, 
+                StringSplitOptions.RemoveEmptyEntries);
+            if (array == null || array.Length == 0) {
+                return String.Empty;
+            }
+
+            return array[array.Length - 1];
+        }
+
+        private static String GetMethodName(String query)
         {
             var brackets = GetQueryDelimiters(query);
             int itemsTaken;
@@ -113,7 +140,7 @@ namespace DBUI.Queries
             {
                 var c = chars[i];
                 if (Char.IsLetter(c) || Char.IsNumber(c)
-                    || Char.IsWhiteSpace(c) || c == '.')
+                    || Char.IsWhiteSpace(c) || c == '.' || c == '_')
                 {
                     word.Add(c);
                 }
@@ -149,7 +176,31 @@ namespace DBUI.Queries
             return false;
         }
 
+        public static bool IsQueryEndingInUnderScore(String s)
+        {
+            //catched " _ . "
+            //preceded by " ", "=", "(", or "{" or ";"
+            //or at the begining of line
 
+            //            string regex = @"(^|(\s)+|\=|\(|\{|\;)
+            //                             \_
+            //                             ([\s, \t, \r, \n]*)
+            //                             $";
+            
+            var regex = @"(^|(\s)+|\=|\(|\{|\;)_([\s, \t, \r, \n]*)$";
+            var options = RegexOptions.IgnoreCase | RegexOptions.Singleline;
+            var reg = new Regex(regex, options);
+            try
+            {
+                var c = reg.Matches(s);
+                return c.Count > 0;
+            }
+            catch (Exception ex)
+            {
+                ErrorManager.Write(ex);
+            }
+            return false;
+        }
         //delimiters = quotes + brackets
         private static List<Match> GetQueryDelimiters(String s)
         {
