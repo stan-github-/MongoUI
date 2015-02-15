@@ -18,18 +18,21 @@ namespace DBUI.Queries
 	                    }
                     })();
                 ";
-        static bool Debug = true;
+        static bool Debug = false;
 
         public static List<String> GetMethodArray(String queryFirstHalf, string querySecondHalf)
         {
             String queryOut;
             GetReflectionQuery(queryFirstHalf, querySecondHalf, out queryOut);
 
-            var output = new QueryExecuter().Execute(queryOut);
+            var output = new QueryExecuter() { NoFeedBack = true}.Execute(queryOut);
 
-            var array = output.Split('\r').ToList();
-            array.ForEach(s => s.Trim().Replace("\"", ""));
-            return array;
+            var array = output.Split(new String[]{"\r\n"}, StringSplitOptions.RemoveEmptyEntries)
+                .ToList();
+
+            var o = new List<String>();
+            array.ForEach(s => o.Add(s.Trim().Replace("\"", "")));
+            return o.OrderBy(s=>s).ToList();
         }
 
         public static bool GetReflectionQuery

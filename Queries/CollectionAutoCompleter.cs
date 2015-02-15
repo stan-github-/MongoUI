@@ -12,7 +12,7 @@ namespace DBUI.Queries
             //var server = Program.MongoXMLManager.CurrentServer.Name;
             //var database = Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name;
 
-            var executor = new QueryExecuter() { NoWindows = true, NoConfirmation= true};
+            var executor = new QueryExecuter() { NoFeedBack = true };
             
             //custom function defined in script file!
             
@@ -24,9 +24,10 @@ namespace DBUI.Queries
                 ErrorManager.Write(executor.QueryError);
             }
 
-            return results.Split(
+            var r = results.Split(
                 new String[]{"\r\n"}, StringSplitOptions.RemoveEmptyEntries)
-                .Skip(3).ToList();
+                .ToList();
+            return r;
         }
 
         public void RefreshCurrentDBCollectionNames() {

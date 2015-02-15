@@ -20,6 +20,12 @@ namespace DBUI.Queries
         //for querying collection names
         public bool NoConfirmation { get; set; }
         public bool NoOutputPrefix { get; set; }
+        
+        public bool NoFeedBack { 
+            get { return NoWindows && NoConfirmation && NoOutputPrefix;}
+            set { NoWindows = true; NoConfirmation = true; NoOutputPrefix = true; }
+        }
+
         public String QueryError { get { return _queryOutputError.ToString(); } }
 
         public MongoXMLRepository MongoXMLManager {get; set; }

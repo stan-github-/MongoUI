@@ -213,26 +213,16 @@ namespace DBUI.Queries {
 
             public static void Run(ScintillaNET.Scintilla text_box, bool debug = false) {
 
-                var currentPos = text_box.CurrentPos;
-                var text = text_box.Text;
-                //this should be extension classes
-                var s = text_box.Text.Substring(0, text_box.CurrentPos - 1);
-
-                var e = currentPos == text.Length ? "" : text_box.Text.Substring(
-                     text_box.CurrentPos + 1,  //skipping the dot
-                     text_box.Text.Length - 1);
-                
-                
-                if (IsQueryEndingInClosingParenthesis(s) == true)
+                if (IsQueryEndingInClosingParenthesis(text_box.TextBeforeCursor()) == true)
                 {
-                    SetList(text_box, s, e, debug);
+                    SetList(text_box, text_box.TextBeforeCursor(), text_box.TextAfterCursor(), debug);
                 }
 
-                if (IsQueryEndingInCollectionName(s) == true) {
+                if (IsQueryEndingInCollectionName(text_box.TextBeforeCursor()) == true) {
                     SetList(text_box, MongoMethods.CollectionObjectMethods);
                 }
 
-                if (IsQueryEndingInDB(s) == true) {
+                if (IsQueryEndingInDB(text_box.TextBeforeCursor()) == true) {
                     var currentServer = Program.MongoXMLManager.CurrentServer;
                     List<String> collections = null;
                     try
