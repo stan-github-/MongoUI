@@ -13,9 +13,23 @@ namespace DBUI.Queries
         //todo
         //override internal print, get rid of printz!!!
         
-        //make underscore intellisence, 
-        //modify findmethod class to handle string without brackets
+        //add collection names back to database,
+        //object intellisense needs to add back the stuff taken out
 
+        //still somewhat buggy with complex queries
+        private static QueryExecuter _queryExecuter;
+        public static QueryExecuter QueryExecuter {
+            get {
+                if (_queryExecuter == null)
+                {
+                    _queryExecuter = new QueryExecuter() { NoFeedBack = true };
+                    return _queryExecuter;
+                }
+                else {
+                    return _queryExecuter;
+                }
+            }
+        }
         private readonly static String ReflectionString =
                 @";
                     (function(){
@@ -40,8 +54,12 @@ namespace DBUI.Queries
             var queryOut = GetReflectionQuery
                 (queryFirstHalf, querySecondHalf, methodOrObjectName, isMethod);
 
-            var output = new QueryExecuter() { NoFeedBack = true}.Execute(queryOut);
+            var output = QueryExecuter.Execute(queryOut);
 
+            if (!String.IsNullOrEmpty(QueryExecuter.QueryError)) {
+                ErrorManager.Write(QueryExecuter.QueryError);
+            }
+            
             var properties = GetMethodProperties(output);
 
             return properties;
@@ -65,13 +83,11 @@ namespace DBUI.Queries
             //split output into a list
             var array = inputList[1]
                 .Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
-                .ToList();
+                .Select(s => s.Trim().Replace("\"", ""))
+                .Where(s => s.Trim() != String.Empty)
+                .OrderBy(s => s).ToList();
 
-            //replace quotes with blank
-            var o = new List<String>();
-            array.ForEach(s => o.Add(s.Trim().Replace("\"", "")));
-
-            return o.OrderBy(s => s).ToList();
+            return array;
         }
 
         public static String GetReflectionQuery
@@ -117,7 +133,6 @@ namespace DBUI.Queries
             }
             return methodName;
         }
-
         
         private static String GetMethodName(Match firstBracket, String s)
         {
@@ -164,32 +179,6 @@ namespace DBUI.Queries
             return false;
         }
 
-        //public static bool IsQueryEndingInUnderScore(String s)
-        //{
-        //    //catched " _ . "
-        //    //preceded by " ", "=", "(", or "{" or ";"
-        //    //or at the begining of line
-
-        //    //            string regex = @"(^|(\s)+|\=|\(|\{|\;)
-        //    //                             \_
-        //    //                             ([\s, \t, \r, \n]*)
-        //    //                             $";
-            
-        //    var regex = @"(^|(\s)+|\=|\(|\{|\;)_([\s, \t, \r, \n]*)$";
-        //    var options = RegexOptions.IgnoreCase | RegexOptions.Singleline;
-        //    var reg = new Regex(regex, options);
-        //    try
-        //    {
-        //        var c = reg.Matches(s);
-        //        return c.Count > 0;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ErrorManager.Write(ex);
-        //    }
-        //    return false;
-        //}
-        ////delimiters = quotes + brackets
         private static List<Match> GetQueryDelimiters(String s)
         {
             string regex = @"\{|\}|\(|\)|\'|\""|\[|\]";

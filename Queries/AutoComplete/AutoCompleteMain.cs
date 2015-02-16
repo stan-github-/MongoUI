@@ -48,7 +48,11 @@ namespace DBUI.Queries.AutoComplete
         private static void SetList(ScintillaNET.Scintilla text_box, List<String> methods)
         {
             text_box.AutoComplete.MaxHeight = 10;
-            text_box.AutoComplete.Show(0, methods);
+            if (methods.Count == 1) {
+                text_box.InsertText(methods[0]);
+                return;
+            }
+            text_box.AutoComplete.Show(methods);
         }
     }
 

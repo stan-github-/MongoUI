@@ -235,8 +235,15 @@ namespace DBUI.Queries
             //error output
             _queryOutputError.Append(process.StandardError.ReadToEnd());
 
+            var standardOut = process.StandardOutput.ReadToEnd();
+
+            if (standardOut.Contains("JavaScript execution failed:")
+             && standardOut.Contains("ReferenceError:")) {
+                 _queryOutputError.Append(standardOut);
+            }
+
             //query output + error output
-            _queryOutputAll.Append(process.StandardOutput.ReadToEnd());
+            _queryOutputAll.Append(standardOut);
             _queryOutputAll.Append(Environment.NewLine);
             _queryOutputAll.Append(_queryOutputError.ToString());
             
