@@ -134,6 +134,9 @@ namespace DBUI.Queries
             return methodName;
         }
         
+        //
+        //this has to be recursive
+        // _.chain(function(){...}).find(function(){...}). will not work
         private static String GetMethodName(Match firstBracket, String s)
         {
             var word = new List<char>();
@@ -144,6 +147,9 @@ namespace DBUI.Queries
                 var c = chars[i];
                 if (Char.IsLetter(c) || Char.IsNumber(c)
                     || Char.IsWhiteSpace(c) || c == '.' || c == '_')
+
+                //this will not work recursively, see example above
+                //if (!(c=='=' || c==';'))
                 {
                     word.Add(c);
                 }
