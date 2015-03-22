@@ -45,14 +45,14 @@ namespace DBUI.Queries
 
         public static List<String> Main(String queryFirstHalf, string querySecondHalf)
         {
-            var isMethod =  (IsQueryEndingInClosingParenthesis(queryFirstHalf));
+            var isMethod = (IsQueryEndingInClosingParenthesis(queryFirstHalf));
             String methodOrObjectName = 
                 isMethod?
                 GetMethodChain(queryFirstHalf): 
                 GetMethodChain(queryFirstHalf + "()");
             
             var queryOut = GetReflectionQuery
-                (queryFirstHalf, querySecondHalf, methodOrObjectName, isMethod);
+                (queryFirstHalf, querySecondHalf, methodOrObjectName);
 
             var output = QueryExecuter.Execute(queryOut);
 
@@ -91,11 +91,11 @@ namespace DBUI.Queries
         }
 
         public static String GetReflectionQuery
-            (String firstHalf, String secondHalf, String objectName, bool isMethod)
+            (String firstHalf, String secondHalf, String objectName)
         {
 
             var reflectionString = ObjectAutoCompleter.ReflectionString
-                .Replace("{zzzz}", objectName + (isMethod?"()":""));
+                .Replace("{zzzz}", objectName);
 
             return String.Format("{0}{1}{2}", firstHalf, reflectionString, secondHalf);
         }
@@ -105,51 +105,126 @@ namespace DBUI.Queries
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        private static String GetMethodChain(String query)
+        public static String GetMethodChain2(String query)
         {
             var brackets = GetQueryDelimiters(query);
             int itemsTaken;
             bool matchFound = false;
 
-            var bracketsToRemove = RemoveMatchingBrackets
+            //note: the Match object will have the index (char) to the original query string.
+            var bracketsToRemove = RemoveMatchingBracketsRecursive
                 (brackets, out itemsTaken, out matchFound).OrderBy(x => x.Index);
 
-            String methodName = String.Empty;
-            if (matchFound == true)
-            {
-                methodName = GetMethodName(bracketsToRemove.First(), query);
+            if (!matchFound) { 
+                //badly structured code, just return;
+                return String.Empty;
             }
 
-            if (Debug)
-            {
-                foreach (var b in bracketsToRemove.OrderBy(x => x.Index))
-                {
-                    ErrorManager.Write(b.Index.ToString());
-                    ErrorManager.Write(b.Groups[0].ToString());
-                }
-
-                ErrorManager.Write(matchFound ? "match found" : "not matching delimiters");
-                ErrorManager.Write(methodName);
-            }
+            var methodName = String.Empty;
+            var hasParent = false;
+            methodName = GetMethodName(bracketsToRemove.First(), query, out hasParent);
+            
             return methodName;
         }
-        
+
+        public static String GetMethodChain(String query)
+        {
+            var index = GetMethodRecursive(query);
+            return query.Substring(index, query.Count() - index);
+        }
+
+        public static int GetMethodRecursive(String query)
+        {
+            var brackets = GetQueryDelimiters(query);
+            int itemsTaken;
+            bool matchFound = false;
+
+            //note: the Match object will have the index (char) to the original query string.
+            var bracketsToRemove = RemoveMatchingBracketsRecursive
+                (brackets, out itemsTaken, out matchFound).OrderBy(x => x.Index);
+
+            if (!matchFound)
+            {
+                //badly structured code, just return 0;
+                return 0;
+            }
+
+            int methodIndex;
+            var hasParent = false;
+            methodIndex = GetMethodIndex(bracketsToRemove.First(), query, out hasParent);
+
+            if (hasParent) { 
+               methodIndex = GetMethodRecursive(query.Substring(0, methodIndex));
+            }
+
+            //exclude the first character
+            return methodIndex;
+        }
+
+        //if (Debug)
+        //{
+        //    foreach (var b in bracketsToRemove.OrderBy(x => x.Index))
+        //    {
+        //        ErrorManager.Write(b.Index.ToString());
+        //        ErrorManager.Write(b.Groups[0].ToString());
+        //    }
+
+        //    ErrorManager.Write(matchFound ? "match found" : "not matching delimiters");
+        //    ErrorManager.Write(methodName);
+        //}        
         //
         //this has to be recursive
         // _.chain(function(){...}).find(function(){...}). will not work
-        private static String GetMethodName(Match firstBracket, String s)
+
+        private static int GetMethodIndex(Match firstBracket, String s, out bool hasParent)
         {
             var word = new List<char>();
             var chars = s.ToArray<char>();
+            hasParent = false;
+
+            int i;
+
+            for (i = firstBracket.Groups[0].Index - 1; i > -1; i--)
+            {
+                var c = chars[i];
+
+                if (c == ']' || c == '}' || c == ')')
+                {
+                    hasParent = true;
+                    return i + 1;
+                }
+
+                if (Char.IsLetter(c) || Char.IsNumber(c)
+                    || Char.IsWhiteSpace(c) || c == '.' || c == '_')
+                {
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return i + 1;
+        }
+
+
+        private static String GetMethodName(Match firstBracket, String s, out bool hasParent)
+        {
+            var word = new List<char>();
+            var chars = s.ToArray<char>();
+            hasParent = false;
 
             for (int i = firstBracket.Groups[0].Index - 1; i > -1; i--)
             {
                 var c = chars[i];
+
+                if (c == ']' || c == '}' || c == ')') {
+                    hasParent = true;
+                    return String.Empty;
+                }
+
                 if (Char.IsLetter(c) || Char.IsNumber(c)
                     || Char.IsWhiteSpace(c) || c == '.' || c == '_')
-
-                //this will not work recursively, see example above
-                //if (!(c=='=' || c==';'))
                 {
                     word.Add(c);
                 }
@@ -270,16 +345,17 @@ namespace DBUI.Queries
         //        function()
         //          {{...}, {...}, [...]}
         //     ).
-        private static List<Match> RemoveMatchingBrackets(List<Match> delimiters, out int itemsTaken, out bool matchFound)
+        private static List<Match> RemoveMatchingBracketsRecursive
+            (List<Match> delimiters, out int itemsTaken, out bool matchFound)
         {
             int length = delimiters.Count;
             var bracketDict = new Dictionary<String, String>()
                 {
-                    {")", "("},  {@"}", @"{"}, {@"]", @"["}
+                    {")", "("},  {"}", "{"}, {"]", "["}
                 };
             var quotes = new List<String> { @"""", "'" };
 
-            var closeBrackets = new List<String> { @"}", @")", @"]" };
+            var closeBrackets = new List<String> { "}", ")", "]" };
             var toRemove = new List<Match>();
 
             Match closeDelimiter = null;
@@ -327,7 +403,7 @@ namespace DBUI.Queries
                 {
                     int itemsToSkip;
                     toRemove.AddRange(
-                        RemoveMatchingBrackets(delimiters.Take(i + 1).ToList(), out itemsToSkip, out matchFound));
+                        RemoveMatchingBracketsRecursive(delimiters.Take(i + 1).ToList(), out itemsToSkip, out matchFound));
                     i = i - itemsToSkip + 1;
                     continue;
                 }

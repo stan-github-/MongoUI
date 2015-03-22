@@ -12,12 +12,19 @@ namespace ConsoleApplication
     {
         static void Main(string[] args)
         {
-            Test.CaseOne();
+            Test.TestMethodFinder();
         }
     }
 
     public static class Test
     {
+        public static void TestMethodFinder() {
+            var query = "var x = db.test(function(){var x = function(){return ['a','cb','c'];}}).find(function(){})";
+            var method = ObjectAutoCompleter.GetMethodChain(query);
+            Console.WriteLine(method);
+            Console.Read();
+        }
+
         public static QueryExecuter QueryExecuter {
             get {
                 var mongoXMLManager = new MongoXMLRepository();
