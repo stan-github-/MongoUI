@@ -20,7 +20,7 @@ namespace ConsoleApplication
     {
         public static void TestMethodFinder() {
             var query = "var x = db.test(function(){var x = function(){return ['a','cb','c'];}}).find(function(){})";
-            var method = ObjectAutoCompleter.GetMethodChain(query);
+            var method = ObjectAutoCompleter.GetMethodOrObjectChain(query);
             Console.WriteLine(method);
             Console.Read();
         }

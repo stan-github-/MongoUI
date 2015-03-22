@@ -31,11 +31,13 @@ namespace DBUI.Queries
             }
         }
         private readonly static String ReflectionString =
+                //todo
+                //replace variable name and placeholder with even weirder names
                 @";
                     (function(){
-	                var x = {zzzz};
+	                var _x_y_z_1_2_3 = {zzzzzzzzzzzz};
                         printz('{uuuuuuuuuuuu}');
-	                    for (p in x){
+	                    for (p in _x_y_z_1_2_3){
 		                    printz(p);
 	                    }
                         printz('{vvvvvvvvvvvv}');
@@ -45,11 +47,7 @@ namespace DBUI.Queries
 
         public static List<String> Main(String queryFirstHalf, string querySecondHalf)
         {
-            var isMethod = (IsQueryEndingInClosingParenthesis(queryFirstHalf));
-            String methodOrObjectName = 
-                isMethod?
-                GetMethodChain(queryFirstHalf): 
-                GetMethodChain(queryFirstHalf + "()");
+            var methodOrObjectName =  GetMethodOrObjectChain(queryFirstHalf);
             
             var queryOut = GetReflectionQuery
                 (queryFirstHalf, querySecondHalf, methodOrObjectName);
@@ -93,43 +91,22 @@ namespace DBUI.Queries
         public static String GetReflectionQuery
             (String firstHalf, String secondHalf, String objectName)
         {
-
             var reflectionString = ObjectAutoCompleter.ReflectionString
-                .Replace("{zzzz}", objectName);
+                .Replace("{zzzzzzzzzzzz}", objectName);
 
             return String.Format("{0}{1}{2}", firstHalf, reflectionString, secondHalf);
         }
 
-        /// <summary>
-        /// var x = a.find({***}).
-        /// </summary>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static String GetMethodChain2(String query)
+        public static String GetMethodOrObjectChain(String query)
         {
-            var brackets = GetQueryDelimiters(query);
-            int itemsTaken;
-            bool matchFound = false;
-
-            //note: the Match object will have the index (char) to the original query string.
-            var bracketsToRemove = RemoveMatchingBracketsRecursive
-                (brackets, out itemsTaken, out matchFound).OrderBy(x => x.Index);
-
-            if (!matchFound) { 
-                //badly structured code, just return;
-                return String.Empty;
-            }
-
-            var methodName = String.Empty;
-            var hasParent = false;
-            methodName = GetMethodName(bracketsToRemove.First(), query, out hasParent);
+            var isMethod = (IsQueryEndingInClosingParenthesis(query));
+            var input =
+                isMethod ?
+                query :
+                query + "()";
             
-            return methodName;
-        }
+            var index = GetMethodRecursive(input);
 
-        public static String GetMethodChain(String query)
-        {
-            var index = GetMethodRecursive(query);
             return query.Substring(index, query.Count() - index);
         }
 
@@ -161,21 +138,6 @@ namespace DBUI.Queries
             return methodIndex;
         }
 
-        //if (Debug)
-        //{
-        //    foreach (var b in bracketsToRemove.OrderBy(x => x.Index))
-        //    {
-        //        ErrorManager.Write(b.Index.ToString());
-        //        ErrorManager.Write(b.Groups[0].ToString());
-        //    }
-
-        //    ErrorManager.Write(matchFound ? "match found" : "not matching delimiters");
-        //    ErrorManager.Write(methodName);
-        //}        
-        //
-        //this has to be recursive
-        // _.chain(function(){...}).find(function(){...}). will not work
-
         private static int GetMethodIndex(Match firstBracket, String s, out bool hasParent)
         {
             var word = new List<char>();
@@ -205,40 +167,6 @@ namespace DBUI.Queries
                 }
             }
             return i + 1;
-        }
-
-
-        private static String GetMethodName(Match firstBracket, String s, out bool hasParent)
-        {
-            var word = new List<char>();
-            var chars = s.ToArray<char>();
-            hasParent = false;
-
-            for (int i = firstBracket.Groups[0].Index - 1; i > -1; i--)
-            {
-                var c = chars[i];
-
-                if (c == ']' || c == '}' || c == ')') {
-                    hasParent = true;
-                    return String.Empty;
-                }
-
-                if (Char.IsLetter(c) || Char.IsNumber(c)
-                    || Char.IsWhiteSpace(c) || c == '.' || c == '_')
-                {
-                    word.Add(c);
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            var Word = new StringBuilder();
-            word.Reverse();
-            word.ForEach(x => Word.Append(x.ToString()));
-
-            return Word.ToString().Trim();
         }
 
         public static bool IsQueryEndingInClosingParenthesis(String s)
