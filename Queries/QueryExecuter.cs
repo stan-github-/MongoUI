@@ -8,30 +8,78 @@ using System.Windows.Forms;
 
 namespace DBUI.Queries
 {
-    public class QueryExecuter
-    {
+    public class QueryFeedback {
         //need to get rid of _form variable, just pass in strings...
         //private FormMongoQuery _form;
-        private StringBuilder _queryOutputAll;
-        private StringBuilder _queryOutputError;
+        public StringBuilder QueryOutputAll {get; set;}
+        public StringBuilder QueryOutputError { get; set; }
+        public String QueryError { get { return QueryOutputError.ToString(); } }
 
         public bool NoWindows { get; set; }
         //overrides server configuration
         //for querying collection names
         public bool NoConfirmation { get; set; }
         public bool NoOutputPrefix { get; set; }
-        
-        public bool NoFeedBack { 
-            get { return NoWindows && NoConfirmation && NoOutputPrefix;}
+
+        public bool NoFeedBack
+        {
+            get { return NoWindows && NoConfirmation && NoOutputPrefix; }
             set { NoWindows = true; NoConfirmation = true; NoOutputPrefix = true; }
         }
 
-        public String QueryError { get { return _queryOutputError.ToString(); } }
+        MongoXMLRepository MongoXMLManager { get; set; }
 
+        public QueryFeedback(MongoXMLRepository mongoXMLManager)
+        {
+            QueryOutputAll = new StringBuilder();
+            QueryOutputError = new StringBuilder();
+            MongoXMLManager = mongoXMLManager;
+        }
+
+        public bool ContinueWithExecutionAfterWarning()
+        {
+            if (NoConfirmation)
+            {
+                return true;
+            }
+
+            var serverName = MongoXMLManager.CurrentServer.Name;
+
+            if (!MongoXMLManager.Servers.First(s => s.Name == serverName).WithWarning)
+            {
+                return true;
+            }
+
+            if (MessageBox.Show("Continue query with " + serverName, "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    public class QueryExecuter
+    {
+    
         public MongoXMLRepository MongoXMLManager {get; set; }
         private String TempJSFile { get; set;}
         private String TempBatFile { get; set; }
 
+        QueryFeedback _queryFeedback;
+        public QueryFeedback QueryFeedback {
+            get
+            {
+                if (_queryFeedback == null) {
+                    _queryFeedback = new QueryFeedback(MongoXMLManager);
+                    return _queryFeedback;
+                }
+                return _queryFeedback;
+            }
+            set {
+                _queryFeedback = value;
+            }
+        }
 
         public QueryExecuter(MongoXMLRepository mongoxmlRepository) {
             MongoXMLManager = mongoxmlRepository == null
@@ -60,22 +108,19 @@ namespace DBUI.Queries
                 return String.Empty;
             }
 
-            if (ContinueWithExecutionAfterWarning() == false)
+            if (QueryFeedback.ContinueWithExecutionAfterWarning() == false)
             {
                 return String.Empty;
             }
 
-            //used to store console app outputs
-            _queryOutputAll = new StringBuilder();
-            _queryOutputError = new StringBuilder();
-
+            
             var queries = SplitQueries(query);
 
             foreach (Tuple<QueryType, String> q in queries)
             {
-                if (NoOutputPrefix == false)
+                if (QueryFeedback.NoOutputPrefix == false)
                 {
-                    _queryOutputAll.Append("--------------------")
+                    QueryFeedback.QueryOutputAll.Append("--------------------")
                         .Append(q.Item1.ToString())
                         .Append("---------------------")
                         .Append(Environment.NewLine);
@@ -91,7 +136,7 @@ namespace DBUI.Queries
                 }
             }
 
-            return _queryOutputAll.ToString();
+            return QueryFeedback.QueryOutputAll.ToString();
         }
         
         //first split query into individual components
@@ -157,27 +202,7 @@ namespace DBUI.Queries
             return dict;
         }
 
-        private bool ContinueWithExecutionAfterWarning()
-        {
-            if (NoConfirmation){
-                return true;
-            }
-
-            var serverName = MongoXMLManager.CurrentServer.Name;
-
-            if (!MongoXMLManager.Servers.First(s => s.Name == serverName).WithWarning)
-            {
-                return true;
-            }
-
-            if (MessageBox.Show("Continue query with " + serverName, "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
+        
         private void ExecuteExternalQueries(QueryType type, List<String> queries)
         {
             String arguments = string.Empty;
@@ -229,23 +254,25 @@ namespace DBUI.Queries
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.CreateNoWindow = NoWindows;
+            process.StartInfo.CreateNoWindow = QueryFeedback.NoWindows;
             process.Start();
             
             //error output
-            _queryOutputError.Append(process.StandardError.ReadToEnd());
+            QueryFeedback.QueryOutputError.Append(process.StandardError.ReadToEnd());
 
             var standardOut = process.StandardOutput.ReadToEnd();
 
+            //todo 
             if (standardOut.Contains("JavaScript execution failed:")
-             && standardOut.Contains("ReferenceError:")) {
-                 _queryOutputError.Append(standardOut);
+                //&& standardOut.Contains("ReferenceError:")
+            ) {
+                 QueryFeedback.QueryOutputError.Append(standardOut);
             }
 
             //query output + error output
-            _queryOutputAll.Append(standardOut);
-            _queryOutputAll.Append(Environment.NewLine);
-            _queryOutputAll.Append(_queryOutputError.ToString());
+            QueryFeedback.QueryOutputAll.Append(standardOut);
+            QueryFeedback.QueryOutputAll.Append(Environment.NewLine);
+            QueryFeedback.QueryOutputAll.Append(QueryFeedback.QueryOutputError.ToString());
             
             process.WaitForExit();
 

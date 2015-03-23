@@ -12,16 +12,17 @@ namespace DBUI.Queries
             //var server = Program.MongoXMLManager.CurrentServer.Name;
             //var database = Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name;
 
-            var executor = new QueryExecuter() { NoFeedBack = true };
-            
+            var executor = new QueryExecuter() ;
+            executor.QueryFeedback.NoFeedBack = true;
+                
             //custom function defined in script file!
             
             var func = "GetCollectionNames();";
 
             var results = executor.Execute(func);
             
-            if (!String.IsNullOrWhiteSpace(executor.QueryError)) {
-                ErrorManager.Write(executor.QueryError);
+            if (!String.IsNullOrWhiteSpace(executor.QueryFeedback.QueryError)) {
+                ErrorManager.Write(executor.QueryFeedback.QueryError);
             }
 
             var r = results.Split(
