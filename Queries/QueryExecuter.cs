@@ -57,14 +57,9 @@ namespace DBUI.Queries
                     var sb = new StringBuilder();
                     sb.Append(array[0]).Append(Environment.NewLine);
                     sb.Append("line number: ")
-                      .Append((lineNumberInt - this.QueryErrorLineNumOffset).ToString());
+                      .Append((lineNumberInt - this.QueryErrorLineNumOffset + 1).ToString());
 
                     return sb.ToString();
-                    //return
-                    //(String.Format("{0}\n\rcustom code lines: {1}",
-                    //    this.StandardOut,
-                    //    QueryErrorLineNumOffset));
-
                 }
                 return String.Empty;
             }
