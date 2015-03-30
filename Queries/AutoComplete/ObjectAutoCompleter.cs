@@ -23,7 +23,7 @@ namespace DBUI.Queries
                 if (_queryExecuter == null)
                 {
                     _queryExecuter = new QueryExecuter();
-                    _queryExecuter.QueryFeedback.NoFeedBack = true;
+                    _queryExecuter.QueryHelper.NoFeedBack = true;
                     return _queryExecuter;
                 }
                 else {
@@ -55,8 +55,8 @@ namespace DBUI.Queries
 
             var output = QueryExecuter.Execute(queryOut);
 
-            if (!String.IsNullOrEmpty(QueryExecuter.QueryFeedback.QueryError)) {
-                ErrorManager.Write(QueryExecuter.QueryFeedback.QueryError);
+            if (!String.IsNullOrEmpty(QueryExecuter.QueryHelper.QueryError)) {
+                ErrorManager.Write(QueryExecuter.QueryHelper.QueryError);
             }
             
             var properties = GetMethodProperties(output);

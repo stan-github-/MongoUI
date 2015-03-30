@@ -8,18 +8,45 @@ using System.Windows.Forms;
 
 namespace DBUI.Queries
 {
-    public class QueryFeedback {
+    //todo find the line number of the error, and high light the test in the window!!
+    public class QueryHelper {
         //need to get rid of _form variable, just pass in strings...
         //private FormMongoQuery _form;
+
+        public String TempJSFile { get; set; }
+        public String TempBatFile { get; set; }
+
         public StringBuilder QueryOutputAll {get; set;}
         public StringBuilder QueryOutputError { get; set; }
-        public String QueryError { get { return QueryOutputError.ToString(); } }
+        public String QueryError
+        {
+            get
+            {
+                return
+                    (String.Format("{0}\n\rcustom code lines: {1}",
+                        QueryOutputError,
+                        QueryErrorLineNumOffset));
+                    
+            }
+        }
+
+        public int QueryErrorLineNum {
+            get { 
+                if (String.IsNullOrEmpty(QueryOutputError.ToString())){
+                    return 0;
+                }
+                return 0;
+            }
+        }
+
+        public int QueryErrorLineNumOffset { get; set; }
 
         public bool NoWindows { get; set; }
         //overrides server configuration
         //for querying collection names
         public bool NoConfirmation { get; set; }
         public bool NoOutputPrefix { get; set; }
+
 
         public bool NoFeedBack
         {
@@ -29,11 +56,35 @@ namespace DBUI.Queries
 
         MongoXMLRepository MongoXMLManager { get; set; }
 
-        public QueryFeedback(MongoXMLRepository mongoXMLManager)
-        {
+        //todo, not the best implementation, code smell
+        public void Init() {
             QueryOutputAll = new StringBuilder();
             QueryOutputError = new StringBuilder();
-            MongoXMLManager = mongoXMLManager;
+            MongoXMLManager = Program.MongoXMLManager;
+
+            SetTempFilePaths();
+        }
+
+        public QueryHelper()
+        {
+            Init();
+        }
+
+        private void SetTempFilePaths()
+        {
+            TempJSFile = Environment.ExpandEnvironmentVariables(MongoXMLManager.TempFolderPath
+                                                              + "\\" + Guid.NewGuid() + ".js");
+            TempBatFile = Environment.ExpandEnvironmentVariables(MongoXMLManager.TempFolderPath
+                                                              + "\\" + Guid.NewGuid() + ".bat");
+        }
+        public void SetOutputPrefix(string s) {
+            if (NoOutputPrefix == false)
+            {
+                QueryOutputAll.Append("--------------------")
+                    .Append(s)
+                    .Append("---------------------")
+                    .Append(Environment.NewLine);
+            }
         }
 
         public bool ContinueWithExecutionAfterWarning()
@@ -63,69 +114,56 @@ namespace DBUI.Queries
     {
     
         public MongoXMLRepository MongoXMLManager {get; set; }
-        private String TempJSFile { get; set;}
-        private String TempBatFile { get; set; }
-
-        QueryFeedback _queryFeedback;
-        public QueryFeedback QueryFeedback {
+        
+        QueryHelper _queryHelper;
+        public QueryHelper QueryHelper {
             get
             {
-                if (_queryFeedback == null) {
-                    _queryFeedback = new QueryFeedback(MongoXMLManager);
-                    return _queryFeedback;
+                if (_queryHelper == null) {
+                    _queryHelper = new QueryHelper();
+                    return _queryHelper;
                 }
-                return _queryFeedback;
+                return _queryHelper;
             }
             set {
-                _queryFeedback = value;
+                _queryHelper = value;
             }
         }
 
-        public QueryExecuter(MongoXMLRepository mongoxmlRepository) {
-            MongoXMLManager = mongoxmlRepository == null
-                ? Program.MongoXMLManager : mongoxmlRepository;
+        //public QueryExecuter(MongoXMLRepository mongoxmlRepository) {
+        //    Init(mongoxmlRepository);
+        //}
 
-            SetTempFilePaths();
+        private void Init() {
+            MongoXMLManager = Program.MongoXMLManager;
         }
 
         public QueryExecuter()
         {
-            MongoXMLManager = Program.MongoXMLManager;
-            SetTempFilePaths();
-        }
-
-        private void SetTempFilePaths() { 
-                TempJSFile = Environment.ExpandEnvironmentVariables(MongoXMLManager.TempFolderPath
-                                                              + "\\" + Guid.NewGuid() + ".js");
-            TempBatFile = Environment.ExpandEnvironmentVariables(MongoXMLManager.TempFolderPath
-                                                              + "\\" + Guid.NewGuid() + ".bat");
+            Init();
         }
 
         public String Execute(string query)
         {
+            //reset query helper
+            QueryHelper.Init();
+
             if (String.IsNullOrWhiteSpace(query))
             {
                 return String.Empty;
             }
 
-            if (QueryFeedback.ContinueWithExecutionAfterWarning() == false)
+            if (QueryHelper.ContinueWithExecutionAfterWarning() == false)
             {
                 return String.Empty;
             }
 
-            
             var queries = SplitQueries(query);
 
             foreach (Tuple<QueryType, String> q in queries)
             {
-                if (QueryFeedback.NoOutputPrefix == false)
-                {
-                    QueryFeedback.QueryOutputAll.Append("--------------------")
-                        .Append(q.Item1.ToString())
-                        .Append("---------------------")
-                        .Append(Environment.NewLine);
-                }
-
+                QueryHelper.SetOutputPrefix(q.Item1.ToString());
+                
                 if (q.Item1 == QueryType.SQL || q.Item1 == QueryType.DOS)
                 {
                     ExecuteExternalQueries(q.Item1, new List<String> { q.Item2 });
@@ -136,7 +174,7 @@ namespace DBUI.Queries
                 }
             }
 
-            return QueryFeedback.QueryOutputAll.ToString();
+            return QueryHelper.QueryOutputAll.ToString();
         }
         
         //first split query into individual components
@@ -254,11 +292,11 @@ namespace DBUI.Queries
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.CreateNoWindow = QueryFeedback.NoWindows;
+            process.StartInfo.CreateNoWindow = QueryHelper.NoWindows;
             process.Start();
             
             //error output
-            QueryFeedback.QueryOutputError.Append(process.StandardError.ReadToEnd());
+            QueryHelper.QueryOutputError.Append(process.StandardError.ReadToEnd());
 
             var standardOut = process.StandardOutput.ReadToEnd();
 
@@ -266,13 +304,13 @@ namespace DBUI.Queries
             if (standardOut.Contains("JavaScript execution failed:")
                 //&& standardOut.Contains("ReferenceError:")
             ) {
-                 QueryFeedback.QueryOutputError.Append(standardOut);
+                 QueryHelper.QueryOutputError.Append(standardOut);
             }
 
             //query output + error output
-            QueryFeedback.QueryOutputAll.Append(standardOut);
-            QueryFeedback.QueryOutputAll.Append(Environment.NewLine);
-            QueryFeedback.QueryOutputAll.Append(QueryFeedback.QueryOutputError.ToString());
+            QueryHelper.QueryOutputAll.Append(standardOut);
+            QueryHelper.QueryOutputAll.Append(Environment.NewLine);
+            QueryHelper.QueryOutputAll.Append(QueryHelper.QueryOutputError.ToString());
             
             process.WaitForExit();
 
@@ -286,7 +324,7 @@ namespace DBUI.Queries
                 return;
             }
 
-            var tempFile = TempBatFile;
+            var tempFile = QueryHelper.TempBatFile;
             FileManager.SaveToFile(tempFile, "");
             FileManager.AppendToFile(tempFile, command);
 
@@ -306,17 +344,19 @@ namespace DBUI.Queries
             }
 
             //apppend custom code to file
-            var tempFile = TempJSFile;
-            FileManager.SaveToFile(tempFile, PrependCustomJSCode(""));
+            var tempFile = QueryHelper.TempJSFile;
+            var customJsCode = PrependCustomJSCode("");
+            FileManager.SaveToFile(tempFile, customJsCode);
             FileManager.AppendToFile(tempFile, query);
+
+            //set line offset for query feed back
+            QueryHelper.QueryErrorLineNumOffset = customJsCode.Split('\n').Length;
 
             //execute file
             String arguments = String.Format(
                 "{0} --quiet --host {1} {2} ",
                 MongoXMLManager.CurrentServer.CurrentDatabase.Name,
                 MongoXMLManager.CurrentServer.Name,
-                //((FormMainMDI)_form.ParentForm).DatabaeName,
-                //((FormMainMDI)_form.ParentForm).ServerName,
                 tempFile);
 
             ExecuteConsoleApp("mongo.exe", arguments);

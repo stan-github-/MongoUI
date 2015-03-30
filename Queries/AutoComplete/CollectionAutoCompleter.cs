@@ -13,7 +13,7 @@ namespace DBUI.Queries
             //var database = Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name;
 
             var executor = new QueryExecuter() ;
-            executor.QueryFeedback.NoFeedBack = true;
+            executor.QueryHelper.NoFeedBack = true;
                 
             //custom function defined in script file!
             
@@ -21,8 +21,8 @@ namespace DBUI.Queries
 
             var results = executor.Execute(func);
             
-            if (!String.IsNullOrWhiteSpace(executor.QueryFeedback.QueryError)) {
-                ErrorManager.Write(executor.QueryFeedback.QueryError);
+            if (!String.IsNullOrWhiteSpace(executor.QueryHelper.QueryError)) {
+                ErrorManager.Write(executor.QueryHelper.QueryError);
             }
 
             var r = results.Split(

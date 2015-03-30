@@ -26,12 +26,12 @@ namespace ConsoleApplication
         }
 
         public static QueryExecuter QueryExecuter {
-            get {
-                var mongoXMLManager = new MongoXMLRepository();
-                mongoXMLManager.Init("MongoXML.xml", "DocumentElement");
+            //get {
+            //    var mongoXMLManager = new MongoXMLRepository();
+            //    mongoXMLManager.Init("MongoXML.xml", "DocumentElement");
 
-                return new QueryExecuter(mongoXMLManager) { NoOutputPrefix = true };
-            }
+            //    //return new QueryExecuter(mongoXMLManager) { NoOutputPrefix = true };
+            //}
         }
      
         public static void CaseOne(){
@@ -41,7 +41,7 @@ namespace ConsoleApplication
             AutoCompleter.GetReflectionQuery(s, "", out query);
             Console.Write(query);
             
-            var output = QueryExecuter.Execute(query);
+            var output = new QueryExecuter().Execute(query);
 
             var array = output.Split('\r').ToArray()[9].Trim().Replace("\"", "");
             Console.Write(output);
@@ -56,7 +56,7 @@ namespace ConsoleApplication
             AutoCompleter.GetReflectionQuery(s, "", out query);
             Console.Write(query);
 
-            var output = QueryExecuter.Execute(query + "}; zzz();");
+            var output = new QueryExecuter().Execute(query + "}; zzz();");
 
             Console.Write(output);
             Console.ReadKey();
