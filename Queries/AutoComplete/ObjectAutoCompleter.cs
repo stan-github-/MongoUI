@@ -55,8 +55,8 @@ namespace DBUI.Queries
 
             var output = QueryExecuter.Execute(queryOut);
 
-            if (!String.IsNullOrEmpty(QueryExecuter.QueryHelper.QueryError)) {
-                ErrorManager.Write(QueryExecuter.QueryHelper.QueryError);
+            if (!String.IsNullOrEmpty(QueryExecuter.QueryHelper.JavascriptQueryError)) {
+                ErrorManager.Write(QueryExecuter.QueryHelper.JavascriptQueryError);
             }
             
             var properties = GetMethodProperties(output);

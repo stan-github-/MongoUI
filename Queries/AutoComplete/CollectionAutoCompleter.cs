@@ -21,8 +21,8 @@ namespace DBUI.Queries
 
             var results = executor.Execute(func);
             
-            if (!String.IsNullOrWhiteSpace(executor.QueryHelper.QueryError)) {
-                ErrorManager.Write(executor.QueryHelper.QueryError);
+            if (!String.IsNullOrWhiteSpace(executor.QueryHelper.JavascriptQueryError)) {
+                ErrorManager.Write(executor.QueryHelper.JavascriptQueryError);
             }
 
             var r = results.Split(
