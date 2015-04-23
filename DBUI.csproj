@@ -58,6 +58,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PhantomJs\FormPhantomJs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PhantomJs\FormPhantomJs.Designer.cs">
+      <DependentUpon>FormPhantomJs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="XMLRepository\MainXMLRepository.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="XMLRepository\PhantomJsXMLRepository.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Core\ErrorManager.cs" />
     <Compile Include="Core\FileManager.cs" />
     <Compile Include="Core\FormError.cs">
@@ -96,7 +108,7 @@
     <Compile Include="Mongo\FormMongoQuery.Designer.cs">
       <DependentUpon>FormMongoQuery.cs</DependentUpon>
     </Compile>
-    <Compile Include="Mongo\MongoXMLRepository.cs">
+    <Compile Include="XMLRepository\MongoXMLRepository.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Queries\AutoComplete\MongoMethods.cs" />
@@ -104,6 +116,10 @@
     <Compile Include="Queries\QueryExecuter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\Scraps.cs" />
+    <EmbeddedResource Include="PhantomJs\FormPhantomJs.resx">
+      <DependentUpon>FormPhantomJs.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core\FormError.resx">
       <DependentUpon>FormError.cs</DependentUpon>
     </EmbeddedResource>
@@ -148,6 +164,9 @@
     <Content Include="Newtonsoft.Json.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Queries\WrapperJs.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ScintillaNET.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -158,6 +177,7 @@
     <Content Include="SciLexer64.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\AutoCompleter.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

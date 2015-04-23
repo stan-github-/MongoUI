@@ -17,12 +17,12 @@ namespace DBUI.Queries
         //object intellisense needs to add back the stuff taken out
 
         //still somewhat buggy with complex queries
-        private static QueryExecuter _queryExecuter;
-        public static QueryExecuter QueryExecuter {
+        private static JavaScriptExecuter _queryExecuter;
+        public static JavaScriptExecuter QueryExecuter {
             get {
                 if (_queryExecuter == null)
                 {
-                    _queryExecuter = new QueryExecuter();
+                    _queryExecuter = new JavaScriptExecuter();
                     _queryExecuter.QueryHelper.NoFeedBack = true;
                     return _queryExecuter;
                 }
@@ -53,7 +53,7 @@ namespace DBUI.Queries
             var queryOut = GetReflectionQuery
                 (queryFirstHalf, querySecondHalf, methodOrObjectName);
 
-            var output = QueryExecuter.Execute(queryOut);
+            var output = QueryExecuter.ExecuteMongo(queryOut);
 
             if (!String.IsNullOrEmpty(QueryExecuter.QueryHelper.JavascriptQueryError)) {
                 ErrorManager.Write(QueryExecuter.QueryHelper.JavascriptQueryError);

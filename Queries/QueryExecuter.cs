@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -9,12 +10,12 @@ using System.Windows.Forms;
 namespace DBUI.Queries
 {
     //todo find the line number of the error, and high light the test in the window!!
-    public class QueryHelper {
+    public class MongoQueryHelper {
         //need to get rid of _form variable, just pass in strings...
         //private FormMongoQuery _form;
 
         public String TempJSFile { get; set; }
-
+        
         #region "query output" 
 
         public String QueryOutputAll {get {
@@ -131,10 +132,16 @@ namespace DBUI.Queries
             return this.TempJSFile;
         }
 
+        public String PrepareHtmlFile(String text)
+        {
+            FileManager.SaveToFile(this.TempJSFile, text);
+            return this.TempJSFile;
+        }
+
         private String PrependCustomJSCode()
         {
             var b = new StringBuilder();
-            foreach (var path in MongoXMLManager.CustomJSFilePaths)
+            foreach (var path in Program.MongoXMLManager.CustomJSFilePaths)
             {
                 b.Append(FileManager.ReadFromFile(path)).Append("\n");
             }
@@ -144,8 +151,9 @@ namespace DBUI.Queries
 
         private void SetTempFilePaths()
         {
-            TempJSFile = Environment.ExpandEnvironmentVariables(MongoXMLManager.TempFolderPath
+            TempJSFile = Environment.ExpandEnvironmentVariables(Program.MainXMLManager.TempFolderPath
                                                               + "\\" + Guid.NewGuid() + ".js");
+            
         }
 
         #endregion
@@ -163,23 +171,165 @@ namespace DBUI.Queries
             SetTempFilePaths();
         }
 
-        public QueryHelper()
+        public MongoQueryHelper()
         {
             Init();
         }
         
     }
 
-    public class QueryExecuter
+    public class PhantomJsHelper
     {
-        public MongoXMLRepository MongoXMLManager {get; set; }
-        
-        QueryHelper _queryHelper;
-        public QueryHelper QueryHelper {
+        //need to get rid of _form variable, just pass in strings...
+        //private FormMongoQuery _form;
+
+        public String TempJSFile { get; set; }
+        public String TempHTMLFile { get; set; }
+
+        #region "query output"
+
+        public String QueryOutputAll
+        {
+            get
+            {
+                return String.Format("{0}\n\r{1}\n\r",
+                    StandardError.ToString(),
+                    StandardOut.ToString());
+            }
+        }
+
+        public String JavascriptQueryError
+        {
+            /*
+             * 
+             * Sun Mar 29 21:27:37.660 JavaScript execution failed: ReferenceError: 
+            zzz is not defined at 
+            E:\Users\ztan\AppData\Local\Temp\\69d3425f-150d-4d1d-abab-1be699fabac0.js:L26
+            failed to load: E:\Users\ztan\AppData\Local\Temp\\69d3425f-150d-4d1d-abab-1be699fabac0.js
+             */
+            get
+            {
+                //if (StandardOut.ToString().Contains("JavaScript execution failed:")
+                //    //&& standardOut.Contains("ReferenceError:")
+                //)
+                //{
+                //    var array = this.StandardOut.ToString()
+                //        .Split(new string[] { "failed to load:", this.TempJSFile },
+                //         StringSplitOptions.RemoveEmptyEntries);
+
+                //    if (array.Length < 3 || !array[1].Contains(":L"))
+                //    {
+                //        throw new Exception("javascript error message parse error!!, please update mongo and mongo ui!");
+                //    }
+
+                //    var lineNumber = array[1].Replace(":L", "").Replace("\n\r", "");
+
+                //    int lineNumberInt = 0;
+
+                //    if (!int.TryParse(lineNumber, out lineNumberInt))
+                //    {
+                //        throw new Exception("javascript error message parse error!!, please update mongo and mongo ui!");
+                //    }
+
+                //    var sb = new StringBuilder();
+                //    sb.Append(array[0]).Append(Environment.NewLine);
+                //    sb.Append("line number: ")
+                //      .Append((lineNumberInt - this.QueryErrorLineNumOffset + 1).ToString());
+
+                //    return sb.ToString();
+                //}
+                return String.Empty;
+            }
+        }
+        public StringBuilder StandardOut { get; set; }
+        public StringBuilder StandardError { get; set; }
+
+        #endregion
+
+        public bool NoWindows { get; set; }
+
+        #region "actual execution"
+
+        public String PrepareJsFile()
+        {
+            //apppend custom code to file
+
+            var customJsCode = PrependCustomJSCode();
+            var jsContent = ReadWrapperJs();
+
+            FileManager.SaveToFile(this.TempJSFile, customJsCode);
+            FileManager.AppendToFile(this.TempJSFile, jsContent);
+
+            return this.TempJSFile;
+        }
+
+        private String ReadWrapperJs()
+        {
+            String wrapperJsPath = Application.StartupPath + "/Queries/WrapperJs.js";
+            var content = File.ReadAllText(wrapperJsPath);
+            content = content.Replace("{replace_replace_replace}", "file:///" + this.TempHTMLFile.Replace(@"\", @"/"));
+            return content;
+        }
+
+        public String PrepareHtmlFile(String text)
+        {
+            FileManager.SaveToFile(this.TempHTMLFile, text);
+            return this.TempHTMLFile;
+        }
+
+        private String PrependCustomJSCode()
+        {
+            var b = new StringBuilder();
+            foreach (var path in Program.PhantomJsXMLManager.CustomJSFilePaths)
+            {
+                b.Append(FileManager.ReadFromFile(path)).Append("\n");
+            }
+
+            return b.ToString();
+        }
+
+        private void SetTempFilePaths()
+        {
+            TempJSFile = Environment.ExpandEnvironmentVariables(Program.MainXMLManager.TempFolderPath
+                                                              + "\\" + Guid.NewGuid() + ".js");
+
+            //file to be used for phantomjs execuation
+            TempHTMLFile = Environment.ExpandEnvironmentVariables(Program.MainXMLManager.TempFolderPath
+                                                              + "\\" + Guid.NewGuid() + ".html");
+
+        }
+
+        #endregion
+
+        PhantomJsXMLRepository PhantomJsXMLRepository { get; set; }
+
+        //todo, not the best implementation, code smell
+        public void Init()
+        {
+            //this.JavascriptError = new StringBuilder();
+            this.StandardError = new StringBuilder();
+            this.StandardOut = new StringBuilder();
+
+            PhantomJsXMLRepository = Program.PhantomJsXMLManager;
+
+            SetTempFilePaths();
+        }
+
+        public PhantomJsHelper()
+        {
+            Init();
+        }
+
+    }
+
+    public class JavaScriptExecuter
+    {
+        MongoQueryHelper _queryHelper;
+        public MongoQueryHelper QueryHelper {
             get
             {
                 if (_queryHelper == null) {
-                    _queryHelper = new QueryHelper();
+                    _queryHelper = new MongoQueryHelper();
                     return _queryHelper;
                 }
                 return _queryHelper;
@@ -189,16 +339,26 @@ namespace DBUI.Queries
             }
         }
 
-        private void Init() {
-            MongoXMLManager = Program.MongoXMLManager;
-        }
-
-        public QueryExecuter()
+        PhantomJsHelper _phantomJsHelper;
+        public PhantomJsHelper PhantomJsHelper
         {
-            Init();
+            get
+            {
+                if (_phantomJsHelper == null)
+                {
+                    _phantomJsHelper = new PhantomJsHelper();
+                    return _phantomJsHelper;
+                }
+                return _phantomJsHelper;
+            }
+            set
+            {
+                _phantomJsHelper = value;
+            }
         }
 
-        public String Execute(string query)
+        
+        public String ExecuteMongo(string query)
         {
             //reset query helper
             QueryHelper.Init();
@@ -219,32 +379,65 @@ namespace DBUI.Queries
             var tempFilePath = QueryHelper.PrepareJsFile(query);
 
             //actually executing the query using file
-            ExecuteMongo(tempFilePath);
+            ExecuteMongo2(tempFilePath);
 
             //delete file
             FileManager.DeleteFile(tempFilePath);
 
             //return output
-            return QueryHelper.QueryOutputAll.ToString();
+            return QueryHelper.QueryOutputAll;
         }
            
-        private void ExecuteMongo(String tempFilePath)
+        private void ExecuteMongo2(String tempFilePath)
         {
-            
             //execute file
             String arguments = String.Format(
                 "{0} --quiet --host {1} {2} ",
-                MongoXMLManager.CurrentServer.CurrentDatabase.Name,
-                MongoXMLManager.CurrentServer.Name,
+                Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name,
+                Program.MongoXMLManager.CurrentServer.Name,
                 tempFilePath);
 
             ExecuteConsoleApp("mongo.exe", arguments);
+        }
+
+        public String ExecutePhantomJs(string htmlContent)
+        {
+            //reset query helper
+            PhantomJsHelper.Init();
+
+            //check for query
+            if (String.IsNullOrWhiteSpace(htmlContent))
+            {
+                return String.Empty;
+            }
+
+            //prepare html and js file
+            //todo a bit of refactoring here
+            var tempHtmlFilePath = PhantomJsHelper.PrepareHtmlFile(htmlContent);
+            var tempFilePath = PhantomJsHelper.PrepareJsFile();
+
+            //actually executing the query using file
+            ExecutePhantom2(tempFilePath);
+
+            //delete file
+            FileManager.DeleteFile(tempFilePath);
+
+            //return output
+            return QueryHelper.QueryOutputAll;
+        }
+
+        private void ExecutePhantom2(String tempFilePath)
+        {
+            //execute file
+            String arguments = String.Format("{0}", tempFilePath.Replace(@"\",@"/"));
+            ExecuteConsoleApp(Program.PhantomJsXMLManager.ExeFilePath, arguments);
 
         }
 
+
         private void ExecuteConsoleApp(String exeName, String arguments)
         {
-            Process process = new Process();
+            var process = new Process();
             process.StartInfo.FileName = exeName; //"mongo.exe ";
 
             process.StartInfo.Arguments = arguments;
@@ -268,165 +461,20 @@ namespace DBUI.Queries
         //display output in notepad, excel etc.
         public void DisplayQueryInExe(String content, String exe)
         {
-            string tempPath = Environment.ExpandEnvironmentVariables
-                (MongoXMLManager.TempFolderPath + "\\"
+            var tempPath = Environment.ExpandEnvironmentVariables
+                (Program.MainXMLManager.TempFolderPath + "\\"
                  + Guid.NewGuid() + ".json");
-            ;
-            if (FileManager.SaveToFile(tempPath, content)
-                == false)
+
+            if (!FileManager.SaveToFile(tempPath, content))
             {
                 return;
             }
 
-            Process process = new Process();
+            var process = new Process();
             process.StartInfo.FileName = exe;
             process.StartInfo.Arguments = tempPath;
             process.Start();
         }
-
-        #region additional types of execution dos, sql etc
-        public List<Tuple<QueryType, String>> SplitQueries(String query)
-        {
-            string regex = @"\#\#DOS\#\#|\#\#MONGO\#\#|\#\#SQL\#\#";
-            var options = RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase | RegexOptions.Singleline;
-
-            var tokens = new List<String> { "##DOS##", "##MONGO##", "##SQL##" };
-            var dict = new List<Tuple<QueryType, String>>();
-
-            var reg = new Regex(regex, options);
-            var s = query.Trim();
-
-            try
-            {
-                var queries = reg.Split(s);
-                if (queries == null || queries.Length == 0)
-                {
-                    return null;
-                }
-
-                if (queries.Length == 1)
-                {
-                    return new List<Tuple<QueryType, String>>{ 
-                          new Tuple<QueryType,String>(QueryType.MONGO, queries[0])};
-                }
-
-                var c = reg.Matches(s);
-
-                int i = 0;
-                foreach (Match q in c)
-                {
-                    //if the first query has no token assume it's mongo
-                    if (i == 0)
-                    {
-                        if (q.Index != 0)
-                        {
-                            dict.Add(new Tuple<QueryType, String>
-                                (QueryType.MONGO, queries[0]));
-                        }
-                    }
-
-                    QueryType queryType;
-                    var queryType_ = q.Groups[0].ToString().Replace("#", "");
-                    if (!Enum.TryParse<QueryType>(queryType_, out queryType))
-                    {
-                        throw new Exception(queryType_ + " is not valid query type");
-                    }
-
-                    dict.Add(new Tuple<QueryType, String>(
-                        queryType, queries[i + 1]));
-                    i++;
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorManager.Write(ex);
-            }
-            return dict;
-        }
-        private String Execute2(string query)
-        {
-            //reset query helper
-            QueryHelper.Init();
-
-            if (String.IsNullOrWhiteSpace(query))
-            {
-                return String.Empty;
-            }
-
-            if (QueryHelper.ContinueWithExecutionAfterWarning() == false)
-            {
-                return String.Empty;
-            }
-
-            var queries = SplitQueries(query);
-
-            //foreach (Tuple<QueryType, String> q in queries)
-            //{
-            //    QueryHelper.SetOutputPrefix(q.Item1.ToString());
-
-            //    if (q.Item1 == QueryType.SQL || q.Item1 == QueryType.DOS)
-            //    {
-            //        ExecuteExternalQueries(q.Item1, new List<String> { q.Item2 });
-            //    }
-            //    else
-            //    {
-            //        ExecuteMongo(q.Item2);
-            //    }
-            //}
-
-            return QueryHelper.QueryOutputAll.ToString();
-        }
-
-        private void ExecuteDOSCmdLine(String command)
-        {
-
-            if (string.IsNullOrWhiteSpace(command))
-            {
-                return;
-            }
-
-            var tempFile = "";// QueryHelper.TempBatFile;
-            FileManager.SaveToFile(tempFile, "");
-            FileManager.AppendToFile(tempFile, command);
-
-            ExecuteConsoleApp(tempFile, String.Empty);
-            FileManager.DeleteFile(tempFile);
-        }
-
-        private void ExecuteExternalQueries(QueryType type, List<String> queries)
-        {
-            String arguments = string.Empty;
-            String fileName = string.Empty;
-
-            var sqlCmd = MongoXMLManager.SQlCmd;
-
-            if (type == QueryType.SQL)
-            {
-                foreach (var q in queries)
-                {
-                    arguments = String.Format("-S {0} -d {1} -q \"{2}\"",
-                        sqlCmd.Server, sqlCmd.Database, q);
-                    ExecuteConsoleApp(sqlCmd.ExePath, arguments);
-                }
-            }
-
-            if (type == QueryType.DOS)
-            {
-                foreach (var q in queries)
-                {
-                    ExecuteDOSCmdLine(q);
-                }
-            }
-        }
-
-        public enum QueryType
-        {
-            MONGO,
-            SQL,
-            DOS
-        }
-        
-        #endregion
 
     }
 

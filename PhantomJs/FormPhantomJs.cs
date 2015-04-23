@@ -13,7 +13,7 @@ using DBUI;
 using System.Diagnostics;
 
 namespace DBUI.Queries {
-    public partial class FormMongoQuery : Form
+    public partial class FormPhantomJs : Form
     {
         private JavaScriptExecuter _queryExecuter;
 
@@ -43,7 +43,7 @@ namespace DBUI.Queries {
 
         public Mode mode { get; set; }
 
-        public FormMongoQuery(FormMainMDI parent)
+        public FormPhantomJs(FormMainMDI parent)
         {
             InitializeComponent();
             this.MdiParent = parent;
@@ -152,7 +152,7 @@ namespace DBUI.Queries {
                                 ? this.text_box.Text
                                 : text_box.Selection.Text;
 
-            DispalyQueryOutput(_queryExecuter.ExecutePhantomJs(query));
+            DispalyQueryOutput(_queryExecuter.ExecuteMongo(query));
 
             var javascriptError = _queryExecuter.QueryHelper.JavascriptQueryError;
             if (!String.IsNullOrEmpty(javascriptError)){

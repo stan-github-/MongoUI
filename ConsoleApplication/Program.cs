@@ -25,14 +25,14 @@ namespace ConsoleApplication
             Console.Read();
         }
 
-        public static QueryExecuter QueryExecuter {
-            //get {
-            //    var mongoXMLManager = new MongoXMLRepository();
-            //    mongoXMLManager.Init("MongoXML.xml", "DocumentElement");
+        //public static JavaScriptExecuter QueryExecuter {
+        //    //get {
+        //    //    var mongoXMLManager = new MongoXMLRepository();
+        //    //    mongoXMLManager.Init("MongoXML.xml", "DocumentElement");
 
-            //    //return new QueryExecuter(mongoXMLManager) { NoOutputPrefix = true };
-            //}
-        }
+        //    //    //return new QueryExecuter(mongoXMLManager) { NoOutputPrefix = true };
+        //    //}
+        //}
      
         public static void CaseOne(){
             var s = @"var x = db.test.find()";
@@ -41,7 +41,7 @@ namespace ConsoleApplication
             AutoCompleter.GetReflectionQuery(s, "", out query);
             Console.Write(query);
             
-            var output = new QueryExecuter().Execute(query);
+            var output = new JavaScriptExecuter().ExecuteMongo(query);
 
             var array = output.Split('\r').ToArray()[9].Trim().Replace("\"", "");
             Console.Write(output);
@@ -56,7 +56,7 @@ namespace ConsoleApplication
             AutoCompleter.GetReflectionQuery(s, "", out query);
             Console.Write(query);
 
-            var output = new QueryExecuter().Execute(query + "}; zzz();");
+            var output = new JavaScriptExecuter().ExecuteMongo(query + "}; zzz();");
 
             Console.Write(output);
             Console.ReadKey();
@@ -112,7 +112,7 @@ namespace ConsoleApplication
             String queryOut;
             GetReflectionQuery(query, "", out queryOut);
             
-            var output = new QueryExecuter().Execute(queryOut);
+            var output = new JavaScriptExecuter().ExecuteMongo(queryOut);
 
             var array = output.Split('\r').ToList();
             array.ForEach(s => s.Trim().Replace("\"", ""));

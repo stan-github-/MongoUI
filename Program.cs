@@ -8,6 +8,8 @@ namespace DBUI
     static class Program
     {
         public static Queries.MongoXMLRepository MongoXMLManager;
+        public static Queries.PhantomJsXMLRepository PhantomJsXMLManager;
+        public static Queries.MainXMLRepository MainXMLManager;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -17,8 +19,15 @@ namespace DBUI
         //todo need save file as.
         static void Main()
         {
+            var xmlFile = "MongoXML.xml";
             MongoXMLManager = new MongoXMLRepository();
-            MongoXMLManager.Init("MongoXML.xml", "DocumentElement");
+            MongoXMLManager.Init(xmlFile, "DocumentElement");
+
+            PhantomJsXMLManager = new PhantomJsXMLRepository();
+            PhantomJsXMLManager.Init(xmlFile, "DocumentElement");
+
+            MainXMLManager = new MainXMLRepository();
+            MainXMLManager.Init(xmlFile, "DocumentElement");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

@@ -132,7 +132,7 @@ namespace DBUI {
         {
             var l = new List<String>();
             MdiChildren.ToList().ForEach(c=> l.Add(((FormMongoQuery)c).QueryFilePath));
-            Program.MongoXMLManager.FileHistory = l;
+            Program.MainXMLManager.FileHistory = l;
 
             Program.MongoXMLManager.SaveXml();
         }
@@ -217,14 +217,14 @@ namespace DBUI {
         #region "drop down snippet code files etc"
         private void SetDropDownFileHistory()
         {
-            Program.MongoXMLManager.FileHistory.ForEach
+            Program.MainXMLManager.FileHistory.ForEach
                 (f=> this.historyMenu.DropDownItems.Add(f)
             );
         }
 
         private void SetDropDownCodeSnippet()
         {
-            Program.MongoXMLManager.CodeSnippets.ForEach
+            Program.MainXMLManager.CodeSnippets.ForEach
                 (f => this.snippetsMenu.DropDownItems.Add(f)
             );
         }

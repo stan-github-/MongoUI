@@ -20,14 +20,6 @@
       <T>MongoUI</T>
       <T>notepad.exe</T>
     </QueryOutputTypes>
-    <SQLCmd current="localhost">
-      <S name="localhost">
-        <ExePath>c:\Program Files\Microsoft SQL Server\110\Tools\Binn\SQLCMD.EXE</ExePath>
-        <Server>localhost</Server>
-        <Database>test</Database>
-        <Query></Query>
-      </S>
-    </SQLCmd>
     <CodeSnippets current="3789">
       <Group name="3789">
         <Path name="1">C:\Users\stan\Desktop\3789\1.txt</Path>
@@ -58,6 +50,16 @@
       <Database name="system"></Database>
     </Server>
   </Servers>
+  <PhantomJs>
+    <ExeFilePath>c:\Users\stan\Desktop\phantomjs-2.0.0-windows\phantomjs-2.0.0-windows\bin\phantomjs.exe</ExeFilePath>
+    <WrapperJsFilePath>c:\NodeJsProjects\angular\phantomJs\runme.js</WrapperJsFilePath>
+    <CustomJavascriptFiles comments="not linked to Options form, yet">
+      <Path>.\Scripts\underscore.js</Path>
+      <Path>.\Scripts\AutoCompleter.js</Path>
+      <Path>.\Scripts\Custom.js</Path>
+      <Path>.\Scripts\angular.js</Path>
+    </CustomJavascriptFiles>
+  </PhantomJs>
   <Miscellaneous comments="not for configuration; used by application only">
     <LastOpenedFilePath>
     </LastOpenedFilePath>

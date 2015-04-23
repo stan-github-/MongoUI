@@ -40,15 +40,15 @@ namespace DBUI {
         }
 
         private void SetControls() {
-            this.textBoxQueryFolder.Text = Program.MongoXMLManager.QueryFolderPath;
-            this.TextBoxTempFolder.Text = Program.MongoXMLManager.TempFolderPath;
-            this.checkBoxDeleteTempFolderContents.Checked = Program.MongoXMLManager.DeleteTempFolderContents;
+            this.textBoxQueryFolder.Text = Program.MainXMLManager.QueryFolderPath;
+            this.TextBoxTempFolder.Text = Program.MainXMLManager.TempFolderPath;
+            this.checkBoxDeleteTempFolderContents.Checked = Program.MainXMLManager.DeleteTempFolderContents;
         }
 
         private void SaveControls() {
-            Program.MongoXMLManager.QueryFolderPath = this.textBoxQueryFolder.Text;
-            Program.MongoXMLManager.TempFolderPath = this.TextBoxTempFolder.Text;
-            Program.MongoXMLManager.DeleteTempFolderContents = this.checkBoxDeleteTempFolderContents.Checked;
+            Program.MainXMLManager.QueryFolderPath = this.textBoxQueryFolder.Text;
+            Program.MainXMLManager.TempFolderPath = this.TextBoxTempFolder.Text;
+            Program.MainXMLManager.DeleteTempFolderContents = this.checkBoxDeleteTempFolderContents.Checked;
             
         }
     }
