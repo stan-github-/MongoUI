@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DBUI.Queries
@@ -274,6 +276,11 @@ namespace DBUI.Queries
         public String PrepareHtmlFile(String text)
         {
             FileManager.SaveToFile(this.TempHTMLFile, text);
+            //copy angular js etc to temp file folder to be used by html file
+            PhantomJsXMLRepository.CustomJSFilePaths.ForEach(f => 
+                FileManager.CopyFileToFolder(Application.StartupPath + @"\" + f,
+                Environment.ExpandEnvironmentVariables(Program.MainXMLManager.TempFolderPath)));
+            
             return this.TempHTMLFile;
         }
 
@@ -282,7 +289,8 @@ namespace DBUI.Queries
             var b = new StringBuilder();
             foreach (var path in Program.PhantomJsXMLManager.CustomJSFilePaths)
             {
-                b.Append(FileManager.ReadFromFile(path)).Append("\n");
+                var p = Application.StartupPath + @"\" + path;
+                b.Append(FileManager.ReadFromFile(p)).Append("\n");
             }
 
             return b.ToString();
@@ -379,17 +387,6 @@ namespace DBUI.Queries
             var tempFilePath = QueryHelper.PrepareJsFile(query);
 
             //actually executing the query using file
-            ExecuteMongo2(tempFilePath);
-
-            //delete file
-            FileManager.DeleteFile(tempFilePath);
-
-            //return output
-            return QueryHelper.QueryOutputAll;
-        }
-           
-        private void ExecuteMongo2(String tempFilePath)
-        {
             //execute file
             String arguments = String.Format(
                 "{0} --quiet --host {1} {2} ",
@@ -397,9 +394,16 @@ namespace DBUI.Queries
                 Program.MongoXMLManager.CurrentServer.Name,
                 tempFilePath);
 
-            ExecuteConsoleApp("mongo.exe", arguments);
-        }
+            ExecuteConsoleApp("mongo.exe", arguments, 
+                QueryHelper.StandardOut, QueryHelper.StandardError);
 
+            //delete file
+            FileManager.DeleteFile(tempFilePath);
+
+            //return output
+            return QueryHelper.QueryOutputAll;
+        }
+    
         public String ExecutePhantomJs(string htmlContent)
         {
             //reset query helper
@@ -417,25 +421,21 @@ namespace DBUI.Queries
             var tempFilePath = PhantomJsHelper.PrepareJsFile();
 
             //actually executing the query using file
-            ExecutePhantom2(tempFilePath);
+            String arguments = String.Format("{0}", tempFilePath.Replace(@"\", @"/"));
+            ExecuteConsoleApp(Program.PhantomJsXMLManager.ExeFilePath, arguments, 
+                PhantomJsHelper.StandardOut, PhantomJsHelper.StandardError);
 
             //delete file
             FileManager.DeleteFile(tempFilePath);
+            FileManager.DeleteFile(tempHtmlFilePath);
 
             //return output
-            return QueryHelper.QueryOutputAll;
+            return PhantomJsHelper.QueryOutputAll;
         }
-
-        private void ExecutePhantom2(String tempFilePath)
-        {
-            //execute file
-            String arguments = String.Format("{0}", tempFilePath.Replace(@"\",@"/"));
-            ExecuteConsoleApp(Program.PhantomJsXMLManager.ExeFilePath, arguments);
-
-        }
-
-
-        private void ExecuteConsoleApp(String exeName, String arguments)
+ 
+        private void ExecuteConsoleApp(String exeName, String arguments, 
+            //todo not the best implementation
+            StringBuilder standout, StringBuilder standerr)
         {
             var process = new Process();
             process.StartInfo.FileName = exeName; //"mongo.exe ";
@@ -445,14 +445,27 @@ namespace DBUI.Queries
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
             process.StartInfo.CreateNoWindow = QueryHelper.NoWindows;
+            Task.Factory.StartNew(() =>
+            {
+                Thread.Sleep(5000);
+                if (!process.HasExited)
+                {
+                    process.Kill();
+                    var errorManager =  new ErrorManagerThreadSafe();
+                    errorManager.Write("process timed out after 5 seconds");
+                    errorManager.CloseForm(10);
+                }
+
+            });
+
             process.Start();
-
             //standard error, mongo.exe not found etc
-            QueryHelper.StandardError.Append(process.StandardError.ReadToEnd());
-
+            //QueryHelper.StandardError.Append(process.StandardError.ReadToEnd());
+            standerr.Append(process.StandardError.ReadToEnd());
             //standard out
-            QueryHelper.StandardOut.Append(process.StandardOutput.ReadToEnd());
-
+            //QueryHelper.StandardOut.Append(process.StandardOutput.ReadToEnd());
+            standout.Append(process.StandardOutput.ReadToEnd());
+            
             process.WaitForExit();
 
         }

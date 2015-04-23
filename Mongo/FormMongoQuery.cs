@@ -96,12 +96,17 @@ namespace DBUI.Queries {
 
         private void text_box_KeyUp(object sender, KeyEventArgs e)
         {
+            if (Program.ProgramMode != Program.Mode.Mongo)
+            {
+                return;
+            }
+
             if (e.KeyCode != Keys.OemPeriod)
             {
                 return;
             }
 
-            Queries.AutoComplete.AutoCompleteMain.Run(this.text_box);
+            Queries.AutoComplete.AutoCompleteMain.RunMongo(this.text_box);
         }
 
         #region "control init"
@@ -124,6 +129,11 @@ namespace DBUI.Queries {
             if (e.KeyCode == Keys.F5)
             {
                 ExecuteQueryAndSaveToFile();
+            }
+            
+            if (e.KeyCode == Keys.F12 && Program.ProgramMode == Program.Mode.PhantomJs)
+            {
+                Queries.AutoComplete.AutoCompleteMain.RunPhantomJs(this.text_box);
             }
         }
 

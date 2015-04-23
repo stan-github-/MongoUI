@@ -1,8 +1,28 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 
 namespace DBUI {
     public static class FileManager {
+
+        public static bool CopyFileToFolder(string filePath, string folerPath)
+        {
+            try
+            {
+                var fileName = Path.GetFileName(filePath);
+                var newFilePath = String.Format(@"{0}\{1}", folerPath, fileName);
+                if (File.Exists(newFilePath))
+                {
+                    return true;
+                }
+                File.Copy(filePath, newFilePath);
+            }
+            catch(Exception e)
+            {
+                ErrorManager.Write(e);
+            }
+            return true;
+        }
 
         public static string ReadFromFile(string filePath) {
             String s = String.Empty;

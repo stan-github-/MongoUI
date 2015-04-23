@@ -4,7 +4,7 @@
     var system = require('system');
 
     page.onConsoleMessage = function (msg) {
-        system.stdout.writeLine('browser: ' + msg);
+        system.stdout.writeLine(msg);
         //system.stderr.writeLine( 'window console: ' + msg);
     };
 

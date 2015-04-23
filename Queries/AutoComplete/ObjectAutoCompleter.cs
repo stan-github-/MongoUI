@@ -31,19 +31,40 @@ namespace DBUI.Queries
                 }
             }
         }
-        private readonly static String ReflectionString =
-                //todo
-                //replace variable name and placeholder with even weirder names
-                @";
+
+        private String ReflectionString
+        {
+            get
+            {
+                if (Program.ProgramMode == Program.Mode.Mongo)
+                {
+                    return @";
                     (function(){
 	                var _x_y_z_1_2_3 = {zzzzzzzzzzzz};
                         printz('{uuuuuuuuuuuu}');
-	                    for (p in _x_y_z_1_2_3){
+	                    for (var p in _x_y_z_1_2_3){
 		                    printz(p);
 	                    }
                         printz('{vvvvvvvvvvvv}');
                     })();
                 ";
+                }
+                else
+                {
+                    return @";
+                    (function(){
+	                var _x_y_z_1_2_3 = {zzzzzzzzzzzz};
+                        console.log('{uuuuuuuuuuuu}');
+	                    for (var p in _x_y_z_1_2_3){
+		                    console.log(p);
+	                    }
+                        console.log('{vvvvvvvvvvvv}');
+                    })();
+                ";
+                }
+            }
+        }
+        
         private static bool Debug = false;
 
         public static List<String> Main(String queryFirstHalf, string querySecondHalf)
@@ -59,6 +80,25 @@ namespace DBUI.Queries
                 ErrorManager.Write(QueryExecuter.QueryHelper.JavascriptQueryError);
             }
             
+            var properties = GetMethodProperties(output);
+
+            return properties;
+        }
+
+        public static List<String> MainPhantomJs(String queryFirstHalf, string querySecondHalf)
+        {
+            var methodOrObjectName = GetMethodOrObjectChain(queryFirstHalf);
+
+            var queryOut = GetReflectionQuery
+                (queryFirstHalf, querySecondHalf, methodOrObjectName);
+
+            var output = QueryExecuter.ExecutePhantomJs(queryOut);
+
+            if (!String.IsNullOrEmpty(QueryExecuter.QueryHelper.JavascriptQueryError))
+            {
+                ErrorManager.Write(QueryExecuter.PhantomJsHelper.JavascriptQueryError);
+            }
+
             var properties = GetMethodProperties(output);
 
             return properties;
@@ -92,7 +132,7 @@ namespace DBUI.Queries
         public static String GetReflectionQuery
             (String firstHalf, String secondHalf, String objectName)
         {
-            var reflectionString = ObjectAutoCompleter.ReflectionString
+            var reflectionString = new ObjectAutoCompleter().ReflectionString
                 .Replace("{zzzzzzzzzzzz}", objectName);
 
             return String.Format("{0}{1}{2}", firstHalf, reflectionString, secondHalf);

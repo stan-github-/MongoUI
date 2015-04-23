@@ -101,7 +101,7 @@ namespace DBUI.Queries {
                 return;
             }
 
-            Queries.AutoComplete.AutoCompleteMain.Run(this.text_box);
+            Queries.AutoComplete.AutoCompleteMain.RunMongo(this.text_box);
         }
 
         #region "control init"
@@ -124,6 +124,11 @@ namespace DBUI.Queries {
             if (e.KeyCode == Keys.F5)
             {
                 ExecuteQueryAndSaveToFile();
+            }
+
+            if (e.KeyCode == Keys.F12)
+            {
+                Queries.AutoComplete.AutoCompleteMain.RunPhantomJs(this.text_box);
             }
         }
 

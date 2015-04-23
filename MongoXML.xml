@@ -54,10 +54,10 @@
     <ExeFilePath>c:\Users\stan\Desktop\phantomjs-2.0.0-windows\phantomjs-2.0.0-windows\bin\phantomjs.exe</ExeFilePath>
     <WrapperJsFilePath>c:\NodeJsProjects\angular\phantomJs\runme.js</WrapperJsFilePath>
     <CustomJavascriptFiles comments="not linked to Options form, yet">
-      <Path>.\Scripts\underscore.js</Path>
-      <Path>.\Scripts\AutoCompleter.js</Path>
-      <Path>.\Scripts\Custom.js</Path>
-      <Path>.\Scripts\angular.js</Path>
+      <Path>Scripts\underscore.js</Path>
+      <Path>Scripts\AutoCompleter.js</Path>
+      <Path>Scripts\Custom.js</Path>
+      <Path>Scripts\angular.js</Path>
     </CustomJavascriptFiles>
   </PhantomJs>
   <Miscellaneous comments="not for configuration; used by application only">

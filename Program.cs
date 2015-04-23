@@ -10,12 +10,21 @@ namespace DBUI
         public static Queries.MongoXMLRepository MongoXMLManager;
         public static Queries.PhantomJsXMLRepository PhantomJsXMLManager;
         public static Queries.MainXMLRepository MainXMLManager;
+
+        public enum Mode
+        {
+            Mongo, PhantomJs
+        }
+
+        //todo 
+        //make this part of main xml settings
+        public static Program.Mode ProgramMode = Mode.PhantomJs;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         /// 
         [STAThread]
-
         //todo need save file as.
         static void Main()
         {
