@@ -365,7 +365,20 @@ namespace DBUI.Queries
             }
         }
 
-        
+        public StringBuilder StandardOut { get; set; }
+        public StringBuilder StandardError { get; set; }
+
+        public void ResetOutputs()
+        {
+            StandardOut = Program.ProgramMode == Program.Mode.Mongo
+                ? QueryHelper.StandardOut
+                : PhantomJsHelper.StandardOut;
+
+            StandardError = Program.ProgramMode == Program.Mode.Mongo
+                ? QueryHelper.StandardError
+                : PhantomJsHelper.StandardError;
+        }
+
         public String ExecuteMongo(string query)
         {
             //reset query helper
@@ -394,8 +407,7 @@ namespace DBUI.Queries
                 Program.MongoXMLManager.CurrentServer.Name,
                 tempFilePath);
 
-            ExecuteConsoleApp("mongo.exe", arguments, 
-                QueryHelper.StandardOut, QueryHelper.StandardError);
+            ExecuteConsoleApp("mongo.exe", arguments);
 
             //delete file
             FileManager.DeleteFile(tempFilePath);
@@ -408,6 +420,8 @@ namespace DBUI.Queries
         {
             //reset query helper
             PhantomJsHelper.Init();
+            ResetOutputs();
+
 
             //check for query
             if (String.IsNullOrWhiteSpace(htmlContent))
@@ -421,9 +435,8 @@ namespace DBUI.Queries
             var tempFilePath = PhantomJsHelper.PrepareJsFile();
 
             //actually executing the query using file
-            String arguments = String.Format("{0}", tempFilePath.Replace(@"\", @"/"));
-            ExecuteConsoleApp(Program.PhantomJsXMLManager.ExeFilePath, arguments, 
-                PhantomJsHelper.StandardOut, PhantomJsHelper.StandardError);
+            String arguments = String.Format("{0} > a.txt", tempFilePath.Replace(@"\", @"/"));
+            ExecuteConsoleApp(Program.PhantomJsXMLManager.ExeFilePath, arguments);
 
             //delete file
             FileManager.DeleteFile(tempFilePath);
@@ -433,9 +446,7 @@ namespace DBUI.Queries
             return PhantomJsHelper.QueryOutputAll;
         }
  
-        private void ExecuteConsoleApp(String exeName, String arguments, 
-            //todo not the best implementation
-            StringBuilder standout, StringBuilder standerr)
+        private void ExecuteConsoleApp(String exeName, String arguments)
         {
             var process = new Process();
             process.StartInfo.FileName = exeName; //"mongo.exe ";
@@ -445,29 +456,47 @@ namespace DBUI.Queries
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
             process.StartInfo.CreateNoWindow = QueryHelper.NoWindows;
-            Task.Factory.StartNew(() =>
-            {
-                Thread.Sleep(5000);
-                if (!process.HasExited)
-                {
-                    process.Kill();
-                    var errorManager =  new ErrorManagerThreadSafe();
-                    errorManager.Write("process timed out after 5 seconds");
-                    errorManager.CloseForm(10);
-                }
+            //Task.Factory.StartNew(() =>
+            //{
+            //    Thread.Sleep(5000);
+            //    if (!process.HasExited)
+            //    {
+            //        process.Kill();
+            //        var errorManager =  new ErrorManagerThreadSafe();
+            //        errorManager.Write("process timed out after 5 seconds");
+            //        errorManager.CloseForm(10);
+            //    }
 
-            });
+            //});
 
             process.Start();
-            //standard error, mongo.exe not found etc
-            //QueryHelper.StandardError.Append(process.StandardError.ReadToEnd());
-            standerr.Append(process.StandardError.ReadToEnd());
-            //standard out
-            //QueryHelper.StandardOut.Append(process.StandardOutput.ReadToEnd());
-            standout.Append(process.StandardOutput.ReadToEnd());
+
+            //---------------------------------------------------------------
+            //from msdn
+            //---------------------------------------------------------------
+            // Do not wait for the child process to exit before
+            // reading to the end of its redirected stream.
+            // p.WaitForExit();
+            // Read the output stream first and then wait.
+
+            //asyncrhonous
+            process.BeginOutputReadLine();
+            process.OutputDataReceived += process_OutputDataReceived;
+            //syncrhonous
+            if (StandardError != null)
+            {
+                StandardError.Append(process.StandardError.ReadToEnd());
+            }
             
             process.WaitForExit();
+        }
 
+        void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (StandardOut != null)
+            {
+                StandardOut.Append(e.Data + "\r\n");
+            }
         }
 
         //todo need cleanup refactoring etc

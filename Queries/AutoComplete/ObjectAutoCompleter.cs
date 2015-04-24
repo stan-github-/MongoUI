@@ -99,6 +99,8 @@ namespace DBUI.Queries
                 ErrorManager.Write(QueryExecuter.PhantomJsHelper.JavascriptQueryError);
             }
 
+            ErrorManager.Write(QueryExecuter.PhantomJsHelper.StandardOut.ToString());
+
             var properties = GetMethodProperties(output);
 
             return properties;

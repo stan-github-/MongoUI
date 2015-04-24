@@ -164,9 +164,14 @@ namespace DBUI.Queries {
 
             DispalyQueryOutput(_queryExecuter.ExecutePhantomJs(query));
 
-            var javascriptError = _queryExecuter.QueryHelper.JavascriptQueryError;
-            if (!String.IsNullOrEmpty(javascriptError)){
-                ErrorManager.Write(javascriptError);
+            if (Program.ProgramMode == Program.Mode.Mongo)
+            {
+                var javascriptError = _queryExecuter.QueryHelper.JavascriptQueryError;
+                if (!String.IsNullOrEmpty(javascriptError))
+                {
+                    ErrorManager.Write(javascriptError);
+                }
+            
             }
             
             FileManager.SaveToFile(this.QueryFilePath, text_box.Text);
