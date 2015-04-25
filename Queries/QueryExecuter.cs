@@ -267,7 +267,7 @@ namespace DBUI.Queries
 
         private String ReadWrapperJs()
         {
-            String wrapperJsPath = Application.StartupPath + "/Queries/WrapperJs.js";
+            String wrapperJsPath = Application.StartupPath + "/Queries/Wrapper.js";
             var content = File.ReadAllText(wrapperJsPath);
             content = content.Replace("{replace_replace_replace}", "file:///" + this.TempHTMLFile.Replace(@"\", @"/"));
             return content;

@@ -51,8 +51,8 @@
     </Server>
   </Servers>
   <PhantomJs>
-    <ExeFilePath>c:\Users\stan\Desktop\phantomjs-2.0.0-windows\phantomjs-2.0.0-windows\bin\phantomjs.exe</ExeFilePath>
-    <WrapperJsFilePath>c:\NodeJsProjects\angular\phantomJs\runme.js</WrapperJsFilePath>
+    <ExeFilePath>D:\Programs\PhantomJs\bin\phantomjs.exe</ExeFilePath>
+    <WrapperJsFilePath>D:\Programs\PhantomJs\bin\phantomjs.exe</WrapperJsFilePath>
     <CustomJavascriptFiles comments="not linked to Options form, yet">
       <Path>Scripts\underscore.js</Path>
       <Path>Scripts\AutoCompleter.js</Path>
