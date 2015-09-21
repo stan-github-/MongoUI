@@ -20,14 +20,14 @@ namespace DBUI.Queries.AutoComplete
             SetList(text_box, methods);
         }
 
-        public static void RunPhantomJs(ScintillaNET.Scintilla text_box, bool debug = false)
-        {
+        //public static void RunPhantomJs(ScintillaNET.Scintilla text_box, bool debug = false)
+        //{
 
-            List<String> methods;
+        //    List<String> methods;
 
-            methods = ObjectAutoCompleter.MainPhantomJs(text_box.TextBeforeCursor(), text_box.TextAfterCursor());
-            SetList(text_box, methods);
-        }
+        //    methods = ObjectAutoCompleter.MainPhantomJs(text_box.TextBeforeCursor(), text_box.TextAfterCursor());
+        //    SetList(text_box, methods);
+        //}
     
         private static void SetList(ScintillaNET.Scintilla text_box, List<String> methods)
         {

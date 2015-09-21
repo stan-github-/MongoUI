@@ -96,10 +96,10 @@ namespace DBUI.Queries {
 
         private void text_box_KeyUp(object sender, KeyEventArgs e)
         {
-            if (Program.ProgramMode != Program.Mode.Mongo)
-            {
-                return;
-            }
+            //if (Program.ProgramMode != Program.Mode.Mongo)
+            //{
+            //    return;
+            //}
 
             if (e.KeyCode != Keys.OemPeriod)
             {
@@ -130,11 +130,6 @@ namespace DBUI.Queries {
             {
                 ExecuteQueryAndSaveToFile();
             }
-            
-            if (e.KeyCode == Keys.F12 && Program.ProgramMode == Program.Mode.PhantomJs)
-            {
-                Queries.AutoComplete.AutoCompleteMain.RunPhantomJs(this.text_box);
-            }
         }
 
         private void button_excecute_Click(object sender, EventArgs e)
@@ -162,16 +157,12 @@ namespace DBUI.Queries {
                                 ? this.text_box.Text
                                 : text_box.Selection.Text;
 
-            DispalyQueryOutput(_queryExecuter.ExecutePhantomJs(query));
-
-            if (Program.ProgramMode == Program.Mode.Mongo)
-            {
-                var javascriptError = _queryExecuter.QueryHelper.JavascriptQueryError;
-                if (!String.IsNullOrEmpty(javascriptError))
-                {
-                    ErrorManager.Write(javascriptError);
-                }
+            DispalyQueryOutput(_queryExecuter.ExecuteMongo(query));
             
+            var javascriptError = _queryExecuter.QueryHelper.JavascriptQueryError;
+            if (!String.IsNullOrEmpty(javascriptError))
+            {
+                ErrorManager.Write(javascriptError);
             }
             
             FileManager.SaveToFile(this.QueryFilePath, text_box.Text);

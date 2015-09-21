@@ -36,8 +36,7 @@ namespace DBUI.Queries
         {
             get
             {
-                if (Program.ProgramMode == Program.Mode.Mongo)
-                {
+                
                     return @";
                     (function(){
 	                var _x_y_z_1_2_3 = {zzzzzzzzzzzz};
@@ -48,20 +47,7 @@ namespace DBUI.Queries
                         printz('{vvvvvvvvvvvv}');
                     })();
                 ";
-                }
-                else
-                {
-                    return @";
-                    (function(){
-	                var _x_y_z_1_2_3 = {zzzzzzzzzzzz};
-                        console.log('{uuuuuuuuuuuu}');
-	                    for (var p in _x_y_z_1_2_3){
-		                    console.log(p);
-	                    }
-                        console.log('{vvvvvvvvvvvv}');
-                    })();
-                ";
-                }
+                
             }
         }
         
@@ -85,26 +71,26 @@ namespace DBUI.Queries
             return properties;
         }
 
-        public static List<String> MainPhantomJs(String queryFirstHalf, string querySecondHalf)
-        {
-            var methodOrObjectName = GetMethodOrObjectChain(queryFirstHalf);
+        //public static List<String> MainPhantomJs(String queryFirstHalf, string querySecondHalf)
+        //{
+        //    var methodOrObjectName = GetMethodOrObjectChain(queryFirstHalf);
 
-            var queryOut = GetReflectionQuery
-                (queryFirstHalf, querySecondHalf, methodOrObjectName);
+        //    var queryOut = GetReflectionQuery
+        //        (queryFirstHalf, querySecondHalf, methodOrObjectName);
 
-            var output = QueryExecuter.ExecutePhantomJs(queryOut);
+        //    var output = QueryExecuter.ExecutePhantomJs(queryOut);
 
-            if (!String.IsNullOrEmpty(QueryExecuter.QueryHelper.JavascriptQueryError))
-            {
-                ErrorManager.Write(QueryExecuter.PhantomJsHelper.JavascriptQueryError);
-            }
+        //    if (!String.IsNullOrEmpty(QueryExecuter.QueryHelper.JavascriptQueryError))
+        //    {
+        //        ErrorManager.Write(QueryExecuter.PhantomJsHelper.JavascriptQueryError);
+        //    }
 
-            ErrorManager.Write(QueryExecuter.PhantomJsHelper.StandardOut.ToString());
+        //    ErrorManager.Write(QueryExecuter.PhantomJsHelper.StandardOut.ToString());
 
-            var properties = GetMethodProperties(output);
+        //    var properties = GetMethodProperties(output);
 
-            return properties;
-        }
+        //    return properties;
+        //}
 
         private static List<String> GetMethodProperties(string input) {
 

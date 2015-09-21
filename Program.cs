@@ -8,17 +8,17 @@ namespace DBUI
     static class Program
     {
         public static Queries.MongoXMLRepository MongoXMLManager;
-        public static Queries.PhantomJsXMLRepository PhantomJsXMLManager;
+        //public static Queries.PhantomJsXMLRepository PhantomJsXMLManager;
         public static Queries.MainXMLRepository MainXMLManager;
 
-        public enum Mode
-        {
-            Mongo, PhantomJs
-        }
+        //public enum Mode
+        //{
+        //    Mongo, PhantomJs
+        //}
 
         //todo 
         //make this part of main xml settings
-        public static Program.Mode ProgramMode = Mode.PhantomJs;
+        //public static Program.Mode ProgramMode = Mode.Mongo;
 
         /// <summary>
         /// The main entry point for the application.
@@ -32,8 +32,8 @@ namespace DBUI
             MongoXMLManager = new MongoXMLRepository();
             MongoXMLManager.Init(xmlFile, "DocumentElement");
 
-            PhantomJsXMLManager = new PhantomJsXMLRepository();
-            PhantomJsXMLManager.Init(xmlFile, "DocumentElement");
+            //PhantomJsXMLManager = new PhantomJsXMLRepository();
+            //PhantomJsXMLManager.Init(xmlFile, "DocumentElement");
 
             MainXMLManager = new MainXMLRepository();
             MainXMLManager.Init(xmlFile, "DocumentElement");

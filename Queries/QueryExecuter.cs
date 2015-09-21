@@ -134,11 +134,11 @@ namespace DBUI.Queries
             return this.TempJSFile;
         }
 
-        public String PrepareHtmlFile(String text)
-        {
-            FileManager.SaveToFile(this.TempJSFile, text);
-            return this.TempJSFile;
-        }
+        //public String PrepareHtmlFile(String text)
+        //{
+        //    FileManager.SaveToFile(this.TempJSFile, text);
+        //    return this.TempJSFile;
+        //}
 
         private String PrependCustomJSCode()
         {
@@ -180,156 +180,6 @@ namespace DBUI.Queries
         
     }
 
-    public class PhantomJsHelper
-    {
-        //need to get rid of _form variable, just pass in strings...
-        //private FormMongoQuery _form;
-
-        public String TempJSFile { get; set; }
-        public String TempHTMLFile { get; set; }
-
-        #region "query output"
-
-        public String QueryOutputAll
-        {
-            get
-            {
-                return String.Format("{0}\n\r{1}\n\r",
-                    StandardError.ToString(),
-                    StandardOut.ToString());
-            }
-        }
-
-        public String JavascriptQueryError
-        {
-            /*
-             * 
-             * Sun Mar 29 21:27:37.660 JavaScript execution failed: ReferenceError: 
-            zzz is not defined at 
-            E:\Users\ztan\AppData\Local\Temp\\69d3425f-150d-4d1d-abab-1be699fabac0.js:L26
-            failed to load: E:\Users\ztan\AppData\Local\Temp\\69d3425f-150d-4d1d-abab-1be699fabac0.js
-             */
-            get
-            {
-                //if (StandardOut.ToString().Contains("JavaScript execution failed:")
-                //    //&& standardOut.Contains("ReferenceError:")
-                //)
-                //{
-                //    var array = this.StandardOut.ToString()
-                //        .Split(new string[] { "failed to load:", this.TempJSFile },
-                //         StringSplitOptions.RemoveEmptyEntries);
-
-                //    if (array.Length < 3 || !array[1].Contains(":L"))
-                //    {
-                //        throw new Exception("javascript error message parse error!!, please update mongo and mongo ui!");
-                //    }
-
-                //    var lineNumber = array[1].Replace(":L", "").Replace("\n\r", "");
-
-                //    int lineNumberInt = 0;
-
-                //    if (!int.TryParse(lineNumber, out lineNumberInt))
-                //    {
-                //        throw new Exception("javascript error message parse error!!, please update mongo and mongo ui!");
-                //    }
-
-                //    var sb = new StringBuilder();
-                //    sb.Append(array[0]).Append(Environment.NewLine);
-                //    sb.Append("line number: ")
-                //      .Append((lineNumberInt - this.QueryErrorLineNumOffset + 1).ToString());
-
-                //    return sb.ToString();
-                //}
-                return String.Empty;
-            }
-        }
-        public StringBuilder StandardOut { get; set; }
-        public StringBuilder StandardError { get; set; }
-
-        #endregion
-
-        public bool NoWindows { get; set; }
-
-        #region "actual execution"
-
-        public String PrepareJsFile()
-        {
-            //apppend custom code to file
-
-            var customJsCode = PrependCustomJSCode();
-            var jsContent = ReadWrapperJs();
-
-            FileManager.SaveToFile(this.TempJSFile, customJsCode);
-            FileManager.AppendToFile(this.TempJSFile, jsContent);
-
-            return this.TempJSFile;
-        }
-
-        private String ReadWrapperJs()
-        {
-            String wrapperJsPath = Application.StartupPath + "/Queries/Wrapper.js";
-            var content = File.ReadAllText(wrapperJsPath);
-            content = content.Replace("{replace_replace_replace}", "file:///" + this.TempHTMLFile.Replace(@"\", @"/"));
-            return content;
-        }
-
-        public String PrepareHtmlFile(String text)
-        {
-            FileManager.SaveToFile(this.TempHTMLFile, text);
-            //copy angular js etc to temp file folder to be used by html file
-            PhantomJsXMLRepository.CustomJSFilePaths.ForEach(f => 
-                FileManager.CopyFileToFolder(Application.StartupPath + @"\" + f,
-                Environment.ExpandEnvironmentVariables(Program.MainXMLManager.TempFolderPath)));
-            
-            return this.TempHTMLFile;
-        }
-
-        private String PrependCustomJSCode()
-        {
-            var b = new StringBuilder();
-            foreach (var path in Program.PhantomJsXMLManager.CustomJSFilePaths)
-            {
-                var p = Application.StartupPath + @"\" + path;
-                b.Append(FileManager.ReadFromFile(p)).Append("\n");
-            }
-
-            return b.ToString();
-        }
-
-        private void SetTempFilePaths()
-        {
-            TempJSFile = Environment.ExpandEnvironmentVariables(Program.MainXMLManager.TempFolderPath
-                                                              + "\\" + Guid.NewGuid() + ".js");
-
-            //file to be used for phantomjs execuation
-            TempHTMLFile = Environment.ExpandEnvironmentVariables(Program.MainXMLManager.TempFolderPath
-                                                              + "\\" + Guid.NewGuid() + ".html");
-
-        }
-
-        #endregion
-
-        PhantomJsXMLRepository PhantomJsXMLRepository { get; set; }
-
-        //todo, not the best implementation, code smell
-        public void Init()
-        {
-            //this.JavascriptError = new StringBuilder();
-            this.StandardError = new StringBuilder();
-            this.StandardOut = new StringBuilder();
-
-            PhantomJsXMLRepository = Program.PhantomJsXMLManager;
-
-            SetTempFilePaths();
-        }
-
-        public PhantomJsHelper()
-        {
-            Init();
-        }
-
-    }
-
     public class JavaScriptExecuter
     {
         MongoQueryHelper _queryHelper;
@@ -347,36 +197,15 @@ namespace DBUI.Queries
             }
         }
 
-        PhantomJsHelper _phantomJsHelper;
-        public PhantomJsHelper PhantomJsHelper
-        {
-            get
-            {
-                if (_phantomJsHelper == null)
-                {
-                    _phantomJsHelper = new PhantomJsHelper();
-                    return _phantomJsHelper;
-                }
-                return _phantomJsHelper;
-            }
-            set
-            {
-                _phantomJsHelper = value;
-            }
-        }
-
         public StringBuilder StandardOut { get; set; }
         public StringBuilder StandardError { get; set; }
 
         public void ResetOutputs()
         {
-            StandardOut = Program.ProgramMode == Program.Mode.Mongo
-                ? QueryHelper.StandardOut
-                : PhantomJsHelper.StandardOut;
+            StandardOut = QueryHelper.StandardOut;
 
-            StandardError = Program.ProgramMode == Program.Mode.Mongo
-                ? QueryHelper.StandardError
-                : PhantomJsHelper.StandardError;
+            StandardError = QueryHelper.StandardError;
+                
         }
 
         public String ExecuteMongo(string query)
@@ -416,36 +245,7 @@ namespace DBUI.Queries
             return QueryHelper.QueryOutputAll;
         }
     
-        public String ExecutePhantomJs(string htmlContent)
-        {
-            //reset query helper
-            PhantomJsHelper.Init();
-            ResetOutputs();
 
-
-            //check for query
-            if (String.IsNullOrWhiteSpace(htmlContent))
-            {
-                return String.Empty;
-            }
-
-            //prepare html and js file
-            //todo a bit of refactoring here
-            var tempHtmlFilePath = PhantomJsHelper.PrepareHtmlFile(htmlContent);
-            var tempFilePath = PhantomJsHelper.PrepareJsFile();
-
-            //actually executing the query using file
-            String arguments = String.Format("{0} > a.txt", tempFilePath.Replace(@"\", @"/"));
-            ExecuteConsoleApp(Program.PhantomJsXMLManager.ExeFilePath, arguments);
-
-            //delete file
-            FileManager.DeleteFile(tempFilePath);
-            FileManager.DeleteFile(tempHtmlFilePath);
-
-            //return output
-            return PhantomJsHelper.QueryOutputAll;
-        }
- 
         private void ExecuteConsoleApp(String exeName, String arguments)
         {
             var process = new Process();
@@ -483,9 +283,10 @@ namespace DBUI.Queries
             process.BeginOutputReadLine();
             process.OutputDataReceived += process_OutputDataReceived;
             //syncrhonous
-            if (StandardError != null)
+            if (QueryHelper.StandardError != null)
             {
-                StandardError.Append(process.StandardError.ReadToEnd());
+                QueryHelper.StandardError
+                    .Append(process.StandardError.ReadToEnd());
             }
             
             process.WaitForExit();
@@ -493,9 +294,9 @@ namespace DBUI.Queries
 
         void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            if (StandardOut != null)
+            if (QueryHelper.StandardOut != null)
             {
-                StandardOut.Append(e.Data + "\r\n");
+                QueryHelper.StandardOut.Append(e.Data + "\r\n");
             }
         }
 
