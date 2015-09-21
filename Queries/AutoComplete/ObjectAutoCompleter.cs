@@ -36,19 +36,12 @@ namespace DBUI.Queries
         {
             get
             {
-                
                     return @";
                     (function(){
 	                var _x_y_z_1_2_3 = {zzzzzzzzzzzz};
-<<<<<<< Updated upstream
-                        printz('{uuuuuuuuuuuu}');
-	                    for (var p in _x_y_z_1_2_3){
-		                    printz(p);
-=======
                         printjson('{uuuuuuuuuuuu}');
 	                    for (p in _x_y_z_1_2_3){
 		                    printjson(p);
->>>>>>> Stashed changes
 	                    }
                         printjson('{vvvvvvvvvvvv}');
                     })();
