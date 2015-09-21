@@ -26,6 +26,7 @@ namespace DBUI.Queries
                 StandardOut.ToString());
             } 
         }
+
         public String JavascriptQueryError
         {
             /*

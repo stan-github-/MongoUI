@@ -51,7 +51,7 @@ namespace DBUI.Queries
             }
         }
         
-        private static bool Debug = false;
+        private static bool Debug = true;
 
         public static List<String> Main(String queryFirstHalf, string querySecondHalf)
         {
