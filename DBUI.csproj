@@ -58,7 +58,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Queries\MongoQueryHelper.cs" />
+    <Compile Include="Query\Execution\QueryExecutionConfiguration.cs" />
+    <Compile Include="Query\Execution\MessageManager.cs" />
+    <Compile Include="Query\Execution\QueryFileManager.cs" />
     <Compile Include="XMLRepository\MainXMLRepository.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
@@ -92,8 +94,8 @@
     <Compile Include="Forms\FormOptions.Designer.cs">
       <DependentUpon>FormOptions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Queries\AutoComplete\AutoCompleteMain.cs" />
-    <Compile Include="Queries\AutoComplete\CollectionAutoCompleter.cs" />
+    <Compile Include="Query\AutoComplete\AutoCompleteMain.cs" />
+    <Compile Include="Query\AutoComplete\CollectionAutoCompleter.cs" />
     <Compile Include="Mongo\FormMongoQuery.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,12 +105,11 @@
     <Compile Include="XMLRepository\MongoXMLRepository.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Queries\AutoComplete\MongoMethods.cs" />
-    <Compile Include="Queries\AutoComplete\ObjectAutoCompleter.cs" />
-    <Compile Include="Queries\QueryExecuter.cs" />
+    <Compile Include="Query\AutoComplete\ObjectAutoCompleter.cs" />
+    <Compile Include="Query\Execution\QueryExecuter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queries\Scraps.cs" />
+    <Compile Include="Query\Scraps.cs" />
     <EmbeddedResource Include="Core\FormError.resx">
       <DependentUpon>FormError.cs</DependentUpon>
     </EmbeddedResource>
@@ -153,7 +154,7 @@
     <Content Include="Newtonsoft.Json.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Queries\Wrapper.js">
+    <Content Include="Query\Wrapper.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ScintillaNET.xml">
@@ -175,7 +176,6 @@
     <Content Include="Scripts\Custom.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\PhantomJsSampleHtml\s1.html" />
     <Content Include="Scripts\scraps\PhantomJsWrapper.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -186,9 +186,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="PhantomJs\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

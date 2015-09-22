@@ -10,8 +10,6 @@ namespace DBUI.Queries
     //functions and classes
     public class ObjectAutoCompleter
     {
-        //todo
-        //override internal print, get rid of printz!!!
         
         //add collection names back to database,
         //object intellisense needs to add back the stuff taken out
@@ -23,7 +21,7 @@ namespace DBUI.Queries
                 if (_queryExecuter == null)
                 {
                     _queryExecuter = new JavaScriptExecuter();
-                    _queryExecuter.QueryHelper.NoFeedBack = true;
+                    _queryExecuter.QueryExecutionConfiguration.NoFeedBack = true;
                     return _queryExecuter;
                 }
                 else {
@@ -69,27 +67,6 @@ namespace DBUI.Queries
 
             return properties;
         }
-
-        //public static List<String> MainPhantomJs(String queryFirstHalf, string querySecondHalf)
-        //{
-        //    var methodOrObjectName = GetMethodOrObjectChain(queryFirstHalf);
-
-        //    var queryOut = GetReflectionQuery
-        //        (queryFirstHalf, querySecondHalf, methodOrObjectName);
-
-        //    var output = QueryExecuter.ExecutePhantomJs(queryOut);
-
-        //    if (!String.IsNullOrEmpty(QueryExecuter.QueryHelper.JavascriptQueryError))
-        //    {
-        //        ErrorManager.Write(QueryExecuter.PhantomJsHelper.JavascriptQueryError);
-        //    }
-
-        //    ErrorManager.Write(QueryExecuter.PhantomJsHelper.StandardOut.ToString());
-
-        //    var properties = GetMethodProperties(output);
-
-        //    return properties;
-        //}
 
         private static List<String> GetMethodProperties(string input) {
 

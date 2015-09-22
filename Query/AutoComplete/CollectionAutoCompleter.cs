@@ -13,7 +13,7 @@ namespace DBUI.Queries
             //var database = Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name;
 
             var executor = new JavaScriptExecuter() ;
-            executor.QueryHelper.NoFeedBack = true;
+            executor.QueryExecutionConfiguration.NoFeedBack = true;
                 
             //custom function defined in script file!
             

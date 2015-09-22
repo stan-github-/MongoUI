@@ -86,8 +86,8 @@ namespace DBUI.Queries {
 
             var collectionNodeNew = this.CreateNode("Collections", null);
             foreach (var collection in l) {
-                var n = this.AppendNode(ref collectionNodeNew, "C", "");
-                var attr = this.AppendAttribute(ref n, "name", collection);
+                var n = this.AppendNode(collectionNodeNew, "C", "");
+                var attr = this.AppendAttribute(n, "name", collection);
             }
 
             var collectionNodeOld = databaseNode.SelectSingleNode("Collections");
@@ -151,7 +151,7 @@ namespace DBUI.Queries {
                 n.RemoveAll();
 
                 //append new nodes
-                value.ForEach(v=>this.AppendNode(ref n, "f", v));
+                value.ForEach(v=>this.AppendNode(n, "f", v));
             }
         }
 

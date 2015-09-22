@@ -7,35 +7,26 @@ using System.Text.RegularExpressions;
 namespace DBUI.Queries.AutoComplete
 {
     
-
     public class AutoCompleteMain
     {
 
         public static void RunMongo(ScintillaNET.Scintilla text_box, bool debug = false)
         {
-
-            List<String> methods;
-
-            methods = ObjectAutoCompleter.Main(text_box.TextBeforeCursor(), text_box.TextAfterCursor());
+            var methods = ObjectAutoCompleter.Main
+                (text_box.TextBeforeCursor(), text_box.TextAfterCursor());
             SetList(text_box, methods);
         }
 
-        //public static void RunPhantomJs(ScintillaNET.Scintilla text_box, bool debug = false)
-        //{
-
-        //    List<String> methods;
-
-        //    methods = ObjectAutoCompleter.MainPhantomJs(text_box.TextBeforeCursor(), text_box.TextAfterCursor());
-        //    SetList(text_box, methods);
-        //}
-    
+       
         private static void SetList(ScintillaNET.Scintilla text_box, List<String> methods)
         {
             text_box.AutoComplete.MaxHeight = 10;
+
             if (methods.Count == 1) {
                 text_box.InsertText(methods[0]);
                 return;
             }
+            
             text_box.AutoComplete.Show(methods);
         }
     }

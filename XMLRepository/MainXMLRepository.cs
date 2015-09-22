@@ -94,7 +94,7 @@ namespace DBUI.Queries {
                 //append nodes from current list
                 var m = this.CreateNode("FileHistory", null);
                 value.Reverse();
-                value.ForEach(x => this.AppendNode(ref m, "f", x));
+                value.ForEach(x => this.AppendNode(m, "f", x));
 
                 //append nodes from past list
                 foreach (XmlNode x in n.SelectNodes("*"))
@@ -102,7 +102,7 @@ namespace DBUI.Queries {
                     if (m.SelectSingleNode(String.Format("*[text()='{0}']", x.InnerText)) 
                         == null)
                     {
-                        this.AppendNode (ref m, "f", x.InnerText);
+                        this.AppendNode (m, "f", x.InnerText);
                     }
                 }
 
@@ -111,13 +111,10 @@ namespace DBUI.Queries {
 
                 //append new nodes
                 m.SelectNodes("*").ToList().Take(9).ToList()
-                    .ForEach(x => this.AppendNode(ref n, "f", x.InnerText));
+                    .ForEach(x => this.AppendNode(n, "f", x.InnerText));
             }
 
         }
-
-        
-
 
         public String LastFilePath
         {
@@ -144,9 +141,7 @@ namespace DBUI.Queries {
         {
             set
             {
-                XmlNode n =
-                    RootNode.SelectSingleNode
-                        (_tempFolderPath);
+                XmlNode n = RootNode.SelectSingleNode(_tempFolderPath);
                 if (n != null) { n.InnerText = value; }
             }
             get
@@ -204,7 +199,7 @@ namespace DBUI.Queries {
                 n.RemoveAll();
 
                 //append new nodes
-                value.ForEach(v=>this.AppendNode(ref n, "f", v));
+                value.ForEach(v=>this.AppendNode(n, "f", v));
             }
         }
 

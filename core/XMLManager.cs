@@ -204,7 +204,7 @@ namespace DBUI
         }
 
         //should be made in into 
-        public XmlNode AppendNode(ref XmlNode parentNode,
+        public XmlNode AppendNode(XmlNode parentNode,
             string nodeName, string nodeValue) {
             if (parentNode == null) { return null; }
             XmlNode n = this.CreateNode(nodeName, nodeValue);
@@ -220,7 +220,7 @@ namespace DBUI
         }
 
         public XmlNode AppendAttribute
-            (ref XmlNode node, string attributeName, string attributeValue){
+            (XmlNode node, string attributeName, string attributeValue){
             if (node == null){return null;}
             XmlAttribute a = _domDoc.CreateAttribute(attributeName);
             a.InnerText = attributeValue;
