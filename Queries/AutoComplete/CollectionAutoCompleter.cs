@@ -21,8 +21,8 @@ namespace DBUI.Queries
 
             var results = executor.ExecuteMongo(func);
             
-            if (!String.IsNullOrWhiteSpace(executor.QueryHelper.JavascriptQueryError)) {
-                ErrorManager.Write(executor.QueryHelper.JavascriptQueryError);
+            if (!String.IsNullOrWhiteSpace(executor.MessageManager.GetJavascriptQueryError())) {
+                ErrorManager.Write(executor.MessageManager.GetJavascriptQueryError());
             }
 
             var r = results.Split(

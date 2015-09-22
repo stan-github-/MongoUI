@@ -27,6 +27,7 @@ namespace DBUI.Queries
                 _queryHelper = value;
             }
         }
+        public MessageManager MessageManager {get; set;}
 
         public String ExecuteMongo(string query)
         {
@@ -46,23 +47,27 @@ namespace DBUI.Queries
             }
 
             //prepend custome js files etc and return file path
-            var tempFilePath = QueryHelper.PrepareJsFile(query);
+            var queryFilePath = QueryHelper.PrepareJsFile(query);
 
+            //message manager;
+            MessageManager = new MessageManager
+                (queryFilePath, QueryHelper.GetQueryErrorLineNumOffset());
+            
             //actually executing the query using file
             //execute file
             String arguments = String.Format(
                 "{0} --quiet --host {1} {2} ",
                 Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name,
                 Program.MongoXMLManager.CurrentServer.Name,
-                tempFilePath);
+                queryFilePath);
 
             ExecuteConsoleApp("mongo.exe", arguments);
 
             //delete file
-            FileManager.DeleteFile(tempFilePath);
+            FileManager.DeleteFile(queryFilePath);
 
             //return output
-            return QueryHelper.QueryOutputAll;
+            return MessageManager.StandardErrorAndOut;
         }
     
 
@@ -91,20 +96,20 @@ namespace DBUI.Queries
             process.BeginOutputReadLine();
             process.OutputDataReceived += process_OutputDataReceived;
             //syncrhonous
-            if (QueryHelper.StandardError != null)
+            if (MessageManager.StandardError != null)
             {
-                QueryHelper.StandardError
+                MessageManager.StandardError
                     .Append(process.StandardError.ReadToEnd());
             }
             
             process.WaitForExit();
         }
 
-        void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        private void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            if (QueryHelper.StandardOut != null)
+            if (MessageManager.StandardOut != null)
             {
-                QueryHelper.StandardOut.Append(e.Data + "\r\n");
+                MessageManager.StandardOut.Append(e.Data + "\r\n");
             }
         }
 

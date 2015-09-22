@@ -159,7 +159,8 @@ namespace DBUI.Queries {
 
             DispalyQueryOutput(_queryExecuter.ExecuteMongo(query));
             
-            var javascriptError = _queryExecuter.QueryHelper.JavascriptQueryError;
+            var javascriptError = _queryExecuter.
+                    MessageManager.GetJavascriptQueryError();
             if (!String.IsNullOrEmpty(javascriptError))
             {
                 ErrorManager.Write(javascriptError);

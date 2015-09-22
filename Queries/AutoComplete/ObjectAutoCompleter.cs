@@ -61,8 +61,8 @@ namespace DBUI.Queries
 
             var output = QueryExecuter.ExecuteMongo(queryOut);
 
-            if (!String.IsNullOrEmpty(QueryExecuter.QueryHelper.JavascriptQueryError)) {
-                ErrorManager.Write(QueryExecuter.QueryHelper.JavascriptQueryError);
+            if (!String.IsNullOrEmpty(QueryExecuter.MessageManager.GetJavascriptQueryError())) {
+                ErrorManager.Write(QueryExecuter.MessageManager.GetJavascriptQueryError());
             }
             
             var properties = GetMethodProperties(output);

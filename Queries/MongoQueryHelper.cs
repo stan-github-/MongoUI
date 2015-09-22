@@ -12,22 +12,32 @@ using System.Windows.Forms;
 namespace DBUI.Queries
 {
     //todo find the line number of the error, and high light the test in the window!!
-    public class MongoQueryHelper {
-        //need to get rid of _form variable, just pass in strings...
-        //private FormMongoQuery _form;
 
-        public String TempJSFile { get; set; }
-        
-        #region "query output" 
+    public class MessageManager {
 
-        public String QueryOutputAll {get {
-            return String.Format("{0}\n\r{1}\n\r",
-                StandardError.ToString(),
-                StandardOut.ToString());
-            } 
+        public MessageManager(string queryFilePath, int errorLineNumOffset) {
+            this.QueryFilePath = queryFilePath;
+            this.QueryErrorLineNumOffset = errorLineNumOffset;
+            StandardOut = new StringBuilder();
+            StandardError = new StringBuilder();
         }
 
-        public String JavascriptQueryError
+        public StringBuilder StandardOut { get; set; }
+        public StringBuilder StandardError { get; set; }
+        public int QueryErrorLineNumOffset { get; set; }
+        public string QueryFilePath { get; set; }
+
+        public String StandardErrorAndOut
+        {
+            get
+            {
+                return String.Format("{0}\n\r{1}\n\r",
+                    StandardError.ToString(),
+                    StandardOut.ToString());
+            }
+        }
+
+        public String GetJavascriptQueryError()
         {
             /*
              * 
@@ -36,53 +46,76 @@ namespace DBUI.Queries
             E:\Users\ztan\AppData\Local\Temp\\69d3425f-150d-4d1d-abab-1be699fabac0.js:L26
             failed to load: E:\Users\ztan\AppData\Local\Temp\\69d3425f-150d-4d1d-abab-1be699fabac0.js
              */
-            get
+
+            string str = string.Empty;
+
+            if (StandardOut.ToString().Contains("couldn't connect to server"))
             {
-                if (StandardOut.ToString().Contains("JavaScript execution failed:")
-                    //&& standardOut.Contains("ReferenceError:")
-                )
-                {
-                    var array = this.StandardOut.ToString()
-                        .Split(new string[] { "failed to load:", this.TempJSFile }, 
-                         StringSplitOptions.RemoveEmptyEntries);
-
-                    if (array.Length < 3 || !array[1].Contains(":L")) {
-                        throw new Exception("javascript error message parse error!!, please update mongo and mongo ui!");
-                    }
-                    
-                    var lineNumber = array[1].Replace(":L", "").Replace("\n\r", "");
-
-                    int lineNumberInt = 0;
-
-                    if (!int.TryParse(lineNumber, out lineNumberInt)) {
-                        throw new Exception("javascript error message parse error!!, please update mongo and mongo ui!");
-                    }
-
-                    var sb = new StringBuilder();
-                    sb.Append(array[0]).Append(Environment.NewLine);
-                    sb.Append("line number: ")
-                      .Append((lineNumberInt - this.QueryErrorLineNumOffset + 1).ToString());
-
-                    return sb.ToString();
-                }
-                return String.Empty;
+                return "Please start mongo server";
             }
+
+            str = GetErrorMessageWithLineNumber();
+
+            return str;
+            
         }
-        public StringBuilder StandardOut {get; set;}
-        public StringBuilder StandardError { get; set; }
         
-        public int QueryErrorLineNum {
-            get { 
-                if (String.IsNullOrEmpty(this.JavascriptQueryError.ToString())){
-                    return 0;
-                }
-                return 0;
+        private string GetErrorMessageWithLineNumber(){
+            if (!StandardOut.ToString().Contains("JavaScript execution failed:")) {
+                return string.Empty;
             }
+            
+            var array = this.StandardOut.ToString()
+                .Split(new string[] { "failed to load:", this.QueryFilePath },
+                    StringSplitOptions.RemoveEmptyEntries);
+
+            if (array.Length < 3 || !array[1].Contains(":L"))
+            {
+                throw new Exception("javascript error message parse error!!, please update mongo and mongo ui!");
+            }
+
+            var lineNumber = array[1].Replace(":L", "").Replace("\n\r", "");
+
+            int lineNumberInt = 0;
+
+            if (!int.TryParse(lineNumber, out lineNumberInt))
+            {
+                throw new Exception("javascript error message parse error!!, please update mongo and mongo ui!");
+            }
+
+            var sb = new StringBuilder();
+            sb.Append(array[0]).Append(Environment.NewLine);
+            sb.Append("line number: ")
+                .Append((lineNumberInt - this.QueryErrorLineNumOffset + 1).ToString());
+
+            return sb.ToString();
+        }
+    }
+
+    public class MongoQueryHelper {
+        //need to get rid of _form variable, just pass in strings...
+        //private FormMongoQuery _form;
+
+        public String QueryFilePath { get; set; }
+        //public MessageManager MessageManager { get; set; }
+        public MongoXMLRepository MongoXMLManager { get; set; }
+        private String CustomeJsCode { get; set; }
+
+
+        public void Init()
+        {
+            SetTempFilePaths();
+
+           // MessageManager = new MessageManager(this.QueryFilePath);
+            MongoXMLManager = Program.MongoXMLManager;
+            
         }
 
-        public int QueryErrorLineNumOffset { get; set; }
-        #endregion
-
+        public MongoQueryHelper()
+        {
+            Init();
+        }
+        
         #region "auto execute, no feedback"
         
         public bool NoWindows { get; set; }
@@ -125,21 +158,16 @@ namespace DBUI.Queries
         public String PrepareJsFile(String query)
         {
             //apppend custom code to file
-            var customJsCode = PrependCustomJSCode();
-            FileManager.SaveToFile(this.TempJSFile, customJsCode);
-            FileManager.AppendToFile(this.TempJSFile, query);
+            this.CustomeJsCode = PrependCustomJSCode();
+            FileManager.SaveToFile(this.QueryFilePath, this.CustomeJsCode);
+            FileManager.AppendToFile(this.QueryFilePath, query);
 
-            //set line offset for query feed back
-            QueryErrorLineNumOffset = customJsCode.Split('\n').Length;
-
-            return this.TempJSFile;
+            return this.QueryFilePath;
         }
 
-        //public String PrepareHtmlFile(String text)
-        //{
-        //    FileManager.SaveToFile(this.TempJSFile, text);
-        //    return this.TempJSFile;
-        //}
+        public int GetQueryErrorLineNumOffset() {
+            return this.CustomeJsCode.Split('\n').Length;
+        }
 
         private String PrependCustomJSCode()
         {
@@ -154,31 +182,14 @@ namespace DBUI.Queries
 
         private void SetTempFilePaths()
         {
-            TempJSFile = Environment.ExpandEnvironmentVariables(Program.MainXMLManager.TempFolderPath
-                                                              + "\\" + Guid.NewGuid() + ".js");
+            QueryFilePath = Environment.ExpandEnvironmentVariables
+                (Program.MainXMLManager.TempFolderPath
+                + "\\" + Guid.NewGuid() + ".js");
             
         }
 
         #endregion
 
-        MongoXMLRepository MongoXMLManager { get; set; }
-
-        //todo, not the best implementation, code smell
-        public void Init() {
-            
-            this.StandardError = new StringBuilder();
-            this.StandardOut = new StringBuilder();
-
-            MongoXMLManager = Program.MongoXMLManager;
-
-            SetTempFilePaths();
-        }
-
-        public MongoQueryHelper()
-        {
-            Init();
-        }
-        
     }
 
 }
