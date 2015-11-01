@@ -57,6 +57,9 @@ namespace DBUI.Queries
             var queryOut = GetReflectionQuery
                 (queryFirstHalf, querySecondHalf, methodOrObjectName);
 
+            if (Debug) {
+                ErrorManager.Write(queryOut);
+            }
             var output = QueryExecuter.ExecuteMongo(queryOut);
 
             if (!String.IsNullOrEmpty(QueryExecuter.MessageManager.GetJavascriptQueryError())) {
@@ -108,6 +111,7 @@ namespace DBUI.Queries
             var input =
                 isMethod ?
                 query :
+                //if not query, then an object, adding () so it looks like a method
                 query + "()";
             
             var index = GetMethodRecursive(input);

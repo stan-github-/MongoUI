@@ -203,7 +203,6 @@ namespace DBUI.Queries {
             }
         }
 
-        
         public class QueryOutputType
         {
             public QueryOutputType()
