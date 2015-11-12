@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 namespace DBUI.Queries
 {
     //functions and classes
-    public class ObjectAutoCompleter
+    public class ObjectAutoCompleter2
     {
         
         //add collection names back to database,
@@ -52,28 +52,24 @@ namespace DBUI.Queries
 
         public static List<String> Main(String queryFirstHalf, string querySecondHalf)
         {
-            //var methodOrObjectName = GetMethodOrObjectChain(queryFirstHalf);
+            var methodOrObjectName =  GetMethodOrObjectChain(queryFirstHalf);
+            
+            var queryOut = GetReflectionQuery
+                (queryFirstHalf, querySecondHalf, methodOrObjectName);
 
-            //var queryOut = GetReflectionQuery
-            //    (queryFirstHalf, querySecondHalf, methodOrObjectName);
+            if (Debug) {
+                //ErrorManager.Write(queryOut);
+                ErrorManager.Write(methodOrObjectName);
+            }
+            var output = QueryExecuter.ExecuteMongo(queryOut);
 
-            //if (Debug)
-            //{
-            //    //ErrorManager.Write(queryOut);
-            //    ErrorManager.Write(methodOrObjectName);
-            //}
-            //var output = QueryExecuter.ExecuteMongo(queryOut);
+            if (!String.IsNullOrEmpty(QueryExecuter.MessageManager.GetJavascriptQueryError())) {
+                ErrorManager.Write(QueryExecuter.MessageManager.GetJavascriptQueryError());
+            }
+            
+            var properties = GetMethodProperties(output);
 
-            //if (!String.IsNullOrEmpty(QueryExecuter.MessageManager.GetJavascriptQueryError()))
-            //{
-            //    ErrorManager.Write(QueryExecuter.MessageManager.GetJavascriptQueryError());
-            //}
-
-            //var properties = GetMethodProperties(output);
-
-            //return properties;
-
-            return new List<String>();
+            return properties;
         }
 
         private static List<String> GetMethodProperties(string input) {
@@ -104,76 +100,54 @@ namespace DBUI.Queries
         public static String GetReflectionQuery
             (String firstHalf, String secondHalf, String objectName)
         {
-            var reflectionString = new ObjectAutoCompleter().ReflectionString
+            var reflectionString = new ObjectAutoCompleter2().ReflectionString
                 .Replace("{zzzzzzzzzzzz}", objectName);
 
             return String.Format("{0}{1}{2}", firstHalf, reflectionString, secondHalf);
         }
 
-        //public static String GetMethodOrObjectChain(String query)
-        //{
-        //    var isMethod = (IsQueryEndingInClosingParenthesis(query));
-        //    var input =
-        //        isMethod ?
-        //        query :
-        //        //if not query, then an object, adding () so it looks like a method
-        //        query + "()";
-            
-        //    //var index = GetMethodRecursive(input);
-        //    //return query.Substring(index, query.Count() - index);
-        //}
-
-        public static Match FindLastValidDelimiterFromBackToFront
-            (String query, List<Match> delimiters)
+        public static String GetMethodOrObjectChain(String query)
         {
-            var bracketDict = new Dictionary<String, String>()
-                {
-                    {")", "("},  {"}", "{"}, {"]", "["}
-                };
-            var quotes = new List<String> { @"""", "'" };
-            var closeBrackets = new List<String> { "}", ")", "]" };
-            var openBrackets = new List<String> { "{", "(", "[" };
-
-            int length = delimiters.Count;
+            var isMethod = (IsQueryEndingInClosingParenthesis(query));
+            var input =
+                isMethod ?
+                query :
+                //if not query, then an object, adding () so it looks like a method
+                query + "()";
             
-            var stack = new Stack<Match>();
+            var index = GetMethodRecursive(input);
 
-            //loop through the delimiters
-            for (int i = length - 1; i > -1; i--)
+            return query.Substring(index, query.Count() - index);
+        }
+
+        public static int GetMethodRecursive(String query)
+        {
+            var s = new Stack<string>();
+
+            var delimiters = GetQueryDelimiters(query);
+            int itemsTaken;
+            bool matchFound = false;
+
+            //note: the Match object will have the index (char) to the original query string.
+            var delimitersToRemove = RemoveMatchingDelimitersRecursivelyBackToFront
+                (delimiters, out itemsTaken, out matchFound).OrderBy(x => x.Index);
+
+            if (!matchFound)
             {
-                var delimiter = delimiters[i].Value;
-
-                if (stack.Count == 0) {
-                    if (openBrackets.Contains(delimiter))
-                    {
-                        return null;
-                    }
-
-                    stack.Push(delimiters[i]);
-                    continue;
-                }
-
-                if (closeBrackets.Contains(delimiter)) { 
-                    stack.Push(delimiters[i]);
-                    continue;
-                }
-
-                if (openBrackets.Contains(delimiter)) {
-                    if (bracketDict[stack.First().Value] != delimiter) {
-                        return stack.Last();
-                    }
-
-                    stack.Pop();
-                    continue;
-                }
-                
+                //badly structured code, just return 0;
+                return 0;
             }
 
-            if (stack.Count == 0) {
-                return delimiters.First();
+            int methodIndex;
+            var hasParent = false;
+            methodIndex = GetMethodIndex(delimitersToRemove.First(), query, out hasParent);
+
+            if (hasParent) { 
+               methodIndex = GetMethodRecursive(query.Substring(0, methodIndex));
             }
 
-            return null;
+            //exclude the first character
+            return methodIndex;
         }
 
         private static int GetMethodIndex(Match firstBracket, String s, out bool hasParent)
@@ -226,11 +200,10 @@ namespace DBUI.Queries
             return false;
         }
 
-        public static List<Match> GetQueryDelimiters(String s)
+        private static List<Match> GetQueryDelimiters(String s)
         {
             string regex = @"\{|\}|\(|\)|\'|\""|\[|\]";
-            var options = RegexOptions.IgnorePatternWhitespace | 
-                RegexOptions.IgnoreCase | RegexOptions.Singleline;
+            var options = RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase | RegexOptions.Singleline;
             var reg = new Regex(regex, options);
             try
             {

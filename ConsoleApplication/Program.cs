@@ -19,9 +19,16 @@ namespace ConsoleApplication
     public static class Test
     {
         public static void TestMethodFinder() {
-            var query = "var x = db.test(function(){var x = function(){return ['a','cb','c'];}}).find(function(){})";
-            var method = ObjectAutoCompleter.GetMethodOrObjectChain(query);
-            Console.WriteLine(method);
+            var query = "var x = db.test(function() " + 
+                "{var x = function(){return ['a','cb','c'];}}).find(function(){}).find({x:1, y:2})";
+            var delimiters = ObjectAutoCompleter.GetQueryDelimiters(query);
+            var match = ObjectAutoCompleter.FindLastValidDelimiterFromBackToFront
+                (query, delimiters);
+            Console.WriteLine(match == null? "match null": match.Groups[0].ToString());
+            if (match != null){
+                Console.WriteLine(query.Substring(match.Index, query.Count() - match.Index));
+            }
+            
             Console.Read();
         }
 
