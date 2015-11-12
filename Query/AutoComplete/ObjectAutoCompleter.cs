@@ -110,81 +110,113 @@ namespace DBUI.Queries
             return String.Format("{0}{1}{2}", firstHalf, reflectionString, secondHalf);
         }
 
-        //public static String GetMethodOrObjectChain(String query)
-        //{
-        //    var isMethod = (IsQueryEndingInClosingParenthesis(query));
-        //    var input =
-        //        isMethod ?
-        //        query :
-        //        //if not query, then an object, adding () so it looks like a method
-        //        query + "()";
-            
-        //    //var index = GetMethodRecursive(input);
-        //    //return query.Substring(index, query.Count() - index);
-        //}
+        //todo, todo main function
+
+        public static String GetMethodOrObjectChainBlock(String query)
+        {
+            //todo a bit hack refactor
+            var isMethod = (IsQueryEndingInClosingParenthesis(query));
+            var input =
+                isMethod ?
+                query :
+                //if not query, then an object, adding () so it looks like a method
+                query + "()";
+
+            var index = GetChainBlockRecursive(input);
+            return query.Substring(index, query.Count() - index);
+        }
+
+        public static int GetChainBlockRecursive(String query) {
+
+            var delimiters = GetQueryDelimiters(query);
+            var delimiter = FindLastValidDelimiterFromBackToFront(query, delimiters);
+
+            bool hasParent = false;
+            int methodIndex;
+            methodIndex = GetMethodIndex(delimiter, query, out hasParent);
+
+            if (hasParent)
+            {
+                methodIndex = GetChainBlockRecursive(query.Substring(0, methodIndex));
+            }
+
+            return methodIndex;
+        }
 
         public static Match FindLastValidDelimiterFromBackToFront
             (String query, List<Match> delimiters)
         {
             var bracketDict = new Dictionary<String, String>()
                 {
-                    {")", "("},  {"}", "{"}, {"]", "["}
-                };
+                    {")", "("},  {"}", "{"}, {"]", "["}};
             var quotes = new List<String> { @"""", "'" };
             var closeBrackets = new List<String> { "}", ")", "]" };
-            var openBrackets = new List<String> { "{", "(", "[" };
+            var openBrackets = new List<String> { "{", "(", "[", };
 
             int length = delimiters.Count;
             
             var stack = new Stack<Match>();
 
-            //loop through the delimiters
+            Match lastValidDelimiter = null;
+            //loop through the delimiters, back to front
             for (int i = length - 1; i > -1; i--)
             {
                 var delimiter = delimiters[i].Value;
 
-                if (stack.Count == 0) {
+                //if initial delimiter
+                if (i == length - 1) {
+                    //if starting with open bracket exit!
                     if (openBrackets.Contains(delimiter))
                     {
                         return null;
                     }
 
+                    //push close  bracket on to stack
                     stack.Push(delimiters[i]);
                     continue;
                 }
 
+                //if more close bracket, keep pushing onto stack
                 if (closeBrackets.Contains(delimiter)) { 
                     stack.Push(delimiters[i]);
                     continue;
                 }
 
+                //if it's open bracket, 
                 if (openBrackets.Contains(delimiter)) {
+                    //something is wierd, delimiters dont match
+                    // ie {(}) 
                     if (bracketDict[stack.First().Value] != delimiter) {
-                        return stack.Last();
+                        return null;
                     }
 
-                    stack.Pop();
-                    continue;
+                    //delimiters match, pop the top one
+                    var popped = stack.Pop();
+
+                    //set last valid delimiter to current delimiter
+                    lastValidDelimiter = delimiters[i];
+
+                    //if stack has gone to zero, break;
+                    if (stack.Count() == 0) {
+                        break;
+                    }
+                                        
                 }
                 
             }
 
-            if (stack.Count == 0) {
-                return delimiters.First();
-            }
-
-            return null;
+            return lastValidDelimiter;
         }
 
-        private static int GetMethodIndex(Match firstBracket, String s, out bool hasParent)
+        private static int GetMethodIndex(Match firstBracket, String query, out bool hasParent)
         {
-            var word = new List<char>();
-            var chars = s.ToArray<char>();
+            //var word = new List<char>();
+            var chars = query.ToArray<char>();
             hasParent = false;
 
             int i;
 
-            for (i = firstBracket.Groups[0].Index - 1; i > -1; i--)
+            for (i = firstBracket.Index - 1; i > -1; i--)
             {
                 var c = chars[i];
 

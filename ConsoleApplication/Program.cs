@@ -12,26 +12,50 @@ namespace ConsoleApplication
     {
         static void Main(string[] args)
         {
-            Test.TestMethodFinder();
+            Test.Test3();
         }
     }
 
     public static class Test
     {
-        public static void TestMethodFinder() {
-            var query = "var x = db.test(function() " + 
-                "{var x = function(){return ['a','cb','c'];}}).find(function(){}).find({x:1, y:2})";
+        public static void Test3()
+        {
+            var query = "var x = db.test(function(z) " +
+                "{var x = function(){return ['a','cb','c'];}})" +
+                ".find(function(){}).find({x:1, y:2})";
+            var index = ObjectAutoCompleter.GetChainBlockRecursive(query);
+            Console.WriteLine(query.Substring(index, query.Count() - index));
+            Console.Read();
+        }
+
+        public static void Test1() {
+            var query = "var x = db.test(function(z) " + 
+                "{var x = function(){return ['a','cb','c'];}})" +
+                ".find(function(){}).find({x:1, y:2})";
             var delimiters = ObjectAutoCompleter.GetQueryDelimiters(query);
             var match = ObjectAutoCompleter.FindLastValidDelimiterFromBackToFront
                 (query, delimiters);
             Console.WriteLine(match == null? "match null": match.Groups[0].ToString());
             if (match != null){
                 Console.WriteLine(query.Substring(match.Index, query.Count() - match.Index));
-            }
-            
+            }    
             Console.Read();
         }
 
+        public static void Test2()
+        {
+            var query = " db.test().find({x:1, y:2})";
+            var delimiters = ObjectAutoCompleter.GetQueryDelimiters(query);
+            var match = ObjectAutoCompleter.FindLastValidDelimiterFromBackToFront
+                (query, delimiters);
+            Console.WriteLine(match == null ? "match null" : match.Groups[0].ToString());
+            if (match != null)
+            {
+                Console.WriteLine(query.Substring(match.Index, query.Count() - match.Index));
+            }
+
+            Console.Read();
+        }
         //public static JavaScriptExecuter QueryExecuter {
         //    //get {
         //    //    var mongoXMLManager = new MongoXMLRepository();
