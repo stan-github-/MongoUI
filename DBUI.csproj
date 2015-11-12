@@ -58,8 +58,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Query\AutoComplete\AutoCompleteMainOriginal.cs" />
-    <Compile Include="Query\AutoComplete\ObjectAutoCompleterOriginal.cs" />
     <Compile Include="Query\AutoComplete\ObjectChainParser.cs" />
     <Compile Include="Query\Execution\QueryExecutionConfiguration.cs" />
     <Compile Include="Query\Execution\MessageManager.cs" />
@@ -97,7 +95,7 @@
     <Compile Include="Forms\FormOptions.Designer.cs">
       <DependentUpon>FormOptions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Query\AutoComplete\AutoCompleteMain.cs" />
+    <Compile Include="Query\AutoComplete\AutoCompleteUI.cs" />
     <Compile Include="Query\AutoComplete\CollectionAutoCompleter.cs" />
     <Compile Include="Mongo\FormMongoQuery.cs">
       <SubType>Form</SubType>
@@ -108,7 +106,7 @@
     <Compile Include="XMLRepository\MongoXMLRepository.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Query\AutoComplete\ObjectAutoCompleter.cs" />
+    <Compile Include="Query\AutoComplete\QueryExecuter.cs" />
     <Compile Include="Query\Execution\QueryExecuter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

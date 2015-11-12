@@ -54,14 +54,11 @@ namespace DBUI.Query.AutoComplete
             var queryOut = GetReflectionQuery
                 (queryFirstHalf, querySecondHalf, methodOrObjectName);
 
-            //if (Debug)
-            //{
-            //    //ErrorManager.Write(queryOut);
-            //    ErrorManager.Write(methodOrObjectName);
-            //}
             var output = Executer.ExecuteMongo(queryOut);
 
-            if (!String.IsNullOrEmpty(Executer.MessageManager.GetJavascriptQueryError()))
+            //display error if any
+            var error = Executer.MessageManager.GetJavascriptQueryError();
+            if (!String.IsNullOrEmpty(error))
             {
                 ErrorManager.Write(Executer.MessageManager.GetJavascriptQueryError());
             }

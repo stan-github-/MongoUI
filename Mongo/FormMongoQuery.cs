@@ -106,7 +106,7 @@ namespace DBUI.Queries {
                 return;
             }
 
-            Queries.AutoComplete.AutoCompleteMain.RunMongo(this.text_box);
+            Queries.AutoComplete.AutoCompleteUI.RunMongo(this.text_box);
         }
 
         #region "control init"

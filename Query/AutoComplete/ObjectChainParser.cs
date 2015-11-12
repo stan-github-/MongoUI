@@ -113,8 +113,12 @@ namespace DBUI.Query.AutoComplete
             }
 
             return lastValidDelimiter;
+        
         }
 
+        // var x = db.test().find().clone(...) 
+        // will return index just after 'find()'
+        // where clone is the method name, and find() is the parent method
         private static int GetMethodIndex(Match firstBracket, String query, out bool hasParent)
         {
             //var word = new List<char>();
@@ -191,149 +195,5 @@ namespace DBUI.Query.AutoComplete
 
             return new List<Match>();
         }
-
-        //private static List<Match> RemoveMatchingQuotes(
-        //    List<Match> delimiters, out int itemsTaken, out bool matchFound)
-        //{
-        //    var quotes = new List<String> { @"""", "'" };
-        //    if (delimiters.Count == 0 ||
-        //        !quotes.Contains(delimiters.Last().Groups[0].ToString()))
-        //    {
-        //        itemsTaken = 0;
-        //        matchFound = true;
-        //        return delimiters;
-        //    }
-
-        //    int length = delimiters.Count;
-        //    var toRemove = new List<Match>();
-
-        //    Match closeDelimiter = null;
-        //    Match delimiter = null;
-
-        //    String closeDelimiterString = String.Empty;
-        //    String delimiterString = String.Empty;
-
-        //    for (int i = length - 1; i > -1; i--)
-        //    {
-        //        delimiter = delimiters[i];
-        //        delimiterString = delimiter.Groups[0].ToString();
-
-        //        first delimiter,
-        //        if (i == length - 1)
-        //        {
-        //            closeDelimiter = delimiter;
-        //            closeDelimiterString = closeDelimiter.Groups[0].ToString();
-        //            toRemove.Add(closeDelimiter);
-        //            continue;
-        //        }
-
-        //        if close quote, return items
-        //        if (delimiterString == closeDelimiterString)
-        //        {
-        //            toRemove.Add(delimiter);
-        //            itemsTaken = toRemove.Count;
-        //            matchFound = true;
-        //            return toRemove;
-        //        }
-        //        else
-        //        {
-        //            toRemove.Add(delimiter);
-        //            continue;
-        //        }
-        //    }
-
-        //    itemsTaken = length;
-        //    matchFound = false;
-        //    return toRemove;
-        //}
-
-        //recursively remove brackets
-        //find(
-        //        function()
-        //          {{...}, {...}, [...]}
-        //     ).
-
-        //private static List<Match> RemoveMatchingDelimitersRecursivelyBackToFront
-        //    (List<Match> delimiters, out int itemsTaken, out bool matchFound)
-        //{
-        //    int length = delimiters.Count;
-        //    var bracketDict = new Dictionary<String, String>()
-        //        {
-        //            {")", "("},  {"}", "{"}, {"]", "["}
-        //        };
-        //    var quotes = new List<String> { @"""", "'" };
-
-        //    var closeBrackets = new List<String> { "}", ")", "]" };
-
-        //    var delimitersToRemove = new List<Match>();
-
-        //    Match closeDelimiter = null;
-        //    Match delimiter = null;
-
-        //    String closeDelimiterString = String.Empty;
-        //    String delimiterString = String.Empty;
-
-        //    //loop through the delimiters
-        //    for (int i = length - 1; i > -1; i--)
-        //    {
-        //        delimiter = delimiters[i];
-        //        delimiterString = delimiter.Groups[0].ToString();
-
-        //        //first bracket, assume it's a close bracket
-        //        if (i == length - 1)
-        //        {
-        //            closeDelimiter = delimiter;
-        //            closeDelimiterString = closeDelimiter.Groups[0].ToString();
-        //            delimitersToRemove.Add(delimiter);
-        //            continue;
-        //        }
-
-        //        //if open bracket, return items
-        //        if (bracketDict.Keys.Contains(closeDelimiterString) &&
-        //            bracketDict[closeDelimiterString] == delimiterString)
-        //        {
-        //            delimitersToRemove.Add(delimiter);
-        //            itemsTaken = delimitersToRemove.Count;
-        //            matchFound = true;
-        //            return delimitersToRemove;
-        //        }
-
-        //        //if hits quotes, call remvoing matching quotes
-        //        if (quotes.Contains(delimiterString))
-        //        {
-        //            int itemsToSkip;
-        //            delimitersToRemove.AddRange(
-        //                RemoveMatchingQuotes(
-        //                delimiters.Take(i + 1).ToList(),
-        //                out itemsToSkip,
-        //                out matchFound));
-        //            i = i - itemsToSkip + 1;
-        //            continue;
-        //        }
-
-        //        //if hits close bracket, remove matching bracket
-        //        if (closeBrackets.Contains(delimiterString))
-        //        {
-        //            int itemsToSkip;
-        //            delimitersToRemove.AddRange(
-        //                RemoveMatchingDelimitersRecursivelyBackToFront
-        //                (delimiters.Take(i + 1).ToList(),
-        //                out itemsToSkip,
-        //                out matchFound));
-
-        //            i = i - itemsToSkip + 1;
-        //            continue;
-        //        }
-        //        else
-        //        {
-        //            delimitersToRemove.Add(delimiter);
-        //            continue;
-        //        }
-        //    }
-
-        //    matchFound = false;
-        //    itemsTaken = length;
-        //    return delimitersToRemove;
-        //}
     }
 }
