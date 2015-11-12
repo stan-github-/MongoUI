@@ -22,6 +22,7 @@ MongoUI is a bear-bone mongo mananger modeled after sql server manager, where mu
   - Autocomplete (implemented "db.collection." and "db.collection.find()")
     - Works only with runnable code after "." is replaced by ";" (most of the time).
     <img src="Images/AutoComplete.jpg"></image>
+    <img src="Images/AutoComplete2.jpg"></image>
+    <img src="Images/AutoComplete3.jpg"></image>
 
-###Snapshot: ###
-<img src="Images/AppSnapShot.jpg"></image>
+
