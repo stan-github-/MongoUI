@@ -1,4 +1,5 @@
-﻿using DBUI.Queries;
+﻿using DBUI.Query;
+using DBUI.Query.AutoComplete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace ConsoleApplication
             var query = "var x = db.test(function(z) " +
                 "{var x = function(){return ['a','cb','c'];}})" +
                 ".find(function(){}).find({x:1, y:2})";
-            var index = ObjectAutoCompleter.GetChainBlockRecursive(query);
+            var index = DBUI.Query.AutoComplete.ObjectChainParser.GetChainBlockRecursive(query);
             Console.WriteLine(query.Substring(index, query.Count() - index));
             Console.Read();
         }
@@ -32,8 +33,8 @@ namespace ConsoleApplication
             var query = "var x = db.test(function(z) " + 
                 "{var x = function(){return ['a','cb','c'];}})" +
                 ".find(function(){}).find({x:1, y:2})";
-            var delimiters = ObjectAutoCompleter.GetQueryDelimiters(query);
-            var match = ObjectAutoCompleter.FindLastValidDelimiterFromBackToFront
+            var delimiters = DBUI.Query.AutoComplete.ObjectChainParser.GetQueryDelimiters(query);
+            var match = DBUI.Query.AutoComplete.ObjectChainParser.FindLastValidDelimiterFromBackToFront
                 (query, delimiters);
             Console.WriteLine(match == null? "match null": match.Groups[0].ToString());
             if (match != null){
@@ -44,17 +45,17 @@ namespace ConsoleApplication
 
         public static void Test2()
         {
-            var query = " db.test().find({x:1, y:2})";
-            var delimiters = ObjectAutoCompleter.GetQueryDelimiters(query);
-            var match = ObjectAutoCompleter.FindLastValidDelimiterFromBackToFront
-                (query, delimiters);
-            Console.WriteLine(match == null ? "match null" : match.Groups[0].ToString());
-            if (match != null)
-            {
-                Console.WriteLine(query.Substring(match.Index, query.Count() - match.Index));
-            }
+            //var query = " db.test().find({x:1, y:2})";
+            //var delimiters = ObjectAutoCompleter.GetQueryDelimiters(query);
+            //var match = ObjectAutoCompleter.FindLastValidDelimiterFromBackToFront
+            //    (query, delimiters);
+            //Console.WriteLine(match == null ? "match null" : match.Groups[0].ToString());
+            //if (match != null)
+            //{
+            //    Console.WriteLine(query.Substring(match.Index, query.Count() - match.Index));
+            //}
 
-            Console.Read();
+            //Console.Read();
         }
         //public static JavaScriptExecuter QueryExecuter {
         //    //get {
@@ -65,33 +66,33 @@ namespace ConsoleApplication
         //    //}
         //}
      
-        public static void CaseOne(){
-            var s = @"var x = db.test.find()";
+        //public static void CaseOne(){
+        //    var s = @"var x = db.test.find()";
 
-            String query = String.Empty;
-            AutoCompleter.GetReflectionQuery(s, "", out query);
-            Console.Write(query);
+        //    String query = String.Empty;
+        //    AutoCompleter.GetReflectionQuery(s, "", out query);
+        //    Console.Write(query);
             
-            var output = new JavaScriptExecuter().ExecuteMongo(query);
+        //    var output = new JavaScriptExecuter().ExecuteMongo(query);
 
-            var array = output.Split('\r').ToArray()[9].Trim().Replace("\"", "");
-            Console.Write(output);
-            Console.ReadKey();
-        }
+        //    var array = output.Split('\r').ToArray()[9].Trim().Replace("\"", "");
+        //    Console.Write(output);
+        //    Console.ReadKey();
+        //}
 
-        public static void CaseTwo()
-        {
-            var s = @"function xxx() { var x = db.test.find()";
+        //public static void CaseTwo()
+        //{
+        //    var s = @"function xxx() { var x = db.test.find()";
 
-            String query = String.Empty;
-            AutoCompleter.GetReflectionQuery(s, "", out query);
-            Console.Write(query);
+        //    String query = String.Empty;
+        //    AutoCompleter.GetReflectionQuery(s, "", out query);
+        //    Console.Write(query);
 
-            var output = new JavaScriptExecuter().ExecuteMongo(query + "}; zzz();");
+        //    var output = new JavaScriptExecuter().ExecuteMongo(query + "}; zzz();");
 
-            Console.Write(output);
-            Console.ReadKey();
-        }
+        //    Console.Write(output);
+        //    Console.ReadKey();
+        //}
     }
 
     public class ErrorManager {
@@ -140,14 +141,15 @@ namespace ConsoleApplication
         static bool Debug = true;
 
         public static List<String> GetMethodArray(String query) {
-            String queryOut;
-            GetReflectionQuery(query, "", out queryOut);
+            return null;
+            //String queryOut;
+            //GetReflectionQuery(query, "", out queryOut);
             
-            var output = new JavaScriptExecuter().ExecuteMongo(queryOut);
+            //var output = new JavaScriptExecuter().ExecuteMongo(queryOut);
 
-            var array = output.Split('\r').ToList();
-            array.ForEach(s => s.Trim().Replace("\"", ""));
-            return array;
+            //var array = output.Split('\r').ToList();
+            //array.ForEach(s => s.Trim().Replace("\"", ""));
+            //return array;
         }
 
         public static bool GetReflectionQuery

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using DBUI.Query.AutoComplete;
 
 namespace DBUI.Queries.AutoComplete
 {
@@ -12,7 +13,7 @@ namespace DBUI.Queries.AutoComplete
 
         public static void RunMongo(ScintillaNET.Scintilla text_box, bool debug = false)
         {
-            var methods = ObjectAutoCompleter.Main
+            var methods = DBUI.Query.AutoComplete.QueryExecuter.Main
                 (text_box.TextBeforeCursor(), text_box.TextAfterCursor());
             SetList(text_box, methods);
         }

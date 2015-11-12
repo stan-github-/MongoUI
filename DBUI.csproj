@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Query\AutoComplete\AutoCompleteMainOriginal.cs" />
     <Compile Include="Query\AutoComplete\ObjectAutoCompleterOriginal.cs" />
+    <Compile Include="Query\AutoComplete\ObjectChainParser.cs" />
     <Compile Include="Query\Execution\QueryExecutionConfiguration.cs" />
     <Compile Include="Query\Execution\MessageManager.cs" />
     <Compile Include="Query\Execution\QueryFileManager.cs" />

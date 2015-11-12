@@ -12,7 +12,7 @@ namespace DBUI.Queries.AutoComplete
 
         public static void RunMongo(ScintillaNET.Scintilla text_box, bool debug = false)
         {
-            var methods = ObjectAutoCompleter.Main
+            var methods = Query.AutoComplete.QueryExecuter.Main
                 (text_box.TextBeforeCursor(), text_box.TextAfterCursor());
             SetList(text_box, methods);
         }
