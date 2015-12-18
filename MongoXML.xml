@@ -44,7 +44,7 @@
       <Database name="temp"></Database>
       <Database name="system"></Database>
     </Server>
-    <Server name="beta" alias="beta" withWarning="true">
+    <Server name="ncmongoeast2.cloudapp.net:27018" alias="beta" withWarning="true">
       <Database name="test"></Database>
       <Database name="temp"></Database>
       <Database name="system"></Database>

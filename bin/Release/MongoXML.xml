@@ -41,12 +41,11 @@
     <Server name="localhost" alias="localhost" withWarning="false">
       <Database name="test">
         <Collections>
-          <C name="system.indexes" />
-          <C name="t1" />
-          <C name="t2" />
-          <C name="t3" />
-          <C name="t4" />
-          <C name="temp1" />
+          <C name="2015-12-18T14:55:53.788-0500 W NETWORK  [thread1] Failed to connect to 127.0.0.1:27017, reason: errno:10061 No connection could be made because the target machine actively refused it." />
+          <C name="2015-12-18T14:55:53.788-0500 E QUERY    [thread1] Error: couldn't connect to server localhost:27017, connection attempt failed :" />
+          <C name="connect@src/mongo/shell/mongo.js:226:14" />
+          <C name="@(connect):1:6" />
+          <C name="exception: connect failed" />
         </Collections>
       </Database>
       <Database name="temp">
@@ -54,8 +53,15 @@
       <Database name="system">
       </Database>
     </Server>
-    <Server name="alpha" alias="alpha" withWarning="true">
+    <Server name="ncmongoeast2.cloudapp.net" alias="dev" withWarning="true">
       <Database name="test">
+        <Collections>
+          <C name="2015-12-18T14:57:49.484-0500 W NETWORK  [thread1] Failed to connect to 104.46.101.192:27017 after 5000 milliseconds, giving up." />
+          <C name="2015-12-18T14:57:49.484-0500 E QUERY    [thread1] Error: couldn't connect to server ncmongoeast2.cloudapp.net:27017, connection attempt failed :" />
+          <C name="connect@src/mongo/shell/mongo.js:226:14" />
+          <C name="@(connect):1:6" />
+          <C name="exception: connect failed" />
+        </Collections>
       </Database>
       <Database name="temp">
       </Database>
@@ -75,10 +81,12 @@
     <LastOpenedFilePath>
     </LastOpenedFilePath>
     <LastOpenedFilePaths>
+      <f>C:\Users\Steve\AppData\Local\Temp\\f78bfeb9-625f-4b3b-ac4f-ddbdfeca293a.js</f>
     </LastOpenedFilePaths>
     <FileHistory>
+      <f>C:\Users\Steve\AppData\Local\Temp\\f78bfeb9-625f-4b3b-ac4f-ddbdfeca293a.js</f>
     </FileHistory>
-    <CurrentServer name="localhost">
+    <CurrentServer name="ncmongoeast2.cloudapp.net">
       <CurrentDatabase>test</CurrentDatabase>
     </CurrentServer>
   </Miscellaneous>
