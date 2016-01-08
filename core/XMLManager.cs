@@ -58,7 +58,8 @@ namespace DBUI
             return true;
         }
 
-        public bool Init(string xmlFileName, string rootName) {
+        public bool Init(string xmlFileName, string rootName = "DocumentElement")
+        {
             _xmlFileName = xmlFileName;
             _domDoc = new XmlDocument();
             

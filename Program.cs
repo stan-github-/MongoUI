@@ -28,6 +28,10 @@ namespace DBUI
         //todo need save file as.
         static void Main()
         {
+
+            var mainXml = "main.xml";
+            var mainXMLManager = new MainXMLRepository().Init(mainXml);
+
             var xmlFile = "MongoXML.xml";
             MongoXMLManager = new MongoXMLRepository();
             MongoXMLManager.Init(xmlFile, "DocumentElement");
