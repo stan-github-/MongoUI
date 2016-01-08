@@ -61,6 +61,8 @@ namespace DBUI.Queries
         }
         
         private string GetErrorMessageWithLineNumber(){
+            return StandardOut.ToString();
+            
             if (!StandardOut.ToString().Contains("JavaScript execution failed:")) {
                 return string.Empty;
             }

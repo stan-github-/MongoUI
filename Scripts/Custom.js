@@ -7,13 +7,22 @@
     printjson(x);
 };*/
 
-var printOriginal = printjson;
 
-var printjson = function (x) {
-    if (x._collection) {
-        x.forEach(function (z) { printOriginal(z); });
-        return;
-    }
+
+var printjson =
+    (function () {
+        var printOriginal = printjson;
+
+        var f = 
+            function (x) {
+                if (x._collection) {
+                    x.forEach(function (z) { printOriginal(z); });
+                    return;
+                }
     
-    printOriginal(x);
-};
+                printOriginal(x);
+            };
+
+        return f;
+    })();
+    

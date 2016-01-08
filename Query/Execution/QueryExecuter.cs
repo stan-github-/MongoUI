@@ -63,6 +63,39 @@ namespace DBUI.Queries
             //return output
             return MessageManager.StandardErrorAndOut;
         }
+
+
+        public String ExecuteNode(string query)
+        {
+            //check for query
+            if (String.IsNullOrWhiteSpace(query))
+            {
+                return String.Empty;
+            }
+
+            //reset query helper
+            this.QueryFileManager.Init();
+
+            //prepend custome js files etc and return file path
+            var queryFilePath = QueryFileManager.PrepareJsFile(query);
+
+            //message manager;
+            MessageManager = new MessageManager
+                (queryFilePath, QueryFileManager.GetQueryErrorLineNumOffset());
+
+            //actually executing the query using file
+            //execute file
+            String arguments = String.Format(
+                "{0}", queryFilePath);
+
+            ExecuteConsoleApp("node.exe", arguments);
+
+            //delete file
+            FileManager.DeleteFile(queryFilePath);
+
+            //return output
+            return MessageManager.StandardErrorAndOut;
+        }
     
 
         private void ExecuteConsoleApp(String exeName, String arguments)

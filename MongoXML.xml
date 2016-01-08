@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <DocumentElement>
   <Options comments="linked to UI form">
     <General>
@@ -6,12 +6,13 @@
       <DeleteTempFolderContents>true</DeleteTempFolderContents>
     </General>
     <Query>
-       <QueryFolder>%temp%\\MongoQueries</QueryFolder>
+      <QueryFolder>%temp%\\MongoQueries</QueryFolder>
     </Query>
     <CustomJavascriptFiles comments="not linked to Options form, yet">
       <Path>.\Scripts\underscore.js</Path>
       <Path>.\Scripts\AutoCompleter.js</Path>
       <Path>.\Scripts\Custom.js</Path>
+      <PathX>.\Scripts\UUIHelper.js</PathX>
     </CustomJavascriptFiles>
     <UsefulScriptFiles comments="not linked to Options form, yet">
       <Path>H:\underscore.js</Path>
@@ -20,18 +21,51 @@
       <T>MongoUI</T>
       <T>notepad.exe</T>
     </QueryOutputTypes>
+    <SQLCmd current="localhost">
+      <S name="localhost">
+        <ExePath>c:\Program Files\Microsoft SQL Server\110\Tools\Binn\SQLCMD.EXE</ExePath>
+        <Server>localhost</Server>
+        <Database>test</Database>
+        <Query>
+        </Query>
+      </S>
+    </SQLCmd>
     <CodeSnippets current="3789">
       <Group name="3789">
-        <Path name="1">C:\Users\stan\Desktop\3789\1.txt</Path>
-        <Path name="2">C:\Users\stan\Desktop\3789\2.txt</Path>
-        <Path name="3">C:\Users\stan\Desktop\3789\3.txt</Path>
-        <Path name="4">C:\Users\stan\Desktop\3789\4.txt</Path>
-        <Path name="5">C:\Users\stan\Desktop\3789\5.txt</Path>
+        <Path name="1">e:\Users\ztan\Desktop\demo\1.txt</Path>
+        <Path name="2">e:\Users\ztan\Desktop\demo\2.txt</Path>
+        <Path name="3">e:\Users\ztan\Desktop\demo\3.txt</Path>
       </Group>
     </CodeSnippets>
   </Options>
   <Servers comments="edit this to fill the combo boxes in application">
     <Server name="localhost" alias="localhost" withWarning="false">
+      <Database name="test">
+        <Collections>
+          <C name="2015-12-18T14:55:53.788-0500 W NETWORK  [thread1] Failed to connect to 127.0.0.1:27017, reason: errno:10061 No connection could be made because the target machine actively refused it." />
+          <C name="2015-12-18T14:55:53.788-0500 E QUERY    [thread1] Error: couldn't connect to server localhost:27017, connection attempt failed :" />
+          <C name="connect@src/mongo/shell/mongo.js:226:14" />
+          <C name="@(connect):1:6" />
+          <C name="exception: connect failed" />
+        </Collections>
+      </Database>
+      <Database name="temp">
+      </Database>
+      <Database name="system">
+      </Database>
+    </Server>
+    <Server name="ncmongoeast2.cloudapp.net:27018" alias="ncmongoeast2.cloudapp.net:27018" withWarning="false">
+      <Database name="gatewaydev">
+        <Collections>
+          <C name="Cannot use 'commands' readMode, degrading to 'legacy' mode" />
+        </Collections>
+      </Database>
+      <Database name="temp">
+      </Database>
+      <Database name="system">
+      </Database>
+    </Server>
+    <Server name="beta" alias="beta" withWarning="true">
       <Database name="test">
       </Database>
       <Database name="temp">
@@ -39,36 +73,20 @@
       <Database name="system">
       </Database>
     </Server>
-    <Server name="alpha" alias="alpha" withWarning="true">
-      <Database name="test"></Database>
-      <Database name="temp"></Database>
-      <Database name="system"></Database>
-    </Server>
-    <Server name="ncmongoeast2.cloudapp.net:27018" alias="beta" withWarning="true">
-      <Database name="test"></Database>
-      <Database name="temp"></Database>
-      <Database name="system"></Database>
-    </Server>
   </Servers>
-  <PhantomJs>
-    <ExeFilePath>D:\Programs\PhantomJs\bin\phantomjs.exe</ExeFilePath>
-    <WrapperJsFilePath>D:\Programs\PhantomJs\bin\phantomjs.exe</WrapperJsFilePath>
-    <CustomJavascriptFiles comments="not linked to Options form, yet">
-      <Path>Scripts\underscore.js</Path>
-      <Path>Scripts\AutoCompleter.js</Path>
-      <Path>Scripts\Custom.js</Path>
-      <Path>Scripts\angular.js</Path>
-    </CustomJavascriptFiles>
-  </PhantomJs>
   <Miscellaneous comments="not for configuration; used by application only">
     <LastOpenedFilePath>
     </LastOpenedFilePath>
     <LastOpenedFilePaths>
+      <f>C:\Users\Steve\AppData\Local\Temp\\f78bfeb9-625f-4b3b-ac4f-ddbdfeca293a.js</f>
+      <f>C:\Users\Steve\Desktop\story_one_query_one.js</f>
     </LastOpenedFilePaths>
     <FileHistory>
+      <f>C:\Users\Steve\Desktop\story_one_query_one.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\f78bfeb9-625f-4b3b-ac4f-ddbdfeca293a.js</f>
     </FileHistory>
-    <CurrentServer name="localhost">
-      <CurrentDatabase>test</CurrentDatabase>
+    <CurrentServer name="ncmongoeast2.cloudapp.net:27018">
+      <CurrentDatabase>gatewaydev</CurrentDatabase>
     </CurrentServer>
   </Miscellaneous>
 </DocumentElement>
