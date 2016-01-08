@@ -20,56 +20,45 @@
       <T>MongoUI</T>
       <T>notepad.exe</T>
     </QueryOutputTypes>
-    <SQLCmd current="localhost">
-      <S name="localhost">
-        <ExePath>c:\Program Files\Microsoft SQL Server\110\Tools\Binn\SQLCMD.EXE</ExePath>
-        <Server>localhost</Server>
-        <Database>test</Database>
-        <Query>
-        </Query>
-      </S>
-    </SQLCmd>
     <CodeSnippets current="3789">
       <Group name="3789">
-        <Path name="1">e:\Users\ztan\Desktop\demo\1.txt</Path>
-        <Path name="2">e:\Users\ztan\Desktop\demo\2.txt</Path>
-        <Path name="3">e:\Users\ztan\Desktop\demo\3.txt</Path>
+        <Path name="1">C:\Users\stan\Desktop\3789\1.txt</Path>
+        <Path name="2">C:\Users\stan\Desktop\3789\2.txt</Path>
+        <Path name="3">C:\Users\stan\Desktop\3789\3.txt</Path>
+        <Path name="4">C:\Users\stan\Desktop\3789\4.txt</Path>
+        <Path name="5">C:\Users\stan\Desktop\3789\5.txt</Path>
       </Group>
     </CodeSnippets>
   </Options>
   <Servers comments="edit this to fill the combo boxes in application">
     <Server name="localhost" alias="localhost" withWarning="false">
       <Database name="test">
-        <Collections>
-          <C name="2015-12-18T14:55:53.788-0500 W NETWORK  [thread1] Failed to connect to 127.0.0.1:27017, reason: errno:10061 No connection could be made because the target machine actively refused it." />
-          <C name="2015-12-18T14:55:53.788-0500 E QUERY    [thread1] Error: couldn't connect to server localhost:27017, connection attempt failed :" />
-          <C name="connect@src/mongo/shell/mongo.js:226:14" />
-          <C name="@(connect):1:6" />
-          <C name="exception: connect failed" />
-        </Collections>
       </Database>
       <Database name="temp">
       </Database>
       <Database name="system">
       </Database>
     </Server>
-    <Server name="ncmongoeast2.cloudapp.net" alias="dev" withWarning="true">
+    <Server name="alpha" alias="alpha" withWarning="true">
       <Database name="test">
-        <Collections>
-          <C name="2015-12-18T14:57:49.484-0500 W NETWORK  [thread1] Failed to connect to 104.46.101.192:27017 after 5000 milliseconds, giving up." />
-          <C name="2015-12-18T14:57:49.484-0500 E QUERY    [thread1] Error: couldn't connect to server ncmongoeast2.cloudapp.net:27017, connection attempt failed :" />
-          <C name="connect@src/mongo/shell/mongo.js:226:14" />
-          <C name="@(connect):1:6" />
-          <C name="exception: connect failed" />
-        </Collections>
       </Database>
       <Database name="temp">
       </Database>
       <Database name="system">
       </Database>
     </Server>
-    <Server name="beta" alias="beta" withWarning="true">
-      <Database name="test">
+    <Server name="ncmongoeast2.cloudapp.net:27018" alias="beta" withWarning="false">
+      <Database name="gatewaydev">
+        <Collections>
+          <C name="&#xA;&#xD;Cannot use 'commands' readMode, degrading to 'legacy' mode" />
+          <C name="dictionaryObjectCollection" />
+          <C name="sessions" />
+          <C name="settings" />
+          <C name="students" />
+          <C name="system.indexes" />
+          <C name="system.users" />
+          <C name="&#xA;&#xD;" />
+        </Collections>
       </Database>
       <Database name="temp">
       </Database>
@@ -77,17 +66,26 @@
       </Database>
     </Server>
   </Servers>
+  <PhantomJs>
+    <ExeFilePath>D:\Programs\PhantomJs\bin\phantomjs.exe</ExeFilePath>
+    <WrapperJsFilePath>D:\Programs\PhantomJs\bin\phantomjs.exe</WrapperJsFilePath>
+    <CustomJavascriptFiles comments="not linked to Options form, yet">
+      <Path>Scripts\underscore.js</Path>
+      <Path>Scripts\AutoCompleter.js</Path>
+      <Path>Scripts\Custom.js</Path>
+      <Path>Scripts\angular.js</Path>
+    </CustomJavascriptFiles>
+  </PhantomJs>
   <Miscellaneous comments="not for configuration; used by application only">
     <LastOpenedFilePath>
     </LastOpenedFilePath>
     <LastOpenedFilePaths>
-      <f>C:\Users\Steve\AppData\Local\Temp\\f78bfeb9-625f-4b3b-ac4f-ddbdfeca293a.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\50c0861e-586b-440e-a9a8-0ac9d8a594fc.js</f>
     </LastOpenedFilePaths>
     <FileHistory>
-      <f>C:\Users\Steve\AppData\Local\Temp\\f78bfeb9-625f-4b3b-ac4f-ddbdfeca293a.js</f>
     </FileHistory>
-    <CurrentServer name="ncmongoeast2.cloudapp.net">
-      <CurrentDatabase>test</CurrentDatabase>
+    <CurrentServer name="ncmongoeast2.cloudapp.net:27018">
+      <CurrentDatabase>gatewaydev</CurrentDatabase>
     </CurrentServer>
   </Miscellaneous>
 </DocumentElement>
