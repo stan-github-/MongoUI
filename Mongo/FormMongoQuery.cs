@@ -26,7 +26,7 @@ namespace DBUI.Queries {
         }
 
         public String Title {
-            get { return this.text_box.Text; }
+            get { return this.QueryBox.Text; }
         }
 
         public String QueryFilePath { get; set; }
@@ -53,9 +53,9 @@ namespace DBUI.Queries {
 
         public bool Init(Mode mode, String filePath = null)
         {
-            this.text_box.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyDownHandler);
-            this.text_box.KeyUp += text_box_KeyUp;
-            text_box.Margins[0].Width = 20;
+            this.QueryBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyDownHandler);
+            this.QueryBox.KeyUp += QueryBox_KeyUp;
+            QueryBox.Margins[0].Width = 20;
             //mode whether new or existing
             switch (mode)
             {
@@ -79,7 +79,7 @@ namespace DBUI.Queries {
 
             //form tile
             this.Text = this.QueryFilePath;
-            this.text_box.Text = FileManager.ReadFromFile(this.QueryFilePath);
+            this.QueryBox.Text = FileManager.ReadFromFile(this.QueryFilePath);
 
             //resize window
             this.WindowState = FormWindowState.Maximized;
@@ -94,7 +94,7 @@ namespace DBUI.Queries {
             return true;
         }
 
-        private void text_box_KeyUp(object sender, KeyEventArgs e)
+        private void QueryBox_KeyUp(object sender, KeyEventArgs e)
         {
             //if (Program.ProgramMode != Program.Mode.Mongo)
             //{
@@ -106,7 +106,7 @@ namespace DBUI.Queries {
                 return;
             }
 
-            Queries.AutoComplete.AutoCompleteUI.RunMongo(this.text_box);
+            Queries.AutoComplete.AutoCompleteUI.RunMongo(this.QueryBox);
         }
 
         #region "control init"
@@ -153,9 +153,9 @@ namespace DBUI.Queries {
         #region "file/query handlers"
         private void ExecuteQueryAndSaveToFile()
         {
-            var query = String.IsNullOrEmpty(text_box.Selection.Text)
-                                ? this.text_box.Text
-                                : text_box.Selection.Text;
+            var query = String.IsNullOrEmpty(QueryBox.Selection.Text)
+                                ? this.QueryBox.Text
+                                : QueryBox.Selection.Text;
 
             //DispalyQueryOutput(_queryExecuter.ExecuteMongo(query));
             DispalyQueryOutput(_queryExecuter.ExecuteNode(query));
@@ -167,7 +167,7 @@ namespace DBUI.Queries {
                 ErrorManager.Write(javascriptError);
             }
             
-            FileManager.SaveToFile(this.QueryFilePath, text_box.Text);
+            FileManager.SaveToFile(this.QueryFilePath, QueryBox.Text);
         }
 
         private void DispalyQueryOutput(String content)
@@ -215,6 +215,11 @@ namespace DBUI.Queries {
             return this.open_file_dialog.FileName;
         }
         #endregion
+
+        private void QueryBox_Click(object sender, EventArgs e)
+        {
+
+        }
 
         /// <summary>
         /// Query (Mongo, SQL) Execution Handler

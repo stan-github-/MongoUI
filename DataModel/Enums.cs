@@ -5,4 +5,8 @@
         MongoDB
     }
 
+    public enum JsEngineType { 
+        MongoDB,
+        Node,
+    }
 }

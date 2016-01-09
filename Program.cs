@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using DBUI.Queries;
+using System.Linq;
 
 namespace DBUI
 {
@@ -29,10 +30,14 @@ namespace DBUI
         static void Main()
         {
 
-            var mainXml = "main.xml";
-            var mainXMLManager = new MainXMLRepository().Init(mainXml);
+            var mainXMLManager = new MainXMLRepository();
+            mainXMLManager.Init("main.xml");
 
-            var xmlFile = "MongoXML.xml";
+            var currentServer = mainXMLManager.Engines
+                .First(e=>e.IsCurrent == true);
+            
+
+            var xmlFile = "Mongo.xml";
             MongoXMLManager = new MongoXMLRepository();
             MongoXMLManager.Init(xmlFile, "DocumentElement");
 

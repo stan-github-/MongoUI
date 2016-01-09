@@ -12,7 +12,7 @@ using DBUI.DataModel;
 
 namespace DBUI.Queries {
    
-    public class MongoXMLRepository : XMLManager {
+    public class MongoXMLRepository : JsEngineXMLRepository {
         
         private const String _lastFilePath = "Miscellaneous/LastOpenedFilePath";
         private const String _lastFilePaths = "Miscellaneous/LastOpenedFilePaths";
@@ -31,22 +31,7 @@ namespace DBUI.Queries {
         private String _xmlPath;
 
         public bool Init() {
-            _xmlPath = Application.StartupPath + "/MongoXML.xml";
-            return base.Init(_xmlPath, "DocumentElement");
-        }
-
-        public List<String> CustomJSFilePaths
-        {
-            get
-            {
-                List<String> sl = new List<string>();
-                XmlNodeList ns = RootNode.SelectNodes(_customJSFilePaths);
-                foreach (XmlNode n in ns)
-                {
-                    sl.Add(n.InnerText);
-                }
-                return sl;
-            }
+            return base.Init(JsEngineType.MongoDB);
         }
         
         public List<Server> Servers
@@ -128,31 +113,6 @@ namespace DBUI.Queries {
                 l.Add(o.SelectSingleNode("@name").Value);
             }
             return l;
-        }
-
-        public List<String> LastOpenedFilePaths
-        {
-            get
-            {
-                List<String> sl = new List<string>();
-                var ns = RootNode.SelectNodes(_lastFilePaths + "/*").ToList();
-
-                return ns.Select(n => n.InnerText).ToList();
-            }
-            set
-            {
-                XmlNode n = RootNode.SelectSingleNode(_lastFilePaths);
-                if (n == null)
-                {
-                    return;
-                }
-
-                //remove all nodes from original
-                n.RemoveAll();
-
-                //append new nodes
-                value.ForEach(v=>this.AppendNode(n, "f", v));
-            }
         }
 
         public Server CurrentServer {

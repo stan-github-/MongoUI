@@ -39,7 +39,7 @@
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="ScintillaNET">
-      <HintPath>scintillaNET\ScintillaNET.dll</HintPath>
+      <HintPath>packages\jacobslusser.ScintillaNET.3.5.6\lib\net40\ScintillaNET.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -58,10 +58,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataModel\JsEngine.cs" />
+    <Compile Include="JsEngine\JsEngine.cs" />
     <Compile Include="Query\AutoComplete\ObjectChainParser.cs" />
     <Compile Include="Query\Execution\QueryExecutionConfiguration.cs" />
     <Compile Include="Query\Execution\MessageManager.cs" />
     <Compile Include="Query\Execution\QueryFileManager.cs" />
+    <Compile Include="XMLRepository\JsEngineXMLRepository.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="XMLRepository\MainXMLRepository.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
@@ -152,11 +157,11 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="NodeXML.xml">
+    <Content Include="Node.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="MongoXML.xml">
+    <Content Include="Mongo.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>

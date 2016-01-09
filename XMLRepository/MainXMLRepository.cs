@@ -23,17 +23,13 @@ namespace DBUI.Queries {
             return base.Init(_xmlPath, "DocumentElement");
         }
         
-        public class Engine{
-            public string Name { get; set; }
-            public bool IsCurrent { get; set; }
-        }
-
-        public List<Engine> Engines
+        
+        public List<DataModel.JsEngine> Engines
         {
             get
             {
                 var nodes = RootNode.SelectNodes(_JsEngine + "/*")
-                    .ToList().Select(n => new Engine()
+                    .ToList().Select(n => new DataModel.JsEngine()
                     {
                         Name =  n.SelectSingleNode("Engine").InnerText,
                         IsCurrent = bool.Parse(n.SelectSingleNode("@IsCurrent").InnerText)
@@ -41,7 +37,7 @@ namespace DBUI.Queries {
 
                 if (nodes == null)
                 {
-                    return new List<Engine>();
+                    return new List<DataModel.JsEngine>();
                 }
 
                 return nodes;
