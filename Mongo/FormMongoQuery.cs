@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using DBUI;
 using System.Diagnostics;
+using ScintillaNET;
 
 namespace DBUI.Queries {
     public partial class FormMongoQuery : Form
@@ -51,7 +52,78 @@ namespace DBUI.Queries {
             splitContainer1.Panel2.Hide();
             this.QueryBox.Dock = DockStyle.Fill;
             this.QueryOuput.Dock = DockStyle.Fill;
+
+            FormatStyles(QueryBox);
+            FormatStyles(QueryOuput);
+            
         }
+
+        public void FormatStyles(ScintillaNET.Scintilla scintilla)
+        {
+            // Configuring the default style with properties
+            // we have common to every lexer style saves time.
+            
+            scintilla.StyleResetDefault();
+            
+            scintilla.Styles[Style.Default].Font = "Consolas";
+            scintilla.Styles[Style.Default].Size = 10;
+            scintilla.Styles[Style.Default].BackColor = Color.Black;
+            scintilla.Styles[Style.Default].ForeColor = Color.Maroon;
+            
+            scintilla.StyleClearAll();
+
+            // Configure the CPP (C#) lexer styles
+            //scintilla.Styles[Style.Cpp.Default].ForeColor = Color.Silver;
+            scintilla.Styles[Style.Cpp.Comment].ForeColor = Color.DarkGreen; // Green
+            scintilla.Styles[Style.Cpp.CommentLine].ForeColor = Color.DarkGreen;
+            scintilla.Styles[Style.Cpp.CommentLineDoc].ForeColor = Color.DarkGreen;
+
+            scintilla.Styles[Style.Cpp.Comment].BackColor = Color.Black; // Green
+            scintilla.Styles[Style.Cpp.CommentLine].BackColor = Color.Black; // Green
+            scintilla.Styles[Style.Cpp.CommentLineDoc].BackColor = Color.Black; // Green
+            
+            scintilla.Styles[Style.Cpp.Number].ForeColor = Color.Olive;
+            scintilla.Styles[Style.Cpp.Word].ForeColor = Color.Blue;
+            scintilla.Styles[Style.Cpp.Word2].ForeColor = Color.Blue;
+            scintilla.Styles[Style.Cpp.String].ForeColor = Color.FromArgb(163, 21, 21); // Red
+            scintilla.Styles[Style.Cpp.Character].ForeColor = Color.FromArgb(163, 21, 21); // Red
+            scintilla.Styles[Style.Cpp.Verbatim].ForeColor = Color.FromArgb(163, 21, 21); // Red
+            //scintilla.Styles[Style.Cpp.StringEol].BackColor = Color.Pink;
+            scintilla.Styles[Style.Cpp.Operator].ForeColor = Color.Purple;
+            scintilla.Styles[Style.Cpp.Preprocessor].ForeColor = Color.Maroon;
+            //scintilla.Styles[Style.Cpp.Default].BackColor = Color.Black;
+            
+        }
+
+        /*
+         <Language Name="default">
+    <Styles>
+      <Style Name="CHARACTER" ForeColor="Orange" BackColor="Black"/>
+    </Styles>
+  </Language>
+  <Language Name="js">
+    <Indentation TabWidth="4" UseTabs="true"/>
+    <Lexer>
+      <Keywords List="0">print sleep</Keywords>
+    </Lexer>
+    <Styles>
+      <Style Name="COMMENT" ForeColor="DarkGreen" BackColor="Black"/>
+      <Style Name="COMMENTLINE" ForeColor="DarkGreen" BackColor="Black"/>
+      <Style Name="COMMENTDOC" ForeColor="DarkGreen" BackColor="Black"/>
+      <Style Name="NUMBER" ForeColor="Red" BackColor="Black"/>
+      <Style Name="WORD" ForeColor="White" BackColor="Black"/>
+      <Style Name="STRING" ForeColor="LightGreen" BackColor="Black"/>
+      <Style Name="CHARACTER" ForeColor="LightGreen" BackColor="Black"/>
+      <Style Name="OPERATOR" ForeColor="Cyan" BackColor="Black"/>
+      <Style Name="IDENTIFIER" ForeColor="Yellow" BackColor="Black"/>
+      <Style Name="GLOBALCLASS" ForeColor="Magenta" BackColor="Black"/>
+      <style Name="STANDARD" ForeColor="Orange" BackColor="Black" />
+      <style Name="DEFAULT" ForeColor="Orange" BackColor="Black"  />
+      <style Name="BRACELIGHT" ForeColor="Gray" BackColor="Black" />
+      <style Name="BRACEBAD" ForeColor="Gray" BackColor="Black" />
+    </Styles>
+  </Language> 
+         */
 
         public bool Init(Mode mode, String filePath = null)
         {

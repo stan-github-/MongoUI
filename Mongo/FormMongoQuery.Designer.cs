@@ -123,7 +123,7 @@
             // 
             this.QueryOuput.Location = new System.Drawing.Point(3, 3);
             this.QueryOuput.Name = "QueryOuput";
-            this.QueryOuput.Size = new System.Drawing.Size(685, 217);
+            this.QueryOuput.Size = new System.Drawing.Size(768, 217);
             this.QueryOuput.TabIndex = 0;
             this.QueryOuput.UseTabs = false;
             // 
