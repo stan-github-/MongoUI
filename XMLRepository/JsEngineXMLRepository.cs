@@ -27,8 +27,10 @@ namespace DBUI.Queries {
         private const String _codeSnippets = "Options/CodeSnippets";
 
         private String _xmlPath;
+        public JsEngineType Type;
 
         public bool Init(JsEngineType type) {
+            this.Type = type;
             _xmlPath = Application.StartupPath + "/" + type.ToString() + ".xml";
             return base.Init(_xmlPath);
         }

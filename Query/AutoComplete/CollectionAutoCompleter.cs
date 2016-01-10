@@ -12,7 +12,7 @@ namespace DBUI.Queries
             //var server = Program.MongoXMLManager.CurrentServer.Name;
             //var database = Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name;
 
-            if (Program.JsEngine.CurrentType != JsEngineType.MongoDB)
+            if (Program.MainXMLManager.CurrentEngine != JsEngineType.MongoDB)
             {
                 return new List<String>();
             }
@@ -42,14 +42,14 @@ namespace DBUI.Queries
             //foreach (var s in servers) {
             //    foreach (var d in s.Databases) {
 
-            if (Program.JsEngine.CurrentType != JsEngineType.MongoDB) {
+            if (Program.MainXMLManager.CurrentEngine != JsEngineType.MongoDB) {
                 return;
             }
 
-            var server = Program.JsEngine.MongoXMLRepository.CurrentServer.Name;
-            var database = Program.JsEngine.MongoXMLRepository.CurrentServer.CurrentDatabase.Name;
+            var server = Program.JsEngine.MongoEngine.Repository.CurrentServer.Name;
+            var database = Program.JsEngine.MongoEngine.Repository.CurrentServer.CurrentDatabase.Name;
             var collectionNames = GetCurrentDBCollectionNames();
-            Program.JsEngine.MongoXMLRepository.SetCollectionList
+            Program.JsEngine.MongoEngine.Repository.SetCollectionList
                         (collectionNames, server, database);
          
         }

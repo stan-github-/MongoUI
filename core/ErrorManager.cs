@@ -38,54 +38,54 @@ namespace DBUI {
         }
     }
 
-    public class ErrorManagerThreadSafe
-    {
-        private FormError _errorForm;
+    //public class ErrorManagerThreadSafe
+    //{
+    //    private FormError _errorForm;
 
-        private void OpenForm()
-        {
-            if (_errorForm == null)
-            {
-                _errorForm = new FormError();
-            }
+    //    private void OpenForm()
+    //    {
+    //        if (_errorForm == null)
+    //        {
+    //            _errorForm = new FormError();
+    //        }
             
-            _errorForm.Show();
-        }
+    //        _errorForm.Show();
+    //    }
 
-        public void CloseForm(int delay)
-        {
-            Thread.Sleep(1000*delay);
-            if (_errorForm != null)
-            {
-                _errorForm.Close();
-            }
+    //    public void CloseForm(int delay)
+    //    {
+    //        Thread.Sleep(1000*delay);
+    //        if (_errorForm != null)
+    //        {
+    //            _errorForm.Close();
+    //        }
 
-            _errorForm = null;
-        }
+    //        _errorForm = null;
+    //    }
 
-        private void appendToErrorForm(String s)
-        {
-            _errorForm.Append(String.Format("{0} {1}{2}",
-            DateTime.Now.ToString(), s, Environment.NewLine));
-        }
+    //    private void appendToErrorForm(String s)
+    //    {
+    //        _errorForm.Append(String.Format("{0} {1}{2}",
+    //        DateTime.Now.ToString(), s, Environment.NewLine));
+    //    }
 
 
-        public void Write(string s)
-        {
-            OpenForm();
-            appendToErrorForm(s);
-        }
+    //    public void Write(string s)
+    //    {
+    //        OpenForm();
+    //        appendToErrorForm(s);
+    //    }
 
-        public void Debug(string s)
-        {
-            OpenForm();
-            Write(s);
-        }
+    //    public void Debug(string s)
+    //    {
+    //        OpenForm();
+    //        Write(s);
+    //    }
 
-        public void Write(Exception ex)
-        {
-            OpenForm();
-            Write(ex.Message);
-        }
-    }
+    //    public void Write(Exception ex)
+    //    {
+    //        OpenForm();
+    //        Write(ex.Message);
+    //    }
+    //}
 }

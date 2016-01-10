@@ -6,44 +6,24 @@ using System.Text;
 
 namespace DBUI.JsEngine
 {
-    public class JsEngine
+    public class JsEngine<T> where T: JsEngineXMLRepository, new()
     {
-        public MongoXMLRepository MongoXMLRepository;
-        public NodeXMLRepository NodeXMLRepository;
-
-        public JsEngineType CurrentType
+        
+        public JsEngineType Type
         {
             get
             {
-                return Program.MainXMLManager.CurrentEngine;
+                return Repository.Type;
             }
         }
 
-        public JsEngineXMLRepository Repository { get {
-            if (CurrentType == JsEngineType.MongoDB) {
-                return this.MongoXMLRepository;
-            }
-            else if (CurrentType == JsEngineType.Node) {
-                return this.NodeXMLRepository;
-            }
-            return null;
-            } 
-        }
+        public T Repository { get ; set ; }
 
         public void InitRepository() {
+            this.Repository = new T();
+            var xmlFile = Type.ToString() + ".xml";
+            this.Repository.Init(xmlFile);
             
-            var xmlFile = CurrentType.ToString() + ".xml";
-
-            if (CurrentType == JsEngineType.MongoDB)
-            {
-                this.MongoXMLRepository = new MongoXMLRepository();
-                this.MongoXMLRepository.Init(xmlFile);
-            }
-            else if (CurrentType == JsEngineType.Node)
-            {
-                this.NodeXMLRepository = new NodeXMLRepository();
-                this.NodeXMLRepository.Init(xmlFile);
-            }
         }
         
     }

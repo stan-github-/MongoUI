@@ -268,10 +268,7 @@ namespace DBUI.Queries {
         }
         #endregion
 
-        private void QueryBox_Click(object sender, EventArgs e)
-        {
-
-        }
+     
 
         /// <summary>
         /// Query (Mongo, SQL) Execution Handler

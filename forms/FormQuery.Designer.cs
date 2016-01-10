@@ -117,7 +117,7 @@
             this.QueryBox.Size = new System.Drawing.Size(771, 223);
             this.QueryBox.TabIndex = 0;
             this.QueryBox.UseTabs = false;
-            this.QueryBox.Click += new System.EventHandler(this.QueryBox_Click);
+            
             // 
             // QueryOuput
             // 

@@ -150,25 +150,25 @@ namespace DBUI {
 
         private void SetServerComboBox()
         {
-            if (Program.JsEngine.CurrentType != JsEngineType.MongoDB) {
+            if (Program.MainXMLManager.CurrentEngine != JsEngineType.MongoDB) {
                 return;
             }
 
-            Program.JsEngine.MongoXMLRepository.Servers.ForEach
+            Program.JsEngine.MongoEngine.Repository.Servers.ForEach
                     (x =>{
                         if (!this.serverComboBox.Items.Contains(x.Name)){
                             this.serverComboBox.Items.Add(x.Name);
                         }
                     });
 
-            this.serverComboBox.Text = Program.JsEngine.MongoXMLRepository.CurrentServer.Name;
+            this.serverComboBox.Text = Program.JsEngine.MongoEngine.Repository.CurrentServer.Name;
             SetDatabaseComboBox();
         }
 
         private void SetDatabaseComboBox()
         {
             var server = 
-                Program.JsEngine.MongoXMLRepository.Servers.Where
+                Program.JsEngine.MongoEngine.Repository.Servers.Where
                 (x => x.Name == serverComboBox.Text).FirstOrDefault();
                         
             if (server == null)
@@ -191,7 +191,7 @@ namespace DBUI {
                 return;
             }
 
-            this.databaseComboBox.Text = Program.JsEngine.MongoXMLRepository.CurrentServer.CurrentDatabase.Name;
+            this.databaseComboBox.Text = Program.JsEngine.MongoEngine.Repository.CurrentServer.CurrentDatabase.Name;
             //_autoCompleter.RefreshCurrentDBCollectionNames();
         }
 
@@ -218,7 +218,7 @@ namespace DBUI {
                 return;
             }
 
-            Program.JsEngine.MongoXMLRepository.CurrentServer =
+            Program.JsEngine.MongoEngine.Repository.CurrentServer =
                 new Server
                 {
                     Name = serverComboBox.Text,
@@ -249,13 +249,13 @@ namespace DBUI {
         #region "new features"
         private void SetMongoCollectionsOnDataImport()
         {
-            if (Program.JsEngine.CurrentType != JsEngineType.MongoDB) {
+            if (Program.MainXMLManager.CurrentEngine != JsEngineType.MongoDB) {
                 return;
             }
             
             return; //code not working
-            var currentDB = Program.JsEngine.MongoXMLRepository.CurrentServer.Databases.FirstOrDefault(
-                d => Name == Program.JsEngine.MongoXMLRepository.CurrentServer.CurrentDatabase.Name);
+            var currentDB = Program.JsEngine.MongoEngine.Repository.CurrentServer.Databases.FirstOrDefault(
+                d => Name == Program.JsEngine.MongoEngine.Repository.CurrentServer.CurrentDatabase.Name);
             if (currentDB == null)
             {
                 return;
@@ -398,7 +398,7 @@ namespace DBUI {
             this.jsEngineComboBox.Text = Program.MainXMLManager.Engines
                 .First(e => e.IsCurrent == true).Type.ToString();
 
-            if (Program.JsEngine.CurrentType == JsEngineType.MongoDB) {
+            if (Program.MainXMLManager.CurrentEngine == JsEngineType.MongoDB) {
                 this.SetServerComboBox();
             }
 
@@ -418,7 +418,7 @@ namespace DBUI {
         void jsEngineComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             SaveJsEngineType();
-            Program.JsEngine.InitRepository();
+            Program.JsEngine.Repository.Init(Program.MainXMLManager.CurrentEngine);
             SetJsEngineComboBox();
         }
 

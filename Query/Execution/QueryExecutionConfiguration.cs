@@ -17,7 +17,7 @@ namespace DBUI.Queries
         public MongoXMLRepository MongoXMLRepository
         {   get 
             { 
-                return Program.JsEngine.MongoXMLRepository; 
+                return Program.JsEngine.MongoEngine.Repository; 
             } 
         }
         
@@ -40,7 +40,7 @@ namespace DBUI.Queries
 
         public bool ContinueWithExecutionAfterWarning()
         {
-            if (Program.JsEngine.CurrentType != JsEngineType.MongoDB) {
+            if (Program.MainXMLManager.CurrentEngine != JsEngineType.MongoDB) {
                 return true;
             }
 

@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="DataModel\JsEngine.cs" />
     <Compile Include="JsEngine\JsEngine.cs" />
+    <Compile Include="JsEngine\JsEngineProxy.cs" />
     <Compile Include="Query\AutoComplete\ObjectChainParser.cs" />
     <Compile Include="Query\Execution\QueryExecutionConfiguration.cs" />
     <Compile Include="Query\Execution\MessageManager.cs" />

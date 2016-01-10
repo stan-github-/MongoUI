@@ -23,11 +23,13 @@ namespace DBUI.Queries
             QueryExecutionConfiguration = new QueryExecutionConfiguration();
         }
 
+        //todo should be in jsengine or jsengine proxy
         public String Execute(string query){
-            if (Program.JsEngine.CurrentType == JsEngineType.MongoDB) {
+            if (Program.MainXMLManager.CurrentEngine == JsEngineType.MongoDB) {
                 return ExecuteMongo(query);
             }
-            else if (Program.JsEngine.CurrentType == JsEngineType.Node) {
+            else if (Program.MainXMLManager.CurrentEngine == JsEngineType.Node)
+            {
                 return ExecuteNode(query);
             }
 
@@ -62,8 +64,8 @@ namespace DBUI.Queries
             //execute file
             String arguments = String.Format(
                 "{0} --quiet --host {1} {2} ",
-                Program.JsEngine.MongoXMLRepository.CurrentServer.CurrentDatabase.Name,
-                Program.JsEngine.MongoXMLRepository.CurrentServer.Name,
+                Program.JsEngine.MongoEngine.Repository.CurrentServer.CurrentDatabase.Name,
+                Program.JsEngine.MongoEngine.Repository.CurrentServer.Name,
                 queryFilePath);
 
             ExecuteConsoleApp("mongo.exe", arguments);
