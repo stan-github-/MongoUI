@@ -37,7 +37,7 @@ namespace DBUI.Queries {
             get
             {
                 return Environment.ExpandEnvironmentVariables(
-                    Program.JsEngine.MongoXMLRepository.TempFolderPath
+                    Program.JsEngine.Repository.TempFolderPath
                     + "\\" + Guid.NewGuid() + ".js");
             }
         }

@@ -40,7 +40,8 @@ namespace DBUI {
         private bool Init() {
             //if (Program.MongoXMLManager.Init() == false) { return false; }
 
-            this.SetServerComboBox();
+            this.SetJsEngineComboBox();
+
             this.SetDropDownFileHistory();
             this.SetDropDownCodeSnippet();
             this.SetMongoCollectionsOnDataImport();
@@ -135,6 +136,7 @@ namespace DBUI {
             Program.JsEngine.Repository.FileHistory = l;
 
             Program.JsEngine.Repository.SaveXml();
+            Program.MainXMLManager.SaveXml();
         }
 
         private void ExitToolsStripMenuItem_Click(object sender, EventArgs e)
@@ -153,7 +155,11 @@ namespace DBUI {
             }
 
             Program.JsEngine.MongoXMLRepository.Servers.ForEach
-                    (x =>this.serverComboBox.Items.Add(x.Name));
+                    (x =>{
+                        if (!this.serverComboBox.Items.Contains(x.Name)){
+                            this.serverComboBox.Items.Add(x.Name);
+                        }
+                    });
 
             this.serverComboBox.Text = Program.JsEngine.MongoXMLRepository.CurrentServer.Name;
             SetDatabaseComboBox();
@@ -162,7 +168,8 @@ namespace DBUI {
         private void SetDatabaseComboBox()
         {
             var server = 
-                Program.JsEngine.MongoXMLRepository.Servers.Where(x => x.Name == serverComboBox.Text).FirstOrDefault();
+                Program.JsEngine.MongoXMLRepository.Servers.Where
+                (x => x.Name == serverComboBox.Text).FirstOrDefault();
                         
             if (server == null)
             {
@@ -172,9 +179,13 @@ namespace DBUI {
 
             try
             {
-                databaseComboBox.Items.Clear();
+                //databaseComboBox.Items.Clear();
                 server.Databases.ForEach
-                    (x => this.databaseComboBox.Items.Add(x.Name));
+                    (x => {
+                        if (!databaseComboBox.Items.Contains(x.Name)){
+                            this.databaseComboBox.Items.Add(x.Name);
+                        }
+                    });
             }catch{
                 MessageBox.Show("Server not configured correctly; check configure file.");
                 return;
@@ -243,8 +254,8 @@ namespace DBUI {
             }
             
             return; //code not working
-            var currentDB = Program.MongoXMLManager.CurrentServer.Databases.FirstOrDefault(
-                d => Name == Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name);
+            var currentDB = Program.JsEngine.MongoXMLRepository.CurrentServer.Databases.FirstOrDefault(
+                d => Name == Program.JsEngine.MongoXMLRepository.CurrentServer.CurrentDatabase.Name);
             if (currentDB == null)
             {
                 return;
@@ -372,6 +383,67 @@ namespace DBUI {
         }
 
         #endregion
+
+        private void SetJsEngineComboBox()
+        {
+            Program.MainXMLManager.Engines.ForEach
+                    (x =>
+                    {
+                        if (!this.jsEngineComboBox.Items.Contains(x.Type.ToString()))
+                        {
+                            this.jsEngineComboBox.Items.Add(x.Type.ToString());
+                        }
+                    });
+
+            this.jsEngineComboBox.Text = Program.MainXMLManager.Engines
+                .First(e => e.IsCurrent == true).Type.ToString();
+
+            if (Program.JsEngine.CurrentType == JsEngineType.MongoDB) {
+                this.SetServerComboBox();
+            }
+
+            this.jsEngineComboBox.SelectedIndexChanged += jsEngineComboBox_SelectedIndexChanged;
+
+            this.updateMongoServerAndDatabaseUI();
+        }
+
+        private void updateMongoServerAndDatabaseUI()
+        {
+            var isMongo = Program.MainXMLManager.CurrentEngine == JsEngineType.MongoDB;
+            this.serverComboBox.Visible = isMongo;
+            this.databaseComboBox.Visible = isMongo;
+        }
+
+
+        void jsEngineComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SaveJsEngineType();
+            Program.JsEngine.InitRepository();
+            SetJsEngineComboBox();
+        }
+
+        
+        private void SaveJsEngineType()
+        {
+            if (String.IsNullOrEmpty(this.jsEngineComboBox.Text))
+            {
+                return;
+            }
+
+            var node = Program.MainXMLManager.Engines.First(e => e.Type == (JsEngineType)
+                Enum.Parse(typeof(JsEngineType), this.jsEngineComboBox.Text));
+            
+            if (node == null){
+                return;
+            }
+
+            Program.MainXMLManager.CurrentEngine = 
+                (JsEngineType)Enum.Parse(typeof(JsEngineType), this.jsEngineComboBox.Text);
+            
+        }
+        
+        
+        
 
         
     }

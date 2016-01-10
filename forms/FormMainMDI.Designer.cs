@@ -85,6 +85,7 @@ namespace DBUI {
             this.printPreviewToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.button_refresh = new System.Windows.Forms.ToolStripButton();
+            this.jsEngineComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.serverComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.databaseComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.status_strip = new System.Windows.Forms.StatusStrip();
@@ -325,6 +326,7 @@ namespace DBUI {
             this.printPreviewToolStripButton,
             this.helpToolStripButton,
             this.button_refresh,
+            this.jsEngineComboBox,
             this.serverComboBox,
             this.databaseComboBox});
             this.toolStrip.Location = new System.Drawing.Point(0, 24);
@@ -406,6 +408,11 @@ namespace DBUI {
             this.button_refresh.Visible = false;
             this.button_refresh.Click += new System.EventHandler(this.button_refresh_Click);
             // 
+            // jsEngineComboBox
+            // 
+            this.jsEngineComboBox.Name = "jsEngineComboBox";
+            this.jsEngineComboBox.Size = new System.Drawing.Size(121, 25);
+            // 
             // serverComboBox
             // 
             this.serverComboBox.Name = "serverComboBox";
@@ -417,6 +424,7 @@ namespace DBUI {
             this.databaseComboBox.Name = "databaseComboBox";
             this.databaseComboBox.Size = new System.Drawing.Size(92, 25);
             this.databaseComboBox.SelectedIndexChanged += new System.EventHandler(this.databaseComboBox_Select);
+            
             // 
             // status_strip
             // 
@@ -498,6 +506,7 @@ namespace DBUI {
         private System.Windows.Forms.ToolStripMenuItem importSubMenu;
         private System.Windows.Forms.ToolStripMenuItem exportSubMenu;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.ToolStripComboBox jsEngineComboBox;
     }
 }
 

@@ -9,22 +9,39 @@ namespace DBUI.JsEngine
     public class JsEngine
     {
         public MongoXMLRepository MongoXMLRepository;
-        public JsEngineType CurrentType {get; set;}
+        public NodeXMLRepository NodeXMLRepository;
+
+        public JsEngineType CurrentType
+        {
+            get
+            {
+                return Program.MainXMLManager.CurrentEngine;
+            }
+        }
+
         public JsEngineXMLRepository Repository { get {
             if (CurrentType == JsEngineType.MongoDB) {
                 return this.MongoXMLRepository;
             }
+            else if (CurrentType == JsEngineType.Node) {
+                return this.NodeXMLRepository;
+            }
             return null;
         } }
 
-        public void InitRepository(JsEngineType type) {
-            CurrentType = type;
+        public void InitRepository() {
+            
+            var xmlFile = CurrentType.ToString() + ".xml";
 
-            var xmlFile = type.ToString() + ".xml";
-
-            if (type == JsEngineType.MongoDB) {
+            if (CurrentType == JsEngineType.MongoDB)
+            {
                 this.MongoXMLRepository = new MongoXMLRepository();
                 this.MongoXMLRepository.Init(xmlFile);
+            }
+            else if (CurrentType == JsEngineType.Node)
+            {
+                this.NodeXMLRepository = new NodeXMLRepository();
+                this.NodeXMLRepository.Init(xmlFile);
             }
         }
         

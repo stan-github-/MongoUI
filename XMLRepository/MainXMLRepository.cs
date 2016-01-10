@@ -45,5 +45,24 @@ namespace DBUI.Queries {
                 return nodes;
             }
         }
+
+        public JsEngineType CurrentEngine {
+            get {
+                var n =  Program.MainXMLManager.Engines
+                    .First(e => e.IsCurrent == true);
+                return n.Type;
+            }
+
+            set {
+                 foreach (XmlNode node in RootNode.SelectNodes(_JsEngine + "/*")){
+                     var b = node.SelectSingleNode("@isCurrent");
+                     b.InnerText = "false";
+
+                     if (node.SelectSingleNode("@name").InnerText == value.ToString()){
+                         b.InnerText = "true";
+                     }
+                 }
+            }
+        }
     }
 }

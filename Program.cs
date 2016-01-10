@@ -8,7 +8,7 @@ namespace DBUI
 {
     static class Program
     {
-        public static Queries.MongoXMLRepository MongoXMLManager;
+        //public static Queries.MongoXMLRepository MongoXMLManager;
         //public static Queries.PhantomJsXMLRepository PhantomJsXMLManager;
         public static Queries.MainXMLRepository MainXMLManager;
         public static JsEngine.JsEngine JsEngine;
@@ -31,14 +31,14 @@ namespace DBUI
         static void Main()
         {
 
-            var mainXMLManager = new MainXMLRepository();
-            mainXMLManager.Init("main.xml");
+            MainXMLManager = new MainXMLRepository();
+            MainXMLManager.Init("main.xml");
 
-            var currentServer = mainXMLManager.Engines
+            var currentServer = MainXMLManager.Engines
                 .First(e=>e.IsCurrent == true);
 
             JsEngine = new JsEngine.JsEngine();
-            JsEngine.InitRepository(currentServer.Type);
+            JsEngine.InitRepository();
                 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

@@ -41,6 +41,11 @@ namespace DBUI.Queries
             //var servers = Program.MongoXMLManager.Servers;
             //foreach (var s in servers) {
             //    foreach (var d in s.Databases) {
+
+            if (Program.JsEngine.CurrentType != JsEngineType.MongoDB) {
+                return;
+            }
+
             var server = Program.JsEngine.MongoXMLRepository.CurrentServer.Name;
             var database = Program.JsEngine.MongoXMLRepository.CurrentServer.CurrentDatabase.Name;
             var collectionNames = GetCurrentDBCollectionNames();

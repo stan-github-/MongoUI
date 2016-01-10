@@ -64,6 +64,9 @@
     <Compile Include="Query\Execution\QueryExecutionConfiguration.cs" />
     <Compile Include="Query\Execution\MessageManager.cs" />
     <Compile Include="Query\Execution\QueryFileManager.cs" />
+    <Compile Include="XMLRepository\NodeXMLRepository.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="XMLRepository\JsEngineXMLRepository.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
