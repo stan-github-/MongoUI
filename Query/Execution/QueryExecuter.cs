@@ -23,6 +23,17 @@ namespace DBUI.Queries
             QueryExecutionConfiguration = new QueryExecutionConfiguration();
         }
 
+        public String Execute(string query){
+            if (Program.JsEngine.CurrentType == JsEngineType.MongoDB) {
+                return ExecuteMongo(query);
+            }
+            else if (Program.JsEngine.CurrentType == JsEngineType.Node) {
+                return ExecuteNode(query);
+            }
+
+            return String.Empty;
+        }
+
         public String ExecuteMongo(string query)
         {
             //check for query

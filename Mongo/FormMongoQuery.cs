@@ -159,7 +159,7 @@ namespace DBUI.Queries {
                                 : QueryBox.SelectedText;
 
             //DispalyQueryOutput(_queryExecuter.ExecuteMongo(query));
-            DispalyQueryOutput(_queryExecuter.ExecuteNode(query));
+            DispalyQueryOutput(_queryExecuter.Execute(query));
             
             var javascriptError = _queryExecuter.
                     MessageManager.GetJavascriptQueryError();

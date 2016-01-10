@@ -14,11 +14,11 @@ namespace DBUI.Queries
 
     public class QueryExecutionConfiguration {
 
-        public MongoXMLRepository MongoXMLManager { get; set; }
-
+        public MongoXMLRepository MongoXMLRepository { get; set; }
+        
         public QueryExecutionConfiguration()
         {
-            MongoXMLManager = Program.MongoXMLManager;
+            this.MongoXMLRepository = Program.JsEngine.MongoXMLRepository;
         }
 
         public bool NoWindows { get; set; }
@@ -40,14 +40,15 @@ namespace DBUI.Queries
                 return true;
             }
 
-            var serverName = MongoXMLManager.CurrentServer.Name;
+            var serverName = this.MongoXMLRepository.CurrentServer.Name;
 
-            if (!MongoXMLManager.Servers.First(s => s.Name == serverName).WithWarning)
+            if (!MongoXMLRepository.Servers.First(s => s.Name == serverName).WithWarning)
             {
                 return true;
             }
 
-            if (MessageBox.Show("Continue query with " + serverName, "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("Continue query with " + serverName, 
+                "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 return true;
             }
