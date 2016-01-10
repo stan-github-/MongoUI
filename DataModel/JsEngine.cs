@@ -7,7 +7,7 @@ namespace DBUI.DataModel
 {
     public class JsEngine
     {
-        public string Name { get; set; }
+        public JsEngineType Type { get; set; }
         public bool IsCurrent { get; set; }
     }
 }

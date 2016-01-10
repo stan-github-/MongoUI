@@ -14,7 +14,7 @@ namespace DBUI.Queries {
    
     public class MainXMLRepository : XMLManager {
         
-        private const String _JsEngine = "Engines";
+        private const String _JsEngine = "JsEngines";
         
         private String _xmlPath;
 
@@ -31,8 +31,10 @@ namespace DBUI.Queries {
                 var nodes = RootNode.SelectNodes(_JsEngine + "/*")
                     .ToList().Select(n => new DataModel.JsEngine()
                     {
-                        Name =  n.SelectSingleNode("Engine").InnerText,
-                        IsCurrent = bool.Parse(n.SelectSingleNode("@IsCurrent").InnerText)
+                        Type = (JsEngineType)Enum.Parse
+                            (typeof(JsEngineType), 
+                            n.SelectSingleNode("@name").InnerText),
+                        IsCurrent = bool.Parse(n.SelectSingleNode("@isCurrent").InnerText)
                     }).ToList();
 
                 if (nodes == null)

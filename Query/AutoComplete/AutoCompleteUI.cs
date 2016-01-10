@@ -18,14 +18,14 @@ namespace DBUI.Queries.AutoComplete
 
         private static void SetList(ScintillaNET.Scintilla text_box, List<String> methods)
         {
-            text_box.AutoComplete.MaxHeight = 10;
+            text_box.AutoCMaxHeight = 10;
 
             if (methods.Count == 1) {
-                text_box.InsertText(methods[0]);
+                text_box.InsertText(text_box.CurrentPosition,  methods[0]);
                 return;
             }
             
-            text_box.AutoComplete.Show(methods);
+            text_box.AutoCShow(0, string.Join(" ", methods));
         }
     }
 

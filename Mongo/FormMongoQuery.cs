@@ -36,7 +36,7 @@ namespace DBUI.Queries {
             get
             {
                 return Environment.ExpandEnvironmentVariables(
-                    Program.MainXMLManager.TempFolderPath
+                    Program.JsEngine.MongoXMLRepository.TempFolderPath
                     + "\\" + Guid.NewGuid() + ".js");
             }
         }
@@ -67,7 +67,7 @@ namespace DBUI.Queries {
                     EnsureQueryFilePathExists();
                     break;
                 case Mode.Last:
-                    this.QueryFilePath = Program.MainXMLManager.LastFilePath;
+                    this.QueryFilePath = Program.JsEngine.Repository.LastFilePath;
                     EnsureQueryFilePathExists();
                     break;
                 case Mode.FileDialog:
@@ -112,12 +112,12 @@ namespace DBUI.Queries {
         #region "control init"
         private void SetQueryOutputDisplayType()
         {
-            foreach (var t in Program.MainXMLManager.QueryOutputTypes.Types)
+            foreach (var t in Program.JsEngine.Repository.QueryOutputTypes.Types)
             {
                 this.OutputTypeComboBox.Items.Add(t);
             }
 
-            this.OutputTypeComboBox.Text = Program.MainXMLManager.QueryOutputTypes.CurrentOutputType;
+            this.OutputTypeComboBox.Text = Program.JsEngine.Repository.QueryOutputTypes.CurrentOutputType;
         }
 
         #endregion
@@ -139,13 +139,14 @@ namespace DBUI.Queries {
 
         private void Form_Closed(object sender, FormClosedEventArgs e)
         {
-            Program.MongoXMLManager.SaveXml();
+            Program.JsEngine.Repository.SaveXml();
         }
 
         private void QueryOutputType_Selected(object sender, EventArgs e)
         {
-            Program.MainXMLManager.QueryOutputTypes =
-                new MainXMLRepository.QueryOutputType() { CurrentOutputType = OutputTypeComboBox.Text };
+            Program.JsEngine.Repository.QueryOutputTypes =
+                new DBUI.Queries.JsEngineXMLRepository.QueryOutputType() 
+                { CurrentOutputType = OutputTypeComboBox.Text };
         }
 
         #endregion
@@ -153,9 +154,9 @@ namespace DBUI.Queries {
         #region "file/query handlers"
         private void ExecuteQueryAndSaveToFile()
         {
-            var query = String.IsNullOrEmpty(QueryBox.Selection.Text)
+            var query = String.IsNullOrEmpty(QueryBox.SelectedText)
                                 ? this.QueryBox.Text
-                                : QueryBox.Selection.Text;
+                                : QueryBox.SelectedText;
 
             //DispalyQueryOutput(_queryExecuter.ExecuteMongo(query));
             DispalyQueryOutput(_queryExecuter.ExecuteNode(query));
@@ -172,17 +173,18 @@ namespace DBUI.Queries {
 
         private void DispalyQueryOutput(String content)
         {
-            if (!Program.MainXMLManager.QueryOutputTypes.CurrentOutputType.Contains("MongoUI"))
+            if (!Program.JsEngine.Repository.QueryOutputTypes.CurrentOutputType.Contains("MongoUI"))
             {
                 this.splitContainer1.Panel2Collapsed = true;
                 this.splitContainer1.Panel2.Visible = false;
-                 _queryExecuter.DisplayQueryInExe(content, Program.MainXMLManager.QueryOutputTypes.CurrentOutputType);
+                 _queryExecuter.DisplayQueryInExe(content, Program.JsEngine.Repository
+                     .QueryOutputTypes.CurrentOutputType);
             }
-            else if (Program.MainXMLManager.QueryOutputTypes.CurrentOutputType == "MongoUI")
+            else if (Program.JsEngine.Repository.QueryOutputTypes.CurrentOutputType == "MongoUI")
             {
                 this.splitContainer1.Panel2Collapsed = false;
                 this.splitContainer1.Panel2.Show();
-                this.scintillaOutput.Text = content;
+                this.QueryOuput.Text = content;
             }
         }
 

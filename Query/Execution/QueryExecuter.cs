@@ -51,8 +51,8 @@ namespace DBUI.Queries
             //execute file
             String arguments = String.Format(
                 "{0} --quiet --host {1} {2} ",
-                Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name,
-                Program.MongoXMLManager.CurrentServer.Name,
+                Program.JsEngine.MongoXMLRepository.CurrentServer.CurrentDatabase.Name,
+                Program.JsEngine.MongoXMLRepository.CurrentServer.Name,
                 queryFilePath);
 
             ExecuteConsoleApp("mongo.exe", arguments);
@@ -101,16 +101,23 @@ namespace DBUI.Queries
         private void ExecuteConsoleApp(String exeName, String arguments)
         {
             var process = new Process();
-            process.StartInfo.FileName = exeName; //"mongo.exe ";
 
-            process.StartInfo.Arguments = arguments;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.CreateNoWindow = this.QueryExecutionConfiguration.NoWindows;
-            
-            process.Start();
+            try
+            {
+                process.StartInfo.FileName = exeName; //"mongo.exe ";
 
+                process.StartInfo.Arguments = arguments;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.CreateNoWindow = this.QueryExecutionConfiguration.NoWindows;
+
+                process.Start();
+            }
+            catch (Exception e) {
+                ErrorManager.Write(e);
+                return;
+            }
             //---------------------------------------------------------------
             //from msdn
             //---------------------------------------------------------------
@@ -149,7 +156,7 @@ namespace DBUI.Queries
         public void DisplayQueryInExe(String content, String exe)
         {
             var tempPath = Environment.ExpandEnvironmentVariables
-                (Program.MainXMLManager.TempFolderPath + "\\"
+                (Program.JsEngine.Repository.TempFolderPath + "\\"
                  + Guid.NewGuid() + ".json");
 
             if (!FileManager.SaveToFile(tempPath, content))

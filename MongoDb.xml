@@ -39,7 +39,7 @@
     </CodeSnippets>
   </Options>
   <Servers comments="edit this to fill the combo boxes in application">
-    <Server name="localhost" alias="localhost" withWarning="false">
+    <Server name="localhost" alias="localhost" withWarning="false" isCurrent="true">
       <Database name="test">
         <Collections>
           <C name="2015-12-18T14:55:53.788-0500 W NETWORK  [thread1] Failed to connect to 127.0.0.1:27017, reason: errno:10061 No connection could be made because the target machine actively refused it." />
@@ -54,7 +54,7 @@
       <Database name="system">
       </Database>
     </Server>
-    <Server name="ncmongoeast2.cloudapp.net:27018" alias="ncmongoeast2.cloudapp.net:27018" withWarning="false">
+    <Server name="ncmongoeast2.cloudapp.net:27018" alias="ncmongoeast2.cloudapp.net:27018" withWarning="false" isCurrent="false">
       <Database name="gatewaydev">
         <Collections>
           <C name="Cannot use 'commands' readMode, degrading to 'legacy' mode" />
@@ -65,7 +65,7 @@
       <Database name="system">
       </Database>
     </Server>
-    <Server name="beta" alias="beta" withWarning="true">
+    <Server name="beta" alias="beta" withWarning="true" isCurrent="false">
       <Database name="test">
       </Database>
       <Database name="temp">
@@ -85,8 +85,8 @@
       <f>C:\Users\Steve\Desktop\story_one_query_one.js</f>
       <f>C:\Users\Steve\AppData\Local\Temp\\f78bfeb9-625f-4b3b-ac4f-ddbdfeca293a.js</f>
     </FileHistory>
-    <CurrentServer name="ncmongoeast2.cloudapp.net:27018">
-      <CurrentDatabase>gatewaydev</CurrentDatabase>
+    <CurrentServer name="localhost">
+      <CurrentDatabase>test</CurrentDatabase>
     </CurrentServer>
   </Miscellaneous>
 </DocumentElement>

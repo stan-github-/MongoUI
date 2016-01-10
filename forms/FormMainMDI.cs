@@ -109,7 +109,7 @@ namespace DBUI {
 
         private void OpenLastOpendedFiles()
         {
-            foreach (var path in Program.MongoXMLManager.LastOpenedFilePaths)
+            foreach (var path in Program.JsEngine.Repository.LastOpenedFilePaths)
             {
                 new Queries.FormMongoQuery(this).Init(FormMongoQuery.Mode.Existing, path);
             }
@@ -132,7 +132,7 @@ namespace DBUI {
         {
             var l = new List<String>();
             MdiChildren.ToList().ForEach(c=> l.Add(((FormMongoQuery)c).QueryFilePath));
-            Program.MainXMLManager.FileHistory = l;
+            Program.JsEngine.Repository.FileHistory = l;
 
             Program.MongoXMLManager.SaveXml();
         }
@@ -148,17 +148,21 @@ namespace DBUI {
 
         private void SetServerComboBox()
         {
-            Program.MongoXMLManager.Servers.ForEach
+            if (Program.JsEngine.CurrentType != JsEngineType.MongoDB) {
+                return;
+            }
+
+            Program.JsEngine.MongoXMLRepository.Servers.ForEach
                     (x =>this.serverComboBox.Items.Add(x.Name));
 
-            this.serverComboBox.Text = Program.MongoXMLManager.CurrentServer.Name;
+            this.serverComboBox.Text = Program.JsEngine.MongoXMLRepository.CurrentServer.Name;
             SetDatabaseComboBox();
         }
 
         private void SetDatabaseComboBox()
         {
             var server = 
-                Program.MongoXMLManager.Servers.Where(x => x.Name == serverComboBox.Text).FirstOrDefault();
+                Program.JsEngine.MongoXMLRepository.Servers.Where(x => x.Name == serverComboBox.Text).FirstOrDefault();
                         
             if (server == null)
             {
@@ -176,7 +180,7 @@ namespace DBUI {
                 return;
             }
 
-            this.databaseComboBox.Text = Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name;
+            this.databaseComboBox.Text = Program.JsEngine.MongoXMLRepository.CurrentServer.CurrentDatabase.Name;
             //_autoCompleter.RefreshCurrentDBCollectionNames();
         }
 
@@ -203,7 +207,7 @@ namespace DBUI {
                 return;
             }
 
-            Program.MongoXMLManager.CurrentServer =
+            Program.JsEngine.MongoXMLRepository.CurrentServer =
                 new Server
                 {
                     Name = serverComboBox.Text,
@@ -217,14 +221,14 @@ namespace DBUI {
         #region "drop down snippet code files etc"
         private void SetDropDownFileHistory()
         {
-            Program.MainXMLManager.FileHistory.ForEach
+            Program.JsEngine.Repository.FileHistory.ForEach
                 (f=> this.historyMenu.DropDownItems.Add(f)
             );
         }
 
         private void SetDropDownCodeSnippet()
         {
-            Program.MainXMLManager.CodeSnippets.ForEach
+            Program.JsEngine.Repository.CodeSnippets.ForEach
                 (f => this.snippetsMenu.DropDownItems.Add(f)
             );
         }
@@ -256,7 +260,7 @@ namespace DBUI {
         private void helpToolStripButton_Click(object sender, EventArgs e)
         {
             StringBuilder b = new StringBuilder();
-            b.Append("Configure MongoXML.xml\n");
+            b.Append("Configure Mongo.xml\n");
             b.Append("Configure ScintillaNET.xml\n");
 
             MessageBox.Show(b.ToString());

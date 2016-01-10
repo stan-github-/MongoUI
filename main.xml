@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <DocumentElement>
-  <JSEngines>
-    <Engine name="Node" isCurrent ="true"></Engine>
-    <Engine name="Mongo" isCurrent="false"></Engine>
-  </JSEngines>
+  <JsEngines>
+    <JsEngine name="Node" isCurrent ="false"></JsEngine>
+    <JsEngine name="MongoDB" isCurrent="true"></JsEngine>
+  </JsEngines>
 </DocumentElement>

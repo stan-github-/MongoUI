@@ -11,6 +11,7 @@ namespace DBUI
         public static Queries.MongoXMLRepository MongoXMLManager;
         //public static Queries.PhantomJsXMLRepository PhantomJsXMLManager;
         public static Queries.MainXMLRepository MainXMLManager;
+        public static JsEngine.JsEngine JsEngine;
 
         //public enum Mode
         //{
@@ -35,18 +36,10 @@ namespace DBUI
 
             var currentServer = mainXMLManager.Engines
                 .First(e=>e.IsCurrent == true);
-            
 
-            var xmlFile = "Mongo.xml";
-            MongoXMLManager = new MongoXMLRepository();
-            MongoXMLManager.Init(xmlFile, "DocumentElement");
-
-            //PhantomJsXMLManager = new PhantomJsXMLRepository();
-            //PhantomJsXMLManager.Init(xmlFile, "DocumentElement");
-
-            MainXMLManager = new MainXMLRepository();
-            MainXMLManager.Init(xmlFile, "DocumentElement");
-
+            JsEngine = new JsEngine.JsEngine();
+            JsEngine.InitRepository(currentServer.Type);
+                
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMainMDI());

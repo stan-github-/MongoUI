@@ -35,10 +35,10 @@ namespace DBUI.Queries
             //var servers = Program.MongoXMLManager.Servers;
             //foreach (var s in servers) {
             //    foreach (var d in s.Databases) {
-            var server = Program.MongoXMLManager.CurrentServer.Name;
-            var database = Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name;
+            var server = Program.JsEngine.MongoXMLRepository.CurrentServer.Name;
+            var database = Program.JsEngine.MongoXMLRepository.CurrentServer.CurrentDatabase.Name;
             var collectionNames = GetCurrentDBCollectionNames();
-            Program.MongoXMLManager.SetCollectionList
+            Program.JsEngine.MongoXMLRepository.SetCollectionList
                         (collectionNames, server, database);
          
         }

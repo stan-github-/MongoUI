@@ -60,7 +60,7 @@ namespace ConsoleApplication
         //public static JavaScriptExecuter QueryExecuter {
         //    //get {
         //    //    var mongoXMLManager = new MongoXMLRepository();
-        //    //    mongoXMLManager.Init("MongoXML.xml", "DocumentElement");
+        //    //    mongoXMLManager.Init("Mongo.xml", "DocumentElement");
 
         //    //    //return new QueryExecuter(mongoXMLManager) { NoOutputPrefix = true };
         //    //}

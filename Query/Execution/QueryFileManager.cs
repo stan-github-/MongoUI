@@ -15,13 +15,13 @@ namespace DBUI.Queries
     public class QueryFileManager {
 
         public String QueryFilePath { get; set; }
-        public MongoXMLRepository MongoXMLManager { get; set; }
+        //public MongoXMLRepository MongoXMLManager { get; set; }
         private String CustomeJsCode { get; set; }
 
         public void Init()
         {
             SetTempFilePaths();
-            MongoXMLManager = Program.MongoXMLManager;
+            //MongoXMLManager = Program.MongoXMLManager;
         }
 
         public QueryFileManager()
@@ -46,7 +46,7 @@ namespace DBUI.Queries
         private String PrependCustomJSCode()
         {
             var b = new StringBuilder();
-            foreach (var path in Program.MongoXMLManager.CustomJSFilePaths)
+            foreach (var path in Program.JsEngine.Repository.CustomJSFilePaths)
             {
                 b.Append(FileManager.ReadFromFile(path)).Append("\n");
             }
@@ -57,7 +57,7 @@ namespace DBUI.Queries
         private void SetTempFilePaths()
         {
             QueryFilePath = Environment.ExpandEnvironmentVariables
-                (Program.MainXMLManager.TempFolderPath
+                (Program.JsEngine.Repository.TempFolderPath
                 + "\\" + Guid.NewGuid() + ".js");    
         }
     }
