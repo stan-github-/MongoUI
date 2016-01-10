@@ -12,6 +12,12 @@ namespace DBUI.Queries
             //var server = Program.MongoXMLManager.CurrentServer.Name;
             //var database = Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name;
 
+            if (Program.JsEngine.CurrentType != JsEngineType.MongoDB)
+            {
+                return new List<String>();
+            }
+            
+
             var executor = new JavaScriptExecuter() ;
             executor.QueryExecutionConfiguration.NoFeedBack = true;
                 

@@ -49,6 +49,8 @@ namespace DBUI.Queries {
             this.MdiParent = parent;
             splitContainer1.Panel2Collapsed = true;
             splitContainer1.Panel2.Hide();
+            this.QueryBox.Dock = DockStyle.Fill;
+            this.QueryOuput.Dock = DockStyle.Fill;
         }
 
         public bool Init(Mode mode, String filePath = null)

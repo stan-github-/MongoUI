@@ -134,7 +134,7 @@ namespace DBUI {
             MdiChildren.ToList().ForEach(c=> l.Add(((FormMongoQuery)c).QueryFilePath));
             Program.JsEngine.Repository.FileHistory = l;
 
-            Program.MongoXMLManager.SaveXml();
+            Program.JsEngine.Repository.SaveXml();
         }
 
         private void ExitToolsStripMenuItem_Click(object sender, EventArgs e)
@@ -238,7 +238,10 @@ namespace DBUI {
         #region "new features"
         private void SetMongoCollectionsOnDataImport()
         {
-
+            if (Program.JsEngine.CurrentType != JsEngineType.MongoDB) {
+                return;
+            }
+            
             return; //code not working
             var currentDB = Program.MongoXMLManager.CurrentServer.Databases.FirstOrDefault(
                 d => Name == Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name);

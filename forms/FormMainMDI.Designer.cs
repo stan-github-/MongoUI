@@ -34,12 +34,12 @@ namespace DBUI {
                 paths.Add(mf.QueryFilePath);
             }
 
-            Program.MongoXMLManager.LastOpenedFilePaths = paths;
+            Program.JsEngine.Repository.LastOpenedFilePaths = paths;
         }
 
         private void dispose() {
             SaveOpenedFilePaths();
-            Program.MongoXMLManager.SaveXml();
+            Program.JsEngine.Repository.SaveXml();
             return;
         }
 

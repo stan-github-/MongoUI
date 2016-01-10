@@ -111,9 +111,10 @@
             // 
             // QueryBox
             // 
-            this.QueryBox.Location = new System.Drawing.Point(0, 3);
+            this.QueryBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.QueryBox.Location = new System.Drawing.Point(0, 0);
             this.QueryBox.Name = "QueryBox";
-            this.QueryBox.Size = new System.Drawing.Size(688, 217);
+            this.QueryBox.Size = new System.Drawing.Size(771, 223);
             this.QueryBox.TabIndex = 0;
             this.QueryBox.UseTabs = false;
             this.QueryBox.Click += new System.EventHandler(this.QueryBox_Click);
