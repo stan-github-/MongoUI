@@ -8,15 +8,8 @@ namespace DBUI
 {
     static class Program
     {
-        //public static Queries.MongoXMLRepository MongoXMLManager;
-        //public static Queries.PhantomJsXMLRepository PhantomJsXMLManager;
         public static Queries.MainXMLRepository MainXMLManager;
         public static JsEngine.JsEngine JsEngine;
-
-        //public enum Mode
-        //{
-        //    Mongo, PhantomJs
-        //}
 
         //todo 
         //make this part of main xml settings
@@ -33,9 +26,6 @@ namespace DBUI
 
             MainXMLManager = new MainXMLRepository();
             MainXMLManager.Init("main.xml");
-
-            var currentServer = MainXMLManager.Engines
-                .First(e=>e.IsCurrent == true);
 
             JsEngine = new JsEngine.JsEngine();
             JsEngine.InitRepository();

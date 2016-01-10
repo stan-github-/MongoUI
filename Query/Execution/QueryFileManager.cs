@@ -15,13 +15,11 @@ namespace DBUI.Queries
     public class QueryFileManager {
 
         public String QueryFilePath { get; set; }
-        //public MongoXMLRepository MongoXMLManager { get; set; }
         private String CustomeJsCode { get; set; }
 
         public void Init()
         {
             SetTempFilePaths();
-            //MongoXMLManager = Program.MongoXMLManager;
         }
 
         public QueryFileManager()

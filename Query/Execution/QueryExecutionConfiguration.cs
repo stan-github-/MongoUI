@@ -14,11 +14,16 @@ namespace DBUI.Queries
 
     public class QueryExecutionConfiguration {
 
-        public MongoXMLRepository MongoXMLRepository { get; set; }
+        public MongoXMLRepository MongoXMLRepository
+        {   get 
+            { 
+                return Program.JsEngine.MongoXMLRepository; 
+            } 
+        }
         
         public QueryExecutionConfiguration()
         {
-            this.MongoXMLRepository = Program.JsEngine.MongoXMLRepository;
+            
         }
 
         public bool NoWindows { get; set; }
@@ -35,6 +40,10 @@ namespace DBUI.Queries
 
         public bool ContinueWithExecutionAfterWarning()
         {
+            if (Program.JsEngine.CurrentType != JsEngineType.MongoDB) {
+                return true;
+            }
+
             if (NoConfirmation)
             {
                 return true;

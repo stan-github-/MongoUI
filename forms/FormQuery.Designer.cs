@@ -1,5 +1,5 @@
 ﻿namespace DBUI.Queries {
-    partial class FormMongoQuery {
+    partial class FormQuery {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -23,7 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMongoQuery));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormQuery));
             this.open_file_dialog = new System.Windows.Forms.OpenFileDialog();
             this.tool_strip = new System.Windows.Forms.ToolStrip();
             this.button_excecute = new System.Windows.Forms.ToolStripButton();

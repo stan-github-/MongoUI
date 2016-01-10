@@ -30,7 +30,7 @@ namespace DBUI {
             var paths = new List<String>();
             foreach (var mdiChild in MdiChildren)
             {
-                var mf = (FormMongoQuery)mdiChild;
+                var mf = (FormQuery)mdiChild;
                 paths.Add(mf.QueryFilePath);
             }
 

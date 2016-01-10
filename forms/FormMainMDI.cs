@@ -75,7 +75,7 @@ namespace DBUI {
 
         private void SaveQueryFile(object sender, EventArgs eventArgs)
         {
-            var activeChild = (FormMongoQuery)this.ActiveMdiChild;
+            var activeChild = (FormQuery)this.ActiveMdiChild;
             if (activeChild != null)
             {
                 saveFileDialog1.InitialDirectory = Path.GetDirectoryName(activeChild.Text);
@@ -86,44 +86,44 @@ namespace DBUI {
 
         private void SaveQueryWithFileDialog(object sender, CancelEventArgs cancelEventArgs)
         {
-            var activeChild = (FormMongoQuery)this.ActiveMdiChild;
+            var activeChild = (FormQuery)this.ActiveMdiChild;
             if (activeChild == null)
             {
                 return;
             }
             //saveFileDialog1.Filter = "JS Files (*.js)|*.js|All Files (*.*)|*.*";
             FileManager.SaveToFile(saveFileDialog1.FileName, activeChild.Title);
-            new FormMongoQuery(this).Init(FormMongoQuery.Mode.Existing, saveFileDialog1.FileName);
+            new FormQuery(this).Init(FormQuery.Mode.Existing, saveFileDialog1.FileName);
         }
 
         private void OpenExistingFile(object sender, ToolStripItemClickedEventArgs e)
         {
-            foreach (FormMongoQuery c in this.MdiChildren)
+            foreach (FormQuery c in this.MdiChildren)
             {
                 if (c.QueryFilePath == e.ClickedItem.Text)
                 {
                     return;
                 }
             }
-            new FormMongoQuery(this).Init(FormMongoQuery.Mode.Existing, e.ClickedItem.Text);
+            new FormQuery(this).Init(FormQuery.Mode.Existing, e.ClickedItem.Text);
         }
 
         private void OpenLastOpendedFiles()
         {
             foreach (var path in Program.JsEngine.Repository.LastOpenedFilePaths)
             {
-                new Queries.FormMongoQuery(this).Init(FormMongoQuery.Mode.Existing, path);
+                new Queries.FormQuery(this).Init(FormQuery.Mode.Existing, path);
             }
         }
 
         private void OpenFileWithFileDialog(object sender, EventArgs e)
         {
-            var mongoChildForm = new FormMongoQuery(this).Init(FormMongoQuery.Mode.FileDialog);
+            var mongoChildForm = new FormQuery(this).Init(FormQuery.Mode.FileDialog);
         }
 
         private void OpenNewQueryFile(object sender, EventArgs e)
         {
-            new FormMongoQuery(this).Init(FormMongoQuery.Mode.New);
+            new FormQuery(this).Init(FormQuery.Mode.New);
         }
 
         #endregion
@@ -132,7 +132,7 @@ namespace DBUI {
         void FormMainMDI_Closed(object sender, EventArgs e)
         {
             var l = new List<String>();
-            MdiChildren.ToList().ForEach(c=> l.Add(((FormMongoQuery)c).QueryFilePath));
+            MdiChildren.ToList().ForEach(c=> l.Add(((FormQuery)c).QueryFilePath));
             Program.JsEngine.Repository.FileHistory = l;
 
             Program.JsEngine.Repository.SaveXml();

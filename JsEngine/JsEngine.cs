@@ -27,7 +27,8 @@ namespace DBUI.JsEngine
                 return this.NodeXMLRepository;
             }
             return null;
-        } }
+            } 
+        }
 
         public void InitRepository() {
             

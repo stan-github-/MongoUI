@@ -105,11 +105,11 @@
     </Compile>
     <Compile Include="Query\AutoComplete\AutoCompleteUI.cs" />
     <Compile Include="Query\AutoComplete\CollectionAutoCompleter.cs" />
-    <Compile Include="Mongo\FormMongoQuery.cs">
+    <Compile Include="Forms\FormQuery.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Mongo\FormMongoQuery.Designer.cs">
-      <DependentUpon>FormMongoQuery.cs</DependentUpon>
+    <Compile Include="Forms\FormQuery.Designer.cs">
+      <DependentUpon>FormQuery.cs</DependentUpon>
     </Compile>
     <Compile Include="XMLRepository\MongoXMLRepository.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -131,8 +131,8 @@
     <EmbeddedResource Include="Forms\FormOptions.resx">
       <DependentUpon>FormOptions.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Mongo\FormMongoQuery.resx">
-      <DependentUpon>FormMongoQuery.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormQuery.resx">
+      <DependentUpon>FormQuery.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -170,16 +170,6 @@
     </Content>
     <Content Include="Query\Wrapper.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ScintillaNET.xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SciLexer.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SciLexer64.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\angular.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
