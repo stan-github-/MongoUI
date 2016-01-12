@@ -28,21 +28,48 @@ namespace DBUI.Query.AutoComplete
             }
         }
 
-        private String ReflectionString
+        private String ReflectionStringMongo
         {
             get
             {
                     return @";
                     (function(){
-	                    var _x_y_z_1_2_3 = {zzzzzzzzzzzz};
-                        printjson('{uuuuuuuuuuuu}');
-	                    for (var p in _x_y_z_1_2_3){
+	                    printjson('{uuuuuuuuuuuu}');
+	                    for (var p in {zzzzzzzzzzzz}){
 		                   printjson(p);
 	                    }
                         printjson('{vvvvvvvvvvvv}');
                     })();
                 ";
                 
+            }
+        }
+
+        private String ReflectionStringNode
+        {
+            get
+            {
+                return @";
+                    (function(){
+                        console.log('{uuuuuuuuuuuu}');
+	                    for (var p in {zzzzzzzzzzzz}){
+		                   console.log(p);
+	                    }
+                        console.log('{vvvvvvvvvvvv}');
+                    })();
+                ";
+
+            }
+        }
+
+        private String ReflectionString {
+            get {
+                if (Program.MainXMLManager.CurrentEngine == JsEngineType.MongoDB) {
+                    return ReflectionStringMongo;
+                }else if (Program.MainXMLManager.CurrentEngine == JsEngineType.Node){
+                    return ReflectionStringNode;
+                }
+                return String.Empty;
             }
         }
         
