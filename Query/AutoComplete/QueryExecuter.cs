@@ -54,8 +54,8 @@ namespace DBUI.Query.AutoComplete
             var queryOut = GetReflectionQuery
                 (queryFirstHalf, querySecondHalf, methodOrObjectName);
 
-            //var output = Executer.ExecuteMongo(queryOut);
-            var output = Executer.ExecuteNode(queryOut);
+            var output = Executer.Execute(queryOut);
+            //var output = Executer.ExecuteNode(queryOut);
 
             //display error if any
             var error = Executer.MessageManager.GetJavascriptQueryError();

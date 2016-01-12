@@ -57,9 +57,13 @@ namespace DBUI.Queries {
 
             FormatStyles(QueryBox);
             FormatStyles(QueryOuput);
+
+            //brace highlighting
+            QueryBox.UpdateUI += QueryBox_UpdateUI;
             
         }
 
+        
         public void FormatStyles(ScintillaNET.Scintilla scintilla)
         {
             // Configuring the default style with properties
@@ -98,8 +102,79 @@ namespace DBUI.Queries {
             scintilla.SetKeywords(1, "var bool byte char class const decimal double enum float int long sbyte short static string struct uint ulong ushort void");
 
             scintilla.CaretForeColor = Color.Wheat;
+
+            scintilla.Styles[Style.BraceLight].BackColor = Color.LightGray;
+            scintilla.Styles[Style.BraceLight].ForeColor = Color.BlueViolet;
+            scintilla.Styles[Style.BraceBad].ForeColor = Color.Red;
+           
         }
 
+        #region brace highlight //could be refactored, copied directly from scintilla!!
+        private static bool IsBrace(int c)
+        {
+            switch (c)
+            {
+                case '(':
+                case ')':
+                case '[':
+                case ']':
+                case '{':
+                case '}':
+                case '<':
+                case '>':
+                    return true;
+            }
+
+            return false;
+        }
+
+        int lastCaretPos = 0;
+
+        void QueryBox_UpdateUI(object sender, UpdateUIEventArgs e)
+        {
+            var caretPos = QueryBox.CurrentPosition;
+            if (lastCaretPos != caretPos)
+            {
+                lastCaretPos = caretPos;
+                var bracePos1 = -1;
+                var bracePos2 = -1;
+
+                // Is there a brace to the left or right?
+                if (caretPos > 0 && IsBrace(QueryBox.GetCharAt(caretPos - 1)))
+                    bracePos1 = (caretPos - 1);
+                else if (IsBrace(QueryBox.GetCharAt(caretPos)))
+                    bracePos1 = caretPos;
+
+                if (bracePos1 >= 0)
+                {
+                    // Find the matching brace
+                    bracePos2 = QueryBox.BraceMatch(bracePos1);
+                    if (bracePos2 == ScintillaNET.Scintilla.InvalidPosition)
+                    {
+                        QueryBox.BraceBadLight(bracePos1);
+                        QueryBox.HighlightGuide = 0;
+                    }
+                    else
+                    {
+                        QueryBox.BraceHighlight(bracePos1, bracePos2);
+                        QueryBox.HighlightGuide = QueryBox.GetColumn(bracePos1);
+                    }
+                }
+                else
+                {
+                    // Turn off brace matching
+                    QueryBox.BraceHighlight(ScintillaNET.Scintilla.InvalidPosition, ScintillaNET.Scintilla.InvalidPosition);
+                    QueryBox.HighlightGuide = 0;
+                }
+            }
+        }
+        #endregion
+
+        private void scintilla_UpdateUI(object sender, UpdateUIEventArgs e)
+        {
+            // Has the caret changed position?
+            
+        }
 
         public bool Init(Mode mode, String filePath = null)
         {

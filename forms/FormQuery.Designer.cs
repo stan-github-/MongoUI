@@ -117,7 +117,6 @@
             this.QueryBox.Size = new System.Drawing.Size(771, 223);
             this.QueryBox.TabIndex = 0;
             this.QueryBox.UseTabs = false;
-            
             // 
             // QueryOuput
             // 
@@ -127,14 +126,14 @@
             this.QueryOuput.TabIndex = 0;
             this.QueryOuput.UseTabs = false;
             // 
-            // FormMongoQuery
+            // FormQuery
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(771, 475);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.tool_strip);
-            this.Name = "FormMongoQuery";
+            this.Name = "FormQuery";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form_Closed);
             this.tool_strip.ResumeLayout(false);
             this.tool_strip.PerformLayout();
