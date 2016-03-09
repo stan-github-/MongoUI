@@ -181,6 +181,7 @@
     <Content Include="Scripts\Custom.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\JavaScript1.js" />
     <Content Include="Scripts\scraps\PhantomJsWrapper.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

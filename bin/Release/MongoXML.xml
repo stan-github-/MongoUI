@@ -19,7 +19,7 @@
     </UsefulScriptFiles>
     <QueryOutputTypes current="MongoUI">
       <T>MongoUI</T>
-      <T>notepad.exe</T>
+      <T>C:\Program Files\notepad2\notepad2.exe</T>
     </QueryOutputTypes>
     <SQLCmd current="localhost">
       <S name="localhost">
