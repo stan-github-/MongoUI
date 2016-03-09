@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DocumentElement>
+  <Options comments="linked to UI form">
+    <General>
+      <TempFolder>%temp%\</TempFolder>
+      <DeleteTempFolderContents>true</DeleteTempFolderContents>
+    </General>
+    <Query>
+      <QueryFolder>%temp%\\MongoQueries</QueryFolder>
+    </Query>
+    <CustomJavascriptFiles comments="not linked to Options form, yet">
+      <Path>.\Scripts\underscore.js</Path>
+      <Path>.\Scripts\AutoCompleter.js</Path>
+      <Path>.\Scripts\Custom.js</Path>
+      <PathX>.\Scripts\UUIHelper.js</PathX>
+    </CustomJavascriptFiles>
+    <UsefulScriptFiles comments="not linked to Options form, yet">
+      <Path>H:\underscore.js</Path>
+    </UsefulScriptFiles>
+    <QueryOutputTypes current="notepad.exe">
+      <T>MongoUI</T>
+      <T>notepad.exe</T>
+    </QueryOutputTypes>
+    <SQLCmd current="localhost">
+      <S name="localhost">
+        <ExePath>c:\Program Files\Microsoft SQL Server\110\Tools\Binn\SQLCMD.EXE</ExePath>
+        <Server>localhost</Server>
+        <Database>test</Database>
+        <Query>
+        </Query>
+      </S>
+    </SQLCmd>
+    <CodeSnippets current="3789">
+      <Group name="3789">
+        <Path name="1">e:\Users\ztan\Desktop\demo\1.txt</Path>
+        <Path name="2">e:\Users\ztan\Desktop\demo\2.txt</Path>
+        <Path name="3">e:\Users\ztan\Desktop\demo\3.txt</Path>
+      </Group>
+    </CodeSnippets>
+  </Options>
+  <Servers comments="edit this to fill the combo boxes in application">
+    <Server name="localhost" alias="localhost" withWarning="false" isCurrent="true">
+      <Database name="test">
+        <Collections>
+          <C name="exception: connect failed" />
+          <C name="&#xA;&#xD;2016-01-12T10:30:27.656-0500 W NETWORK  [thread1] Failed to connect to 127.0.0.1:27017, reason: errno:10061 No connection could be made because the target machine actively refused it." />
+          <C name="2016-01-12T10:30:27.656-0500 E QUERY    [thread1] Error: couldn't connect to server localhost:27017, connection attempt failed :" />
+          <C name="connect@src/mongo/shell/mongo.js:226:14" />
+          <C name="@(connect):1:21" />
+          <C name="&#xA;&#xD;" />
+        </Collections>
+      </Database>
+      <Database name="temp">
+      </Database>
+      <Database name="system">
+      </Database>
+    </Server>
+    <Server name="ncmongoeast2.cloudapp.net:27018" alias="ncmongoeast2.cloudapp.net:27018" withWarning="true" isCurrent="false">
+      <Database name="gatewaydev">
+        <Collections>
+          <C name="&#xA;&#xD;Cannot use 'commands' readMode, degrading to 'legacy' mode" />
+          <C name="dictionaryObjectCollection" />
+          <C name="sessions" />
+          <C name="settings" />
+          <C name="students" />
+          <C name="system.indexes" />
+          <C name="system.users" />
+          <C name="&#xA;&#xD;" />
+        </Collections>
+      </Database>
+      <Database name="temp">
+      </Database>
+      <Database name="system">
+      </Database>
+    </Server>
+    <Server name="beta" alias="beta" withWarning="true" isCurrent="false">
+      <Database name="test">
+      </Database>
+      <Database name="temp">
+      </Database>
+      <Database name="system">
+      </Database>
+    </Server>
+  </Servers>
+  <Miscellaneous comments="not for configuration; used by application only">
+    <LastOpenedFilePath>
+    </LastOpenedFilePath>
+    <LastOpenedFilePaths>
+      <f>C:\Users\Steve\Desktop\story_one_query_one.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\23658f9c-fb2f-461f-aaff-d20cee8a93ae.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\a19795eb-a104-4721-99ac-4fe2107cc441.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\655d2984-d0df-45a0-84ed-90001f1b2aab.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\c0cc3aac-2ecd-4b93-9451-7bf89465c59a.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\f267c9d5-7bd9-4d51-b6da-36b4877d9099.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\d2c35670-3183-4df7-87e0-92f885fe6fab.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\1f0deeda-a235-40de-af6b-9a5485675f18.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\04ff3167-0974-47b7-86c6-24f9b5719f54.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\091b098f-e0e6-433a-9227-a625bad527e7.js</f>
+    </LastOpenedFilePaths>
+    <FileHistory>
+      <f>C:\Users\Steve\AppData\Local\Temp\\091b098f-e0e6-433a-9227-a625bad527e7.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\04ff3167-0974-47b7-86c6-24f9b5719f54.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\1f0deeda-a235-40de-af6b-9a5485675f18.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\d2c35670-3183-4df7-87e0-92f885fe6fab.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\f267c9d5-7bd9-4d51-b6da-36b4877d9099.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\c0cc3aac-2ecd-4b93-9451-7bf89465c59a.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\655d2984-d0df-45a0-84ed-90001f1b2aab.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\a19795eb-a104-4721-99ac-4fe2107cc441.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\23658f9c-fb2f-461f-aaff-d20cee8a93ae.js</f>
+    </FileHistory>
+    <CurrentServer name="ncmongoeast2.cloudapp.net:27018">
+      <CurrentDatabase>gatewaydev</CurrentDatabase>
+    </CurrentServer>
+  </Miscellaneous>
+</DocumentElement>

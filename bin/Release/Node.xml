@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DocumentElement>
+  <Options comments="linked to UI form">
+    <General>
+      <TempFolder>%temp%\</TempFolder>
+      <DeleteTempFolderContents>true</DeleteTempFolderContents>
+    </General>
+    <Query>
+      <QueryFolder>%temp%\\MongoQueries</QueryFolder>
+    </Query>
+    <CustomJavascriptFiles comments="not linked to Options form, yet">
+      <Path>.\Scripts\underscore.js</Path>
+      <Path>.\Scripts\AutoCompleter.js</Path>
+      <Path>.\Scripts\Custom.js</Path>
+      <PathX>.\Scripts\UUIHelper.js</PathX>
+    </CustomJavascriptFiles>
+    <UsefulScriptFiles comments="not linked to Options form, yet">
+      <Path>H:\underscore.js</Path>
+    </UsefulScriptFiles>
+    <QueryOutputTypes current="notepad.exe">
+      <T>MongoUI</T>
+      <T>notepad.exe</T>
+    </QueryOutputTypes>
+    <SQLCmd current="localhost">
+      <S name="localhost">
+        <ExePath>c:\Program Files\Microsoft SQL Server\110\Tools\Binn\SQLCMD.EXE</ExePath>
+        <Server>localhost</Server>
+        <Database>test</Database>
+        <Query>
+        </Query>
+      </S>
+    </SQLCmd>
+    <CodeSnippets current="3789">
+      <Group name="3789">
+        <Path name="1">e:\Users\ztan\Desktop\demo\1.txt</Path>
+        <Path name="2">e:\Users\ztan\Desktop\demo\2.txt</Path>
+        <Path name="3">e:\Users\ztan\Desktop\demo\3.txt</Path>
+      </Group>
+    </CodeSnippets>
+  </Options>
+  <Servers comments="edit this to fill the combo boxes in application">
+    <Server name="localhost" alias="localhost" withWarning="false">
+      <Database name="test">
+        <Collections>
+          <C name="2015-12-18T14:55:53.788-0500 W NETWORK  [thread1] Failed to connect to 127.0.0.1:27017, reason: errno:10061 No connection could be made because the target machine actively refused it." />
+          <C name="2015-12-18T14:55:53.788-0500 E QUERY    [thread1] Error: couldn't connect to server localhost:27017, connection attempt failed :" />
+          <C name="connect@src/mongo/shell/mongo.js:226:14" />
+          <C name="@(connect):1:6" />
+          <C name="exception: connect failed" />
+        </Collections>
+      </Database>
+      <Database name="temp">
+      </Database>
+      <Database name="system">
+      </Database>
+    </Server>
+    <Server name="ncmongoeast2.cloudapp.net:27018" alias="ncmongoeast2.cloudapp.net:27018" withWarning="false">
+      <Database name="gatewaydev">
+        <Collections>
+          <C name="Cannot use 'commands' readMode, degrading to 'legacy' mode" />
+        </Collections>
+      </Database>
+      <Database name="temp">
+      </Database>
+      <Database name="system">
+      </Database>
+    </Server>
+    <Server name="beta" alias="beta" withWarning="true">
+      <Database name="test">
+      </Database>
+      <Database name="temp">
+      </Database>
+      <Database name="system">
+      </Database>
+    </Server>
+  </Servers>
+  <Miscellaneous comments="not for configuration; used by application only">
+    <LastOpenedFilePath>
+    </LastOpenedFilePath>
+    <LastOpenedFilePaths>
+      <f>C:\Users\Steve\Desktop\story_one_query_one.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\23658f9c-fb2f-461f-aaff-d20cee8a93ae.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\a19795eb-a104-4721-99ac-4fe2107cc441.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\655d2984-d0df-45a0-84ed-90001f1b2aab.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\c0cc3aac-2ecd-4b93-9451-7bf89465c59a.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\511db8d3-11e4-4606-bb49-6cca4cda1deb.js</f>
+    </LastOpenedFilePaths>
+    <FileHistory>
+      <f>C:\Users\Steve\AppData\Local\Temp\\511db8d3-11e4-4606-bb49-6cca4cda1deb.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\c0cc3aac-2ecd-4b93-9451-7bf89465c59a.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\655d2984-d0df-45a0-84ed-90001f1b2aab.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\a19795eb-a104-4721-99ac-4fe2107cc441.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\23658f9c-fb2f-461f-aaff-d20cee8a93ae.js</f>
+      <f>C:\Users\Steve\Desktop\story_one_query_one.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\fa06f97c-2e2e-4a8c-ac71-8c6515c2e8ec.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\f78bfeb9-625f-4b3b-ac4f-ddbdfeca293a.js</f>
+    </FileHistory>
+    <CurrentServer name="ncmongoeast2.cloudapp.net:27018">
+      <CurrentDatabase>gatewaydev</CurrentDatabase>
+    </CurrentServer>
+  </Miscellaneous>
+</DocumentElement>
