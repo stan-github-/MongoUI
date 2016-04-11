@@ -77,23 +77,23 @@ namespace DBUI.Queries {
             scintilla.StyleResetDefault();
             scintilla.Styles[Style.Default].Font = "Consolas";
             scintilla.Styles[Style.Default].Size = 10;
-            scintilla.Styles[Style.Default].ForeColor = Color.DarkGreen;
+            scintilla.Styles[Style.Default].ForeColor = Color.Wheat;
             scintilla.Styles[Style.Default].BackColor = Color.Black;
             scintilla.StyleClearAll();
 
             // Configure the CPP (C#) lexer styles
-            scintilla.Styles[Style.Cpp.Default].ForeColor = Color.Silver;
-            scintilla.Styles[Style.Cpp.Comment].ForeColor = Color.FromArgb(0, 128, 0); // Green
-            scintilla.Styles[Style.Cpp.CommentLine].ForeColor = Color.FromArgb(0, 128, 0); // Green
-            scintilla.Styles[Style.Cpp.CommentLineDoc].ForeColor = Color.FromArgb(128, 128, 128); // Gray
+            scintilla.Styles[Style.Cpp.Default].ForeColor = Color.Orange;
+            scintilla.Styles[Style.Cpp.Comment].ForeColor = Color.GhostWhite; // Green
+            scintilla.Styles[Style.Cpp.CommentLine].ForeColor = Color.GhostWhite; // Green
+            scintilla.Styles[Style.Cpp.CommentLineDoc].ForeColor = Color.GhostWhite; // Gray
             scintilla.Styles[Style.Cpp.Number].ForeColor = Color.Olive;
-            scintilla.Styles[Style.Cpp.Word].ForeColor = Color.Blue;
-            scintilla.Styles[Style.Cpp.Word2].ForeColor = Color.Blue;
-            scintilla.Styles[Style.Cpp.String].ForeColor = Color.FromArgb(163, 21, 21); // Red
-            scintilla.Styles[Style.Cpp.Character].ForeColor = Color.FromArgb(163, 21, 21); // Red
-            scintilla.Styles[Style.Cpp.Verbatim].ForeColor = Color.FromArgb(163, 21, 21); // Red
+            scintilla.Styles[Style.Cpp.Word].ForeColor = Color.BlueViolet;
+            scintilla.Styles[Style.Cpp.Word2].ForeColor = Color.Orange;
+            scintilla.Styles[Style.Cpp.String].ForeColor = Color.LimeGreen; // Red
+            scintilla.Styles[Style.Cpp.Character].ForeColor = Color.LimeGreen; // Red
+            scintilla.Styles[Style.Cpp.Verbatim].ForeColor = Color.LimeGreen; // Red
             scintilla.Styles[Style.Cpp.StringEol].BackColor = Color.Pink;
-            scintilla.Styles[Style.Cpp.Operator].ForeColor = Color.Purple;
+            scintilla.Styles[Style.Cpp.Operator].ForeColor = Color.Silver;
             scintilla.Styles[Style.Cpp.Preprocessor].ForeColor = Color.Maroon;
             scintilla.Lexer = Lexer.Cpp;
 
@@ -103,9 +103,9 @@ namespace DBUI.Queries {
 
             scintilla.CaretForeColor = Color.Transparent;
 
-            scintilla.Styles[Style.BraceLight].BackColor = Color.LightGray;
-            scintilla.Styles[Style.BraceLight].ForeColor = Color.BlueViolet;
-            scintilla.Styles[Style.BraceBad].ForeColor = Color.Red;
+            scintilla.Styles[Style.BraceLight].BackColor = Color.Black;
+            scintilla.Styles[Style.BraceLight].ForeColor = Color.White;
+            scintilla.Styles[Style.BraceBad].ForeColor = Color.Magenta;
            
         }
 

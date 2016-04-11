@@ -17,7 +17,7 @@
     <UsefulScriptFiles comments="not linked to Options form, yet">
       <Path>H:\underscore.js</Path>
     </UsefulScriptFiles>
-    <QueryOutputTypes current="notepad.exe">
+    <QueryOutputTypes current="MongoUI">
       <T>MongoUI</T>
       <T>notepad.exe</T>
     </QueryOutputTypes>
@@ -59,12 +59,32 @@
       <Database name="gatewaydev">
         <Collections>
           <C name="&#xA;&#xD;Cannot use 'commands' readMode, degrading to 'legacy' mode" />
+          <C name="assessmentScoreDeltaLog" />
           <C name="dictionaryObjectCollection" />
           <C name="sessions" />
           <C name="settings" />
           <C name="students" />
           <C name="system.indexes" />
           <C name="system.users" />
+          <C name="tests" />
+          <C name="&#xA;&#xD;" />
+        </Collections>
+      </Database>
+      <Database name="admin">
+        <Collections>
+          <C name="&#xA;&#xD;Cannot use 'commands' readMode, degrading to 'legacy' mode" />
+          <C name="assessmentScoreDeltaLog" />
+          <C name="sessions" />
+          <C name="settings" />
+          <C name="students" />
+          <C name="students_old_delete soon" />
+          <C name="system.backup_users" />
+          <C name="system.indexes" />
+          <C name="system.js" />
+          <C name="system.new_users" />
+          <C name="system.roles" />
+          <C name="system.users" />
+          <C name="system.version" />
           <C name="&#xA;&#xD;" />
         </Collections>
       </Database>
@@ -87,26 +107,25 @@
     </LastOpenedFilePath>
     <LastOpenedFilePaths>
       <f>C:\Users\Steve\Desktop\story_one_query_one.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\23658f9c-fb2f-461f-aaff-d20cee8a93ae.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\a19795eb-a104-4721-99ac-4fe2107cc441.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\655d2984-d0df-45a0-84ed-90001f1b2aab.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\c0cc3aac-2ecd-4b93-9451-7bf89465c59a.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\f267c9d5-7bd9-4d51-b6da-36b4877d9099.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\d2c35670-3183-4df7-87e0-92f885fe6fab.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\1f0deeda-a235-40de-af6b-9a5485675f18.js</f>
       <f>C:\Users\Steve\AppData\Local\Temp\\04ff3167-0974-47b7-86c6-24f9b5719f54.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\091b098f-e0e6-433a-9227-a625bad527e7.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\ash-student-bad-delta-log</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\two-awesome-generic</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\node stuff</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\mongo_generic_stuff</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\mongo_race_condition</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\5fb1a558-1de4-4b82-b070-a100b6f01e17.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\a9f6bce2-e299-4218-9762-ef6c7de8c27d.js</f>
     </LastOpenedFilePaths>
     <FileHistory>
-      <f>C:\Users\Steve\AppData\Local\Temp\\091b098f-e0e6-433a-9227-a625bad527e7.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\a9f6bce2-e299-4218-9762-ef6c7de8c27d.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\5fb1a558-1de4-4b82-b070-a100b6f01e17.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\mongo_race_condition</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\mongo_generic_stuff</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\node stuff</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\two-awesome-generic</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\ash-student-bad-delta-log</f>
       <f>C:\Users\Steve\AppData\Local\Temp\\04ff3167-0974-47b7-86c6-24f9b5719f54.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\1f0deeda-a235-40de-af6b-9a5485675f18.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\d2c35670-3183-4df7-87e0-92f885fe6fab.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\f267c9d5-7bd9-4d51-b6da-36b4877d9099.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\c0cc3aac-2ecd-4b93-9451-7bf89465c59a.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\655d2984-d0df-45a0-84ed-90001f1b2aab.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\a19795eb-a104-4721-99ac-4fe2107cc441.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\23658f9c-fb2f-461f-aaff-d20cee8a93ae.js</f>
+      <f>C:\Users\Steve\Desktop\story_one_query_one.js</f>
     </FileHistory>
     <CurrentServer name="ncmongoeast2.cloudapp.net:27018">
       <CurrentDatabase>gatewaydev</CurrentDatabase>
