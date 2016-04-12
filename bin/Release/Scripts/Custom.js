@@ -13,13 +13,13 @@ var printjson =
     (function () {
         var printOriginal = printjson;
 
-        var f = 
+        var f =
             function (x) {
                 if (x._collection) {
-                    x.forEach(function (z) { printOriginal(z + ','); });
+                    x.forEach(function (z) { printOriginal(z); printOriginal(','); });
                     return;
                 }
-    
+
                 printOriginal(x);
             };
 

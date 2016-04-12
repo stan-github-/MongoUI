@@ -57,8 +57,7 @@ namespace DBUI.Queries
             var queryFilePath = QueryFileManager.PrepareJsFile(query);
 
             //message manager;
-            MessageManager = new MessageManager
-                (queryFilePath, QueryFileManager.GetQueryErrorLineNumOffset());
+            MessageManager.QueryErrorLineNumOffset = QueryFileManager.GetQueryErrorLineNumOffset();
             
             //actually executing the query using file
             //execute file
@@ -93,8 +92,7 @@ namespace DBUI.Queries
             var queryFilePath = QueryFileManager.PrepareJsFile(query);
 
             //message manager;
-            MessageManager = new MessageManager
-                (queryFilePath, QueryFileManager.GetQueryErrorLineNumOffset());
+            MessageManager.QueryErrorLineNumOffset = QueryFileManager.GetQueryErrorLineNumOffset();
 
             //actually executing the query using file
             //execute file

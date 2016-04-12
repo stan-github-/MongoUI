@@ -214,7 +214,9 @@ namespace DBUI.Queries {
             SetQueryOutputDisplayType();
 
             //instantiate child class
-            _queryExecuter = new JavaScriptExecuter();
+            _queryExecuter = new JavaScriptExecuter() { 
+                MessageManager = new MessageManager(this.QueryFilePath)
+            };
 
             return true;
         }
@@ -283,11 +285,12 @@ namespace DBUI.Queries {
                                 ? this.QueryBox.Text
                                 : QueryBox.SelectedText;
 
-            //DispalyQueryOutput(_queryExecuter.ExecuteMongo(query));
-            DispalyQueryOutput(_queryExecuter.Execute(query));
+            var output = _queryExecuter.Execute(query);
+            DispalyQueryOutput(output);
             
             var javascriptError = _queryExecuter.
                     MessageManager.GetJavascriptQueryError();
+
             if (!String.IsNullOrEmpty(javascriptError))
             {
                 ErrorManager.Write(javascriptError);

@@ -15,9 +15,9 @@ namespace DBUI.Queries
 
     public class MessageManager {
 
-        public MessageManager(string queryFilePath, int errorLineNumOffset) {
+        public MessageManager(string queryFilePath) {
             this.QueryFilePath = queryFilePath;
-            this.QueryErrorLineNumOffset = errorLineNumOffset;
+            //this.QueryErrorLineNumOffset = errorLineNumOffset;
             StandardOut = new StringBuilder();
             StandardError = new StringBuilder();
         }
