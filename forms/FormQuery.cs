@@ -214,8 +214,12 @@ namespace DBUI.Queries {
             SetQueryOutputDisplayType();
 
             //instantiate child class
-            _queryExecuter = new JavaScriptExecuter() { 
-                MessageManager = new MessageManager(this.QueryFilePath)
+            _queryExecuter = new JavaScriptExecuter()
+            {
+                MessageManager = new MessageManager(this.QueryFilePath),
+                QueryFileManager = new QueryFileManager() { 
+                    QueryFilePath = this.QueryFilePath
+                }
             };
 
             return true;

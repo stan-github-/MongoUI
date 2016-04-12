@@ -54,6 +54,10 @@ namespace DBUI.Queries
 
         private void SetTempFilePaths()
         {
+            if (!String.IsNullOrEmpty(QueryFilePath)) {
+                return;
+            }
+
             QueryFilePath = Environment.ExpandEnvironmentVariables
                 (Program.JsEngine.Repository.TempFolderPath
                 + "\\" + Guid.NewGuid() + ".js");    

@@ -16,9 +16,12 @@ namespace DBUI.Queries
             {
                 return new List<String>();
             }
-            
 
-            var executor = new JavaScriptExecuter() ;
+
+            var executor = new JavaScriptExecuter() { QueryFileManager = new QueryFileManager() };
+            //todo, a bit hacky here
+            executor.MessageManager = new MessageManager(executor.QueryFileManager.QueryFilePath);
+
             executor.QueryExecutionConfiguration.NoFeedBack = true;
                 
             //custom function defined in script file!
