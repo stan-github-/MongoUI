@@ -61,6 +61,7 @@
           <C name="&#xA;&#xD;Cannot use 'commands' readMode, degrading to 'legacy' mode" />
           <C name="assessmentScoreDeltaLog" />
           <C name="dictionaryObjectCollection" />
+          <C name="mongoritotests" />
           <C name="sessions" />
           <C name="settings" />
           <C name="students" />
@@ -107,6 +108,7 @@
     </LastOpenedFilePath>
     <LastOpenedFilePaths>
       <f>C:\Users\Steve\Desktop\story_one_query_one.js</f>
+      <f>C:\Users\Steve\Desktop\mongoQueries\two-awesome-shortened.js</f>
       <f>C:\Users\Steve\AppData\Local\Temp\\04ff3167-0974-47b7-86c6-24f9b5719f54.js</f>
       <f>C:\Users\Steve\AppData\Local\Temp\ash-student-bad-delta-log</f>
       <f>C:\Users\Steve\AppData\Local\Temp\two-awesome-generic</f>
@@ -125,9 +127,9 @@
       <f>C:\Users\Steve\AppData\Local\Temp\two-awesome-generic</f>
       <f>C:\Users\Steve\AppData\Local\Temp\ash-student-bad-delta-log</f>
       <f>C:\Users\Steve\AppData\Local\Temp\\04ff3167-0974-47b7-86c6-24f9b5719f54.js</f>
-      <f>C:\Users\Steve\Desktop\story_one_query_one.js</f>
+      <f>C:\Users\Steve\Desktop\mongoQueries\two-awesome-shortened.js</f>
     </FileHistory>
-    <CurrentServer name="ncmongoeast2.cloudapp.net:27018">
+    <CurrentServer name="localhost">
       <CurrentDatabase>gatewaydev</CurrentDatabase>
     </CurrentServer>
   </Miscellaneous>

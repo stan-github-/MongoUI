@@ -18,7 +18,10 @@ namespace DBUI.Query.AutoComplete
             get {
                 if (_queryExecuter == null)
                 {
-                    _queryExecuter = new JavaScriptExecuter();
+                    _queryExecuter = new JavaScriptExecuter() { 
+                        QueryFileManager = new QueryFileManager()
+                    };
+                    _queryExecuter.MessageManager = new MessageManager(_queryExecuter.QueryFileManager.QueryFilePath);
                     _queryExecuter.QueryExecutionConfiguration.NoFeedBack = true;
                     return _queryExecuter;
                 }

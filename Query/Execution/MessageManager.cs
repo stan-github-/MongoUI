@@ -27,6 +27,11 @@ namespace DBUI.Queries
         public int QueryErrorLineNumOffset { get; set; }
         public string QueryFilePath { get; set; }
 
+        public void Reset() {
+            StandardOut = new StringBuilder();
+            StandardError = new StringBuilder();
+        }
+
         public String StandardErrorAndOut
         {
             get
