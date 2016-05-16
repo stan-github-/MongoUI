@@ -15,6 +15,10 @@ var printjson =
 
         var f =
             function (x) {
+                if (!x) {
+                    printOriginal(x);
+                    return;
+                }
                 if (x._collection) {
                     x.forEach(function (z) { printOriginal(z); printOriginal(','); });
                     return;

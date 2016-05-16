@@ -118,7 +118,9 @@ namespace DBUI {
 
         private void OpenFileWithFileDialog(object sender, EventArgs e)
         {
-            var mongoChildForm = new FormQuery(this).Init(FormQuery.Mode.FileDialog);
+            //var mongoChildForm = new FormQuery(this).Init(FormQuery.Mode.FileDialog);
+            var filePath = this.OpenOpenFileDialog();
+            var mongoChildForm = new FormQuery(this).Init(FormQuery.Mode.Existing, filePath);
         }
 
         private void OpenNewQueryFile(object sender, EventArgs e)
@@ -442,6 +444,25 @@ namespace DBUI {
             
         }
         
+        private string OpenOpenFileDialog()
+        {
+            this.open_file_dialog.InitialDirectory =
+                Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            this.open_file_dialog.Filter = "JS Files (*.js)|*.js|All Files (*.*)|*.*";
+            
+            //minimize window, can't hide
+            if (this.MdiParent != null && this.MdiParent.ActiveMdiChild != null)
+            {
+                this.open_file_dialog.InitialDirectory = 
+                    Path.GetDirectoryName(this.MdiParent.ActiveMdiChild.Text);
+            }
+            
+            if (this.open_file_dialog.ShowDialog(this) != DialogResult.OK)
+            {
+                return String.Empty;
+            }
+            return this.open_file_dialog.FileName;
+        }
         
         
 

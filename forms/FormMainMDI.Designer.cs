@@ -92,6 +92,7 @@ namespace DBUI {
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.open_file_dialog = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.status_strip.SuspendLayout();
@@ -441,6 +442,10 @@ namespace DBUI {
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
             // 
+            // open_file_dialog
+            // 
+            this.open_file_dialog.FileName = "open_file_dialog";
+            // 
             // FormMainMDI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -506,6 +511,7 @@ namespace DBUI {
         private System.Windows.Forms.ToolStripMenuItem exportSubMenu;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ToolStripComboBox jsEngineComboBox;
+        private System.Windows.Forms.OpenFileDialog open_file_dialog;
     }
 }
 
