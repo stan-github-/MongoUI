@@ -430,15 +430,13 @@ namespace DBUI {
             this.databaseComboBox.Visible = isMongo;
         }
 
-
         void jsEngineComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             SaveJsEngineType();
             Program.JsEngine.Repository.Init(Program.MainXMLManager.CurrentEngine);
             SetJsEngineComboBox();
         }
-
-        
+      
         private void SaveJsEngineType()
         {
             if (String.IsNullOrEmpty(this.jsEngineComboBox.Text))
