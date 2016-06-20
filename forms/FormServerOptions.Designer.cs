@@ -212,6 +212,7 @@
             this.list_view_database.Size = new System.Drawing.Size(703, 390);
             this.list_view_database.TabIndex = 0;
             this.list_view_database.UseCompatibleStateImageBehavior = false;
+            this.list_view_database.View = System.Windows.Forms.View.List;
             // 
             // FormServerOptions
             // 

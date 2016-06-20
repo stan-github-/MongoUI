@@ -13,6 +13,8 @@ namespace DBUI.DataModel {
         //update this to database object
         public Database CurrentDatabase {get; set;}
         public bool WithWarning { get; set; }
+        public String UserName { get; set; }
+        public String Password { get; set; }
     }
 
     public class Database

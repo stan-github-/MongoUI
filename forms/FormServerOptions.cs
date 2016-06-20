@@ -1,4 +1,5 @@
-﻿using DBUI.Queries;
+﻿using DBUI.Forms;
+using DBUI.Queries;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -59,6 +60,39 @@ namespace DBUI {
         private void SetEventHandlers() {
             this.list_view_server.ItemSelectionChanged += new ListViewItemSelectionChangedEventHandler
                 (ListViewServer_SelectionChangedEventHandler);
+            this.button_database_add.Click += new EventHandler(ButtonDatabaseAdd_EventHandler);
+        }
+
+        private void ButtonDatabaseAdd_SetNewItem(String item)
+        {
+            if (this.list_view_server.SelectedItems.Count != 1)
+            {
+                return;
+            }
+
+            var serverName = this.list_view_server.SelectedItems[0].Text;
+            var mongoRepo = GetMongoRepo();
+            var databases = mongoRepo.Servers.First(s => s.Name == serverName).Databases;
+
+            databases.Add(new DataModel.Database()
+            {
+                Name = item,
+            });
+
+            Program.JsEngine.Repository.SaveXml();
+            Program.MainXMLManager.SaveXml();
+
+            SetMongoDatabases(serverName);
+        }
+
+        private void ButtonDatabaseAdd_EventHandler(object sender, EventArgs e){
+            
+            var form = new FormNewItem() {
+                callBack = ButtonDatabaseAdd_SetNewItem
+            };
+
+            form.ShowDialog();
+            
         }
 
         private void ListViewServer_SelectionChangedEventHandler(object sender, ListViewItemSelectionChangedEventArgs e) 
@@ -67,31 +101,33 @@ namespace DBUI {
             SetMongoDatabases(serverName);
         }
 
-        private void SetMongoDatabases(string serverName)
-        {
+        private MongoXMLRepository GetMongoRepo() {
             if (Program.MainXMLManager.CurrentEngine != JsEngineType.MongoDB)
             {
-                return;
+                return null;
             }
-
-            this.list_view_database.Clear();
 
             var mongoRepo = (MongoXMLRepository)Program.JsEngine.MongoEngine.Repository;
 
-            foreach (var database in mongoRepo.Servers.First(s=>s.Name == serverName).Databases)
+            return mongoRepo;
+        }
+
+        private void SetMongoDatabases(string serverName)
+        {
+            var mongoRepo = GetMongoRepo();
+
+            this.list_view_database.Clear();
+
+            var databases = mongoRepo.Servers.First(s=>s.Name == serverName).Databases;
+
+            foreach (var database in databases)
             {
                 this.list_view_database.Items.Add(new ListViewItem(database.Name));
             }
         }
 
-        private void SetMongoServers() { 
-            if (Program.MainXMLManager.CurrentEngine != JsEngineType.MongoDB){
-                return;
-            }
-
-            var mongoEngine = Program.JsEngine.MongoEngine;
-
-            var mongoRepo = (MongoXMLRepository)mongoEngine.Repository;
+        private void SetMongoServers() {
+            var mongoRepo = GetMongoRepo();
 
             foreach (var server in mongoRepo.Servers) {
                 this.list_view_server.Items.Add(new ListViewItem(server.Name));

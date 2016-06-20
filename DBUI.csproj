@@ -59,6 +59,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataModel\JsEngine.cs" />
+    <Compile Include="Forms\FormNewItem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormNewItem.Designer.cs">
+      <DependentUpon>FormNewItem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormOptions.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -134,6 +140,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormMainMDI.resx">
       <DependentUpon>FormMainMDI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormNewItem.resx">
+      <DependentUpon>FormNewItem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormOptions.resx">
       <DependentUpon>FormOptions.cs</DependentUpon>
