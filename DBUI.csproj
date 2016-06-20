@@ -59,6 +59,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataModel\JsEngine.cs" />
+    <Compile Include="Forms\FormOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormOptions.designer.cs">
+      <DependentUpon>FormOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormServerOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormServerOptions.Designer.cs">
+      <DependentUpon>FormServerOptions.cs</DependentUpon>
+    </Compile>
     <Compile Include="JsEngine\JsEngine.cs" />
     <Compile Include="JsEngine\JsEngineProxy.cs" />
     <Compile Include="Query\AutoComplete\ObjectChainParser.cs" />
@@ -98,12 +110,6 @@
     <Compile Include="Forms\FormMainMDI.Designer.cs">
       <DependentUpon>FormMainMDI.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormOptions.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormOptions.Designer.cs">
-      <DependentUpon>FormOptions.cs</DependentUpon>
-    </Compile>
     <Compile Include="Query\AutoComplete\AutoCompleteUI.cs" />
     <Compile Include="Query\AutoComplete\CollectionAutoCompleter.cs" />
     <Compile Include="Forms\FormQuery.cs">
@@ -134,6 +140,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormQuery.resx">
       <DependentUpon>FormQuery.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormServerOptions.resx">
+      <DependentUpon>FormServerOptions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

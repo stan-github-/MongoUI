@@ -9,8 +9,8 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace DBUI {
-    public partial class FormOptions : Form {
-        public FormOptions() {
+    public partial class FormServerOptions : Form {
+        public FormServerOptions() {
             InitializeComponent();
             init();
         }
