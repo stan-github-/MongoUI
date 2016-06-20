@@ -11,23 +11,23 @@ namespace DBUI.JsEngine
         public JsEngine.JsEngine<MongoXMLRepository> MongoEngine;
         public JsEngine.JsEngine<NodeXMLRepository> NodeEngine;
         
-        public JsEngine<JsEngineXMLRepository> CurrentEngine
-        {
-            get
-            {
-                if (Program.MainXMLManager.CurrentEngine == JsEngineType.MongoDB)
-                {
-                    //this has to be an interface
-                    return (JsEngine<JsEngineXMLRepository>)(Object)MongoEngine;
-                }
-                else if (Program.MainXMLManager.CurrentEngine == JsEngineType.Node)
-                {
-                    return (JsEngine<JsEngineXMLRepository>)(Object)NodeEngine;
-                }
+        //public JsEngine<JsEngineXMLRepository> CurrentEngine
+        //{
+        //    get
+        //    {
+        //        if (Program.MainXMLManager.CurrentEngine == JsEngineType.MongoDB)
+        //        {
+        //            //this has to be an interface
+        //            return (JsEngine<JsEngineXMLRepository>)(Object)MongoEngine;
+        //        }
+        //        else if (Program.MainXMLManager.CurrentEngine == JsEngineType.Node)
+        //        {
+        //            return (JsEngine<JsEngineXMLRepository>)(Object)NodeEngine;
+        //        }
 
-                return null;
-            }
-        }
+        //        return null;
+        //    }
+        //}
 
         public JsEngineXMLRepository Repository {
             get

@@ -42,12 +42,11 @@
     <Server name="localhost" alias="localhost" withWarning="false" isCurrent="true">
       <Database name="test">
         <Collections>
-          <C name="exception: connect failed" />
-          <C name="&#xA;&#xD;2016-01-12T10:30:27.656-0500 W NETWORK  [thread1] Failed to connect to 127.0.0.1:27017, reason: errno:10061 No connection could be made because the target machine actively refused it." />
-          <C name="2016-01-12T10:30:27.656-0500 E QUERY    [thread1] Error: couldn't connect to server localhost:27017, connection attempt failed :" />
+          <C name="2015-12-18T14:55:53.788-0500 W NETWORK  [thread1] Failed to connect to 127.0.0.1:27017, reason: errno:10061 No connection could be made because the target machine actively refused it." />
+          <C name="2015-12-18T14:55:53.788-0500 E QUERY    [thread1] Error: couldn't connect to server localhost:27017, connection attempt failed :" />
           <C name="connect@src/mongo/shell/mongo.js:226:14" />
-          <C name="@(connect):1:21" />
-          <C name="&#xA;&#xD;" />
+          <C name="@(connect):1:6" />
+          <C name="exception: connect failed" />
         </Collections>
       </Database>
       <Database name="temp">
@@ -55,37 +54,24 @@
       <Database name="system">
       </Database>
     </Server>
-    <Server name="ncmongoeast2.cloudapp.net:27018" alias="ncmongoeast2.cloudapp.net:27018" withWarning="true" isCurrent="false">
+    <Server name="ncmongodev.westus.cloudapp.azure.com:27018" alias="ncmongodev.westus.cloudapp.azure.com:27018" withWarning="false" isCurrent="false">
       <Database name="gatewaydev">
         <Collections>
-          <C name="&#xA;&#xD;Cannot use 'commands' readMode, degrading to 'legacy' mode" />
-          <C name="assessmentScoreDeltaLog" />
-          <C name="dictionaryObjectCollection" />
-          <C name="mongoritotests" />
-          <C name="sessions" />
-          <C name="settings" />
-          <C name="students" />
-          <C name="system.indexes" />
-          <C name="system.users" />
-          <C name="tests" />
-          <C name="&#xA;&#xD;" />
+          <C name="Cannot use 'commands' readMode, degrading to 'legacy' mode" />
         </Collections>
       </Database>
-      <Database name="admin">
+      <Database name="ashandsteve">
         <Collections>
           <C name="&#xA;&#xD;Cannot use 'commands' readMode, degrading to 'legacy' mode" />
-          <C name="assessmentScoreDeltaLog" />
-          <C name="sessions" />
-          <C name="settings" />
-          <C name="students" />
-          <C name="students_old_delete soon" />
-          <C name="system.backup_users" />
-          <C name="system.indexes" />
-          <C name="system.js" />
-          <C name="system.new_users" />
-          <C name="system.roles" />
-          <C name="system.users" />
-          <C name="system.version" />
+          <C name="2016-06-20T12:52:22.410-0400 E QUERY    [thread1] Error: error: { &quot;$err&quot; : &quot;not master and slaveOk=false&quot;, &quot;code&quot; : 13435 } :" />
+          <C name="_getErrorWithCode@src/mongo/shell/utils.js:23:13" />
+          <C name="DBQuery.prototype.next@src/mongo/shell/query.js:288:1" />
+          <C name="DB.prototype._getCollectionInfosSystemNamespaces@src/mongo/shell/db.js:717:23" />
+          <C name="DB.prototype.getCollectionInfos@src/mongo/shell/db.js:762:12" />
+          <C name="DB.prototype.getCollectionNames@src/mongo/shell/db.js:769:12" />
+          <C name="GetCollectionNames@C:\Users\Steve\AppData\Local\Temp\\7297a2a7-f2e7-4c29-80b4-2593872403f6.js:8:13" />
+          <C name="@C:\Users\Steve\AppData\Local\Temp\\7297a2a7-f2e7-4c29-80b4-2593872403f6.js:43:1" />
+          <C name="failed to load: C:\Users\Steve\AppData\Local\Temp\\7297a2a7-f2e7-4c29-80b4-2593872403f6.js" />
           <C name="&#xA;&#xD;" />
         </Collections>
       </Database>
@@ -107,30 +93,16 @@
     <LastOpenedFilePath>
     </LastOpenedFilePath>
     <LastOpenedFilePaths>
-      <f>C:\Users\Steve\Desktop\story_one_query_one.js</f>
-      <f>C:\Users\Steve\Desktop\mongoQueries\two-awesome-shortened.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\04ff3167-0974-47b7-86c6-24f9b5719f54.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\ash-student-bad-delta-log</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\two-awesome-generic</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\node stuff</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\mongo_generic_stuff</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\mongo_race_condition</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\5fb1a558-1de4-4b82-b070-a100b6f01e17.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\a9f6bce2-e299-4218-9762-ef6c7de8c27d.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\525179cb-e88e-45c1-a2c7-e9926d3a62cf.js</f>
     </LastOpenedFilePaths>
     <FileHistory>
-      <f>C:\Users\Steve\AppData\Local\Temp\\a9f6bce2-e299-4218-9762-ef6c7de8c27d.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\5fb1a558-1de4-4b82-b070-a100b6f01e17.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\mongo_race_condition</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\mongo_generic_stuff</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\node stuff</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\two-awesome-generic</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\ash-student-bad-delta-log</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\04ff3167-0974-47b7-86c6-24f9b5719f54.js</f>
-      <f>C:\Users\Steve\Desktop\mongoQueries\two-awesome-shortened.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\525179cb-e88e-45c1-a2c7-e9926d3a62cf.js</f>
+      <f>C:\Users\Steve\Desktop\story_one_query_one.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\5539516f-2f1a-4780-948f-e0fdee34e7fe.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\f78bfeb9-625f-4b3b-ac4f-ddbdfeca293a.js</f>
     </FileHistory>
-    <CurrentServer name="localhost">
-      <CurrentDatabase>gatewaydev</CurrentDatabase>
+    <CurrentServer name="ncmongodev.westus.cloudapp.azure.com:27018">
+      <CurrentDatabase>ashandsteve</CurrentDatabase>
     </CurrentServer>
   </Miscellaneous>
 </DocumentElement>
