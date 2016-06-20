@@ -19,6 +19,7 @@ namespace DBUI {
     public partial class FormMainMDI : Form {
         
         private FormOptions form_options;
+        private FormServerOptions form_server_options;
 
         public String ServerName
         {
@@ -38,8 +39,8 @@ namespace DBUI {
         private CollectionAutoCompleter _autoCompleter = new CollectionAutoCompleter();
 
         private bool Init() {
-            //if (Program.MongoXMLManager.Init() == false) { return false; }
-
+            
+            this.setToolStripMenuItem();
             this.SetJsEngineComboBox();
 
             this.SetDropDownFileHistory();
@@ -248,6 +249,35 @@ namespace DBUI {
 
         #endregion
 
+        #region tools/options tools/servers
+        private void setToolStripMenuItem(){
+            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
+            this.serversToolStripMenuItem.Click += new EventHandler(this.serversToolStripMenuItem_Click);
+        }
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.form_options == null || this.form_options.IsDisposed == true)
+            {
+                this.form_options = new FormOptions();
+            }
+
+            this.form_options.Show();
+
+        }
+        private void serversToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.form_server_options == null || this.form_server_options.IsDisposed == true)
+            {
+                this.form_server_options = new FormServerOptions();
+            }
+
+            this.form_server_options.Show();
+
+        }
+    
+        #endregion  
+
         #region "new features"
         private void SetMongoCollectionsOnDataImport()
         {
@@ -318,22 +348,6 @@ namespace DBUI {
             {
                 childForm.Close();
             }
-        }
-
-        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //MessageBox.Show("Not Implemented");
-            //return;
-            if (this.form_options == null)
-            {
-                this.form_options = new FormOptions();
-            }
-            if (this.form_options.IsDisposed == true)
-            {
-                this.form_options = new FormOptions();
-            }
-            this.form_options.Show();
-
         }
 
         private void button_refresh_Click(object sender, EventArgs e)
