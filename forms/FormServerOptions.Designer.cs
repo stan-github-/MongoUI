@@ -203,6 +203,7 @@
             this.button_database_delete.TabIndex = 2;
             this.button_database_delete.Text = "&Delete";
             this.button_database_delete.UseVisualStyleBackColor = true;
+            
             // 
             // list_view_database
             // 

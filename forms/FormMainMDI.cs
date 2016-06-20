@@ -170,6 +170,7 @@ namespace DBUI {
 
         private void SetDatabaseComboBox()
         {
+
             var server = 
                 Program.JsEngine.MongoEngine.Repository.Servers.Where
                 (x => x.Name == serverComboBox.Text).FirstOrDefault();
@@ -182,7 +183,7 @@ namespace DBUI {
 
             try
             {
-                //databaseComboBox.Items.Clear();
+                databaseComboBox.Items.Clear();
                 server.Databases.ForEach
                     (x => {
                         if (!databaseComboBox.Items.Contains(x.Name)){

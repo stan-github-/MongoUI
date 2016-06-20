@@ -38,6 +38,8 @@ namespace DBUI {
         }
 
         private void button_cancel_Click(object sender, EventArgs e) {
+
+            Program.JsEngine.Repository.Init(JsEngineType.MongoDB);
             this.Close();
         }
 
@@ -61,6 +63,7 @@ namespace DBUI {
             this.list_view_server.ItemSelectionChanged += new ListViewItemSelectionChangedEventHandler
                 (ListViewServer_SelectionChangedEventHandler);
             this.button_database_add.Click += new EventHandler(ButtonDatabaseAdd_EventHandler);
+            this.button_database_delete.Click += new System.EventHandler(this.button_database_delete_Click);
         }
 
         private void ButtonDatabaseAdd_SetNewItem(String item)
@@ -73,13 +76,24 @@ namespace DBUI {
             var serverName = this.list_view_server.SelectedItems[0].Text;
             var mongoRepo = GetMongoRepo();
             mongoRepo.AddDatabase(serverName, item);
-            
-            //Program.JsEngine.Repository.SaveXml();
-            //Program.MainXMLManager.SaveXml();
-
+         
             SetMongoDatabases(serverName);
         }
 
+        private void button_database_delete_Click(object sender, EventArgs e)
+        {
+            if (this.list_view_server.SelectedItems.Count != 1 || 
+                this.list_view_database.SelectedItems.Count != 1)
+            {
+                return;
+            }
+            
+            var serverName = this.list_view_server.SelectedItems[0].Text;
+            var mongoRepo = GetMongoRepo();
+            mongoRepo.DeleteDatabase(serverName, this.list_view_database.SelectedItems[0].Text);
+            SetMongoDatabases(serverName);
+        }
+        
         private void ButtonDatabaseAdd_EventHandler(object sender, EventArgs e){
             
             var form = new FormNewItem() {
@@ -128,5 +142,6 @@ namespace DBUI {
                 this.list_view_server.Items.Add(new ListViewItem(server.Name));
             }
         }
+
     }
 }

@@ -109,10 +109,41 @@ namespace DBUI.Queries {
                 return;
             }
 
-            var databaseNode = this.CreateNode("database", null);
+            var databaseNode = this.CreateNode("Database", null);
             this.AppendAttribute(databaseNode, "name", database);
             serverNode.AppendChild(databaseNode);
+        }
 
+        public void DeleteDatabase(String server, String database)
+        {
+            var serverNode = RootNode.SelectNodes(_servers + "/*").ToList().FirstOrDefault(
+                    x => x.SelectSingleNode("@name").Value == server);
+            if (serverNode == null)
+            {
+                return;
+            }
+
+            var databaseNode = serverNode.SelectNodes("Database").ToList().FirstOrDefault(
+                    d =>
+                    {
+                        var node = d.SelectSingleNode("@name");
+                        if (node != null)
+                        {
+                            return d.SelectSingleNode("@name").Value == database;
+                        }
+                        else {
+                            return false;
+                        }
+                        
+                    });
+                
+            if (databaseNode == null)
+            {
+                return;
+            }
+
+            serverNode.RemoveChild(databaseNode);
+            
         }
 
         private List<String> GetCollectionList(XmlNode n)
