@@ -100,6 +100,21 @@ namespace DBUI.Queries {
             return l;
         }
 
+        public void AddDatabase(String server, String database)
+        {
+            var serverNode = RootNode.SelectNodes(_servers + "/*").ToList().FirstOrDefault(
+                    x => x.SelectSingleNode("@name").Value == server);
+            if (serverNode == null)
+            {
+                return;
+            }
+
+            var databaseNode = this.CreateNode("database", null);
+            this.AppendAttribute(databaseNode, "name", database);
+            serverNode.AppendChild(databaseNode);
+
+        }
+
         private List<String> GetCollectionList(XmlNode n)
         {
             if (n == null)

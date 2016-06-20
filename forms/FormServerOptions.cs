@@ -72,15 +72,10 @@ namespace DBUI {
 
             var serverName = this.list_view_server.SelectedItems[0].Text;
             var mongoRepo = GetMongoRepo();
-            var databases = mongoRepo.Servers.First(s => s.Name == serverName).Databases;
-
-            databases.Add(new DataModel.Database()
-            {
-                Name = item,
-            });
-
-            Program.JsEngine.Repository.SaveXml();
-            Program.MainXMLManager.SaveXml();
+            mongoRepo.AddDatabase(serverName, item);
+            
+            //Program.JsEngine.Repository.SaveXml();
+            //Program.MainXMLManager.SaveXml();
 
             SetMongoDatabases(serverName);
         }

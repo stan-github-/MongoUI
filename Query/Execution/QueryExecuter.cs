@@ -63,7 +63,7 @@ namespace DBUI.Queries
             //actually executing the query using file
             //execute file
             String arguments = String.Format(
-                "{0} --quiet --host {1} {2} ",
+                "{0} --quiet --host {1} {2} --username ryan --password root88",
                 Program.JsEngine.MongoEngine.Repository.CurrentServer.CurrentDatabase.Name,
                 Program.JsEngine.MongoEngine.Repository.CurrentServer.Name,
                 queryFilePath);
