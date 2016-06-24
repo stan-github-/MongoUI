@@ -32,11 +32,15 @@
             this.list_view_server = new System.Windows.Forms.ListView();
             this.tab_control = new System.Windows.Forms.TabControl();
             this.tab_page_databases = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.database_split_container = new System.Windows.Forms.SplitContainer();
-            this.button_database_add = new System.Windows.Forms.Button();
-            this.button_database_delete = new System.Windows.Forms.Button();
             this.list_view_database = new System.Windows.Forms.ListView();
+            this.button_database_delete = new System.Windows.Forms.Button();
+            this.button_database_add = new System.Windows.Forms.Button();
+            this.tab_page_user_password = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tex_box_password = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textbox_user = new System.Windows.Forms.TextBox();
             this.layout_panel.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.main_split_conntainer)).BeginInit();
@@ -49,6 +53,7 @@
             this.database_split_container.Panel1.SuspendLayout();
             this.database_split_container.Panel2.SuspendLayout();
             this.database_split_container.SuspendLayout();
+            this.tab_page_user_password.SuspendLayout();
             this.SuspendLayout();
             // 
             // layout_panel
@@ -128,7 +133,9 @@
             // list_view_server
             // 
             this.list_view_server.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.list_view_server.HideSelection = false;
             this.list_view_server.Location = new System.Drawing.Point(0, 0);
+            this.list_view_server.MultiSelect = false;
             this.list_view_server.Name = "list_view_server";
             this.list_view_server.Size = new System.Drawing.Size(360, 476);
             this.list_view_server.TabIndex = 4;
@@ -138,7 +145,7 @@
             // tab_control
             // 
             this.tab_control.Controls.Add(this.tab_page_databases);
-            this.tab_control.Controls.Add(this.tabPage2);
+            this.tab_control.Controls.Add(this.tab_page_user_password);
             this.tab_control.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tab_control.Location = new System.Drawing.Point(0, 0);
             this.tab_control.Name = "tab_control";
@@ -156,16 +163,6 @@
             this.tab_page_databases.TabIndex = 0;
             this.tab_page_databases.Text = "databases";
             this.tab_page_databases.UseVisualStyleBackColor = true;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(709, 450);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // database_split_container
             // 
@@ -186,25 +183,6 @@
             this.database_split_container.SplitterDistance = 390;
             this.database_split_container.TabIndex = 0;
             // 
-            // button_database_add
-            // 
-            this.button_database_add.Location = new System.Drawing.Point(520, 12);
-            this.button_database_add.Name = "button_database_add";
-            this.button_database_add.Size = new System.Drawing.Size(75, 23);
-            this.button_database_add.TabIndex = 1;
-            this.button_database_add.Text = "&Add";
-            this.button_database_add.UseVisualStyleBackColor = true;
-            // 
-            // button_database_delete
-            // 
-            this.button_database_delete.Location = new System.Drawing.Point(614, 12);
-            this.button_database_delete.Name = "button_database_delete";
-            this.button_database_delete.Size = new System.Drawing.Size(75, 23);
-            this.button_database_delete.TabIndex = 2;
-            this.button_database_delete.Text = "&Delete";
-            this.button_database_delete.UseVisualStyleBackColor = true;
-            
-            // 
             // list_view_database
             // 
             this.list_view_database.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -214,6 +192,70 @@
             this.list_view_database.TabIndex = 0;
             this.list_view_database.UseCompatibleStateImageBehavior = false;
             this.list_view_database.View = System.Windows.Forms.View.List;
+            // 
+            // button_database_delete
+            // 
+            this.button_database_delete.Location = new System.Drawing.Point(614, 12);
+            this.button_database_delete.Name = "button_database_delete";
+            this.button_database_delete.Size = new System.Drawing.Size(75, 23);
+            this.button_database_delete.TabIndex = 2;
+            this.button_database_delete.Text = "&Delete";
+            this.button_database_delete.UseVisualStyleBackColor = true;
+            // 
+            // button_database_add
+            // 
+            this.button_database_add.Location = new System.Drawing.Point(520, 12);
+            this.button_database_add.Name = "button_database_add";
+            this.button_database_add.Size = new System.Drawing.Size(75, 23);
+            this.button_database_add.TabIndex = 1;
+            this.button_database_add.Text = "&Add";
+            this.button_database_add.UseVisualStyleBackColor = true;
+            // 
+            // tab_page_user_password
+            // 
+            this.tab_page_user_password.Controls.Add(this.label2);
+            this.tab_page_user_password.Controls.Add(this.tex_box_password);
+            this.tab_page_user_password.Controls.Add(this.label1);
+            this.tab_page_user_password.Controls.Add(this.textbox_user);
+            this.tab_page_user_password.Location = new System.Drawing.Point(4, 22);
+            this.tab_page_user_password.Name = "tab_page_user_password";
+            this.tab_page_user_password.Padding = new System.Windows.Forms.Padding(3);
+            this.tab_page_user_password.Size = new System.Drawing.Size(709, 450);
+            this.tab_page_user_password.TabIndex = 1;
+            this.tab_page_user_password.Text = "user password";
+            this.tab_page_user_password.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(28, 79);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(53, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Password";
+            // 
+            // tex_box_password
+            // 
+            this.tex_box_password.Location = new System.Drawing.Point(104, 72);
+            this.tex_box_password.Name = "tex_box_password";
+            this.tex_box_password.Size = new System.Drawing.Size(226, 20);
+            this.tex_box_password.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(28, 29);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "User";
+            // 
+            // textbox_user
+            // 
+            this.textbox_user.Location = new System.Drawing.Point(102, 22);
+            this.textbox_user.Name = "textbox_user";
+            this.textbox_user.Size = new System.Drawing.Size(226, 20);
+            this.textbox_user.TabIndex = 0;
             // 
             // FormServerOptions
             // 
@@ -235,6 +277,8 @@
             this.database_split_container.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.database_split_container)).EndInit();
             this.database_split_container.ResumeLayout(false);
+            this.tab_page_user_password.ResumeLayout(false);
+            this.tab_page_user_password.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -251,10 +295,14 @@
         private System.Windows.Forms.TabControl tab_control;
         private System.Windows.Forms.TabPage tab_page_databases;
         private System.Windows.Forms.SplitContainer database_split_container;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tab_page_user_password;
         private System.Windows.Forms.ListView list_view_database;
         private System.Windows.Forms.Button button_database_delete;
         private System.Windows.Forms.Button button_database_add;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox tex_box_password;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textbox_user;
 
 
     }

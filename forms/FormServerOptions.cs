@@ -23,39 +23,39 @@ namespace DBUI {
         }
 
         public void finalize() {
+
+            //save user name and password
+            var server = list_view_server.SelectedItems[0].Text;
+            this.SaveUserAndPasswordToXMLCache(server);
+
             Program.JsEngine.Repository.SaveXml();
         }
 
         private void button_save_Click(object sender, EventArgs e) {
-            SaveControls();
             this.finalize();
             this.Close();
         }
 
         private void button_apply_Click(object sender, EventArgs e) {
-            SaveControls();
             this.finalize();
         }
 
         private void button_cancel_Click(object sender, EventArgs e) {
-
+            //todo:
+            //reload everything from saved xml file
+            //may not be the best, since file history is lost
+            //could make this just reload the servers and not any other
             Program.JsEngine.Repository.Init(JsEngineType.MongoDB);
             this.Close();
         }
 
         private void SetControls() {
-            SetMongoServers();
+            SetDisplayMongoServers();
+
+            this.list_view_server.Items[0].Selected = true;
 
             SetEventHandlers();
-            //this.textBoxQueryFolder.Text = Program.MainXMLManager.QueryFolderPath;
-            //this.TextBoxTempFolder.Text = Program.MainXMLManager.TempFolderPath;
-            //this.checkBoxDeleteTempFolderContents.Checked = Program.MainXMLManager.DeleteTempFolderContents;
-        }
-
-        private void SaveControls() {
-            //Program.MainXMLManager.QueryFolderPath = this.textBoxQueryFolder.Text;
-            //Program.MainXMLManager.TempFolderPath = this.TextBoxTempFolder.Text;
-            //Program.MainXMLManager.DeleteTempFolderContents = this.checkBoxDeleteTempFolderContents.Checked;   
+            
         }
 
 
@@ -77,7 +77,7 @@ namespace DBUI {
             var mongoRepo = GetMongoRepo();
             mongoRepo.AddDatabase(serverName, item);
          
-            SetMongoDatabases(serverName);
+            SetDisplayMongoDatabases(serverName);
         }
 
         private void button_database_delete_Click(object sender, EventArgs e)
@@ -91,7 +91,7 @@ namespace DBUI {
             var serverName = this.list_view_server.SelectedItems[0].Text;
             var mongoRepo = GetMongoRepo();
             mongoRepo.DeleteDatabase(serverName, this.list_view_database.SelectedItems[0].Text);
-            SetMongoDatabases(serverName);
+            SetDisplayMongoDatabases(serverName);
         }
         
         private void ButtonDatabaseAdd_EventHandler(object sender, EventArgs e){
@@ -107,7 +107,8 @@ namespace DBUI {
         private void ListViewServer_SelectionChangedEventHandler(object sender, ListViewItemSelectionChangedEventArgs e) 
         {
             var serverName = e.Item.Text;
-            SetMongoDatabases(serverName);
+            SetDisplayMongoDatabases(serverName);
+            SetDisplayUserAndPassword(serverName);
         }
 
         private MongoXMLRepository GetMongoRepo() {
@@ -121,7 +122,7 @@ namespace DBUI {
             return mongoRepo;
         }
 
-        private void SetMongoDatabases(string serverName)
+        private void SetDisplayMongoDatabases(string serverName)
         {
             var mongoRepo = GetMongoRepo();
 
@@ -135,7 +136,7 @@ namespace DBUI {
             }
         }
 
-        private void SetMongoServers() {
+        private void SetDisplayMongoServers() {
             var mongoRepo = GetMongoRepo();
 
             foreach (var server in mongoRepo.Servers) {
@@ -143,5 +144,19 @@ namespace DBUI {
             }
         }
 
+        private void SetDisplayUserAndPassword(string serverName) {
+            var mongoRepo = GetMongoRepo();
+
+            this.textbox_user.Text = mongoRepo.GetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.user);
+            this.tex_box_password.Text = mongoRepo.GetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.password);
+            
+        }
+
+        private void SaveUserAndPasswordToXMLCache(string serverName) {
+            var mongoRepo = GetMongoRepo();
+
+            mongoRepo.SetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.user, this.textbox_user.Text);
+            mongoRepo.SetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.password, this.tex_box_password.Text);
+        }
     }
 }

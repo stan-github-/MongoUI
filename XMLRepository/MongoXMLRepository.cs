@@ -178,5 +178,48 @@ namespace DBUI.Queries {
                          value.CurrentDatabase.Name;
             }
         }
+
+        public enum ServerAttribute { 
+            name,
+            alias,
+            withWarning,
+            isCurrent,
+            user,
+            password,
+        }
+
+        public string GetServerAttribute(String server, ServerAttribute attribute) {
+            var serverNode = RootNode.SelectNodes(_servers + "/*").ToList().FirstOrDefault(
+                    x => x.SelectSingleNode("@name").Value == server);
+            if (serverNode == null)
+            {
+                return null;
+            }
+
+            var node = serverNode.SelectSingleNode(String.Format("@{0}", attribute.ToString()));
+            if (node == null) {
+                return null;
+            }
+
+            return node.Value;
+        }
+
+        public string SetServerAttribute(String server, ServerAttribute attribute, String value)
+        {
+            var serverNode = RootNode.SelectNodes(_servers + "/*").ToList().FirstOrDefault(
+                    x => x.SelectSingleNode("@name").Value == server);
+            if (serverNode == null)
+            {
+                return null;
+            }
+
+            var node = serverNode.SelectSingleNode(String.Format("@{0}", attribute.ToString()));
+            if (node == null)
+            {
+                node = this.AppendAttribute(serverNode, attribute.ToString(), value);
+            }
+
+            return node.Value = value;
+        }
     }
 }
