@@ -10,7 +10,7 @@
     </Query>
     <CustomJavascriptFiles comments="not linked to Options form, yet">
       <Path>.\Scripts\underscore.js</Path>
-      <Path>.\Scripts\AutoCompleter.js</Path>
+      <Path>.\Scripts\GetCollectionNames.js</Path>
       <Path>.\Scripts\Custom.js</Path>
       <PathX>.\Scripts\UUIHelper.js</PathX>
     </CustomJavascriptFiles>

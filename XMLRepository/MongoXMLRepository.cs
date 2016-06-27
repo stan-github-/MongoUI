@@ -65,6 +65,7 @@ namespace DBUI.Queries {
         public void SetCollectionList(List<String> l, String server, String database) {
             var serverNode = RootNode.SelectNodes(_servers + "/*").ToList().FirstOrDefault(
                      x => x.SelectSingleNode("@name").Value == server);
+
             if (serverNode == null) { 
                 return; 
             }

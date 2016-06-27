@@ -286,7 +286,10 @@ namespace DBUI {
                 return;
             }
             
-            return; //code not working
+            return; 
+            //todo
+            //todo:code not working
+
             var currentDB = Program.JsEngine.MongoEngine.Repository.CurrentServer.Databases.FirstOrDefault(
                 d => Name == Program.JsEngine.MongoEngine.Repository.CurrentServer.CurrentDatabase.Name);
             if (currentDB == null)
