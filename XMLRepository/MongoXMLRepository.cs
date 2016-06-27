@@ -308,5 +308,27 @@ namespace DBUI.Queries
             return snippetFiles;
             
         }
+
+        public void DeleteSnippetFile(String groupName, String name)
+        {
+            var groupNode = RootNode.SelectNodes(_codeSnippets + "/*").ToList().FirstOrDefault(
+                    x => x.SelectSingleNode("@name").Value == groupName);
+
+            if (groupNode == null)
+            {
+                return;
+            }
+
+            var fileNode = groupNode.SelectNodes("*").ToList().FirstOrDefault(
+                    x => x.SelectSingleNode("@name").Value == name);
+
+            if (fileNode == null)
+            {
+                return;
+            }
+
+            groupNode.RemoveChild(fileNode);
+
+        }
     }
 }

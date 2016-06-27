@@ -84,15 +84,17 @@ namespace DBUI {
 
         private void buttonFileDelete_Click(object sender, EventArgs e)
         {
-            return;
             if (this.list_view_files.SelectedItems.Count != 1)
             {
                 return;
             }
-            
-            var serverName = this.list_view_files.SelectedItems[0].Text;
-            var mongoRepo = GetMongoRepo();
-            //mongoRepo.DeleteDatabase(serverName, this.list_view_files.SelectedItems[0].Text);
+
+            var groupName = this.list_view_files.SelectedItems[0].SubItems[0].Text;
+            var name = this.list_view_files.SelectedItems[0].SubItems[1].Text;
+
+            this.list_view_files.Items.Remove(this.list_view_files.SelectedItems[0]);
+
+            Program.JsEngine.MongoEngine.Repository.DeleteSnippetFile(groupName, name);
         }
         
         private void ButtonDatabaseAdd_EventHandler(object sender, EventArgs e){
