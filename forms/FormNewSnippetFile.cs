@@ -12,18 +12,26 @@ namespace DBUI.Forms
 {
     public partial class FormNewSnippetFile : Form
     {
-        public delegate void CallBack(String value, string groupName, string name);
+        public delegate void CallBack(string groupName, string name, String filePath);
 
         public CallBack callBack { get; set; }
+
         public FormNewSnippetFile()
         {
             InitializeComponent();
 
             this.button_okay.Click += button_okay_Click;
             this.button_file_path.Click += button_file_path_Click;
-            
+
+            SetGroupNameComboBox();    
         }
 
+        private void SetGroupNameComboBox() {
+            var groupNames = Program.JsEngine.MongoEngine.Repository.GetSnippetFiles()
+                .Select(f => f.GroupName).Distinct();
+
+            groupNames.ToList().ForEach(g => this.combo_box_group_name.Items.Add(g));
+        }
 
         private string OpenOpenFileDialog()
         {
@@ -68,7 +76,14 @@ namespace DBUI.Forms
 
         void button_okay_Click(object sender, EventArgs e)
         {
-            this.callBack(this.text_box_file_path.Text, this.combo_box_group_name.SelectedText, this.text_box_snippet_name.Text);
+            if (String.IsNullOrEmpty(this.combo_box_group_name.Text) ||
+                string.IsNullOrEmpty(this.text_box_snippet_name.Text) ||
+                string.IsNullOrEmpty(this.text_box_file_path.Text)) {
+                    ErrorManager.Write("Must fill all fields!");
+                    return;
+            }
+
+            this.callBack(this.combo_box_group_name.Text, this.text_box_snippet_name.Text, this.text_box_file_path.Text);
 
             try
             {

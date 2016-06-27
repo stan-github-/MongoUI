@@ -49,20 +49,12 @@ namespace DBUI {
             this.Close();
         }
 
-        private void ConfigFileViewFiles() {
-
-            //this.list_view_files.Columns.Add("GroupName");
-            //this.list_view_files.Columns.Add("Name");
-            //this.list_view_files.Columns.Add("File Path");
-
-        }
-
+       
         private void SetControls() {
             SetDisplaySnippetFiles();
 
             //this.list_view_files.Items[0].Selected = true;
-            SetEventHandlers();
-            
+            SetEventHandlers();     
         }
 
 
@@ -71,16 +63,23 @@ namespace DBUI {
             this.button_delete_file.Click += new System.EventHandler(this.buttonFileDelete_Click);
         }
 
+
+        public void AddNewFile(string groupName, string name, String filePath) {
+            var listItem = new ListViewItem(groupName);
+            listItem.SubItems.Add(name);
+            listItem.SubItems.Add(filePath);
+            list_view_files.Items.Add(listItem);
+
+            Program.JsEngine.MongoEngine.Repository.AddSnippetFile(groupName, name, filePath);
+
+        }
         
         private void ButtonFileAdd_EventHandler(object sender, EventArgs e)
         {
-
-            //var filePath = OpenOpenFileDialog();
-
-            //var mongoRepo = GetMongoRepo();
-            //mongoRepo.AddDatabase(serverName, item);
-         
-            //SetDisplayMongoDatabases(serverName);
+            var form = new FormNewSnippetFile() { 
+                callBack = AddNewFile
+            };
+            form.Show();
         }
 
         private void buttonFileDelete_Click(object sender, EventArgs e)

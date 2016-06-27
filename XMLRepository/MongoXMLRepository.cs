@@ -273,7 +273,7 @@ namespace DBUI.Queries
         {
             //option, codesnippets
             var group = RootNode.SelectNodes(_codeSnippets + "/*").ToList()
-                .First(g => g.Name == groupName);
+                .FirstOrDefault(g => g.SelectSingleNode("@name").Value == groupName);
 
             if (group == null)
             {
@@ -282,7 +282,8 @@ namespace DBUI.Queries
                 RootNode.SelectSingleNode(_codeSnippets).AppendChild(group);
             }
 
-            var fileNode = this.CreateNode(name, filePath);
+            var fileNode = this.CreateNode("Path", filePath);
+            this.AppendAttribute(fileNode, "name", name);
             group.AppendChild(fileNode);
         }
 
