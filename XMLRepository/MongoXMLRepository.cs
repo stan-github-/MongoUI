@@ -40,12 +40,20 @@ namespace DBUI.Queries {
             {
                 var n = RootNode.SelectSingleNode(_servers);
                 List<Server> servers = new List<Server>();
+                
                 foreach (XmlNode m in n.SelectNodes("Server"))
                 {
+                    var userName = m.SelectSingleNode("@user");
+                    var password = m.SelectSingleNode("@password");
+
                     var s = new Server()
                     {
                         Name = m.SelectSingleNode("@name").Value,
-                        WithWarning = bool.Parse(m.SelectSingleNode("@withWarning").Value)
+                        WithWarning = bool.Parse(m.SelectSingleNode("@withWarning").Value),
+                        User = userName != null? userName.Value: null,
+                        Password = password != null? password.Value: null,   
+                        Alias = m.SelectSingleNode("@alias").Value
+                        
                     };
                     s.Databases = GetDatabase(m);
                     servers.Add(s);
@@ -164,17 +172,15 @@ namespace DBUI.Queries {
         public Server CurrentServer {
             get {
                 XmlNode n = RootNode.SelectSingleNode(_currentServer);
-                String database = n.SelectSingleNode("CurrentDatabase").InnerXml;
-                var userName = n.SelectSingleNode("@userName");
-                var password = n.SelectSingleNode("@password");
-                Server s = new Server()
-                    {
-                        Name = n.SelectSingleNode("@name").Value,
-                        UserName = userName!=null? userName.Value: null,
-                        Password = password!=null? password.Value: null,
-                        CurrentDatabase = new Database { Name = database },
-                    };
-                return s;
+                Server serverNode = Servers.Where
+                    (s => s.Name == n.SelectSingleNode("@name").Value).First();
+                String currentDatabase = n.SelectSingleNode("CurrentDatabase").InnerXml;
+
+                serverNode.CurrentDatabase = new Database()
+                {
+                    Name = currentDatabase
+                };
+                return serverNode;
             }
             set {
                 RootNode.SelectSingleNode(_currentServer + "/@name").Value = value.Name;

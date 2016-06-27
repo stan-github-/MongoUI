@@ -64,10 +64,10 @@ namespace DBUI.Queries
             //execute file
             var currentServer = Program.JsEngine.MongoEngine.Repository.CurrentServer;
             String arguments = String.Format(
-                "{0} --quiet --host {1} {2} --username {3} --password {4}",
+                "{0} --quiet --host {1} --username {2} --password {3} {4}",
                 currentServer.CurrentDatabase.Name,
                 currentServer.Name,
-                currentServer.UserName,
+                currentServer.User,
                 currentServer.Password,
                 queryFilePath);
 
