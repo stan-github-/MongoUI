@@ -23,4 +23,11 @@ namespace DBUI.DataModel {
         public String Name { get; set; }
         public List<String> Collections { get; set; }
     }
+
+    public class SnippetFile {
+        public String GroupName { get; set; }
+        public String Name { get; set; }
+        public String FilePath { get; set; }
+    }
+
 }

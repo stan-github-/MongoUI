@@ -66,6 +66,29 @@ namespace DBUI.Queries
             }
         }
 
+        public Server CurrentServer
+        {
+            get
+            {
+                XmlNode n = RootNode.SelectSingleNode(_currentServer);
+                Server serverNode = Servers.Where
+                    (s => s.Name == n.SelectSingleNode("@name").Value).First();
+                String currentDatabase = n.SelectSingleNode("CurrentDatabase").InnerXml;
+
+                serverNode.CurrentDatabase = new Database()
+                {
+                    Name = currentDatabase
+                };
+                return serverNode;
+            }
+            set
+            {
+                RootNode.SelectSingleNode(_currentServer + "/@name").Value = value.Name;
+                RootNode.SelectSingleNode(_currentServer + "/CurrentDatabase").InnerXml =
+                         value.CurrentDatabase.Name;
+            }
+        }
+
         public void SetCollectionList(List<String> l, String server, String database)
         {
             var serverNode = RootNode.SelectNodes(_servers + "/*").ToList().FirstOrDefault(
@@ -179,29 +202,6 @@ namespace DBUI.Queries
             return l;
         }
 
-        public Server CurrentServer
-        {
-            get
-            {
-                XmlNode n = RootNode.SelectSingleNode(_currentServer);
-                Server serverNode = Servers.Where
-                    (s => s.Name == n.SelectSingleNode("@name").Value).First();
-                String currentDatabase = n.SelectSingleNode("CurrentDatabase").InnerXml;
-
-                serverNode.CurrentDatabase = new Database()
-                {
-                    Name = currentDatabase
-                };
-                return serverNode;
-            }
-            set
-            {
-                RootNode.SelectSingleNode(_currentServer + "/@name").Value = value.Name;
-                RootNode.SelectSingleNode(_currentServer + "/CurrentDatabase").InnerXml =
-                         value.CurrentDatabase.Name;
-            }
-        }
-
         public enum ServerAttribute
         {
             name,
@@ -284,6 +284,28 @@ namespace DBUI.Queries
 
             var fileNode = this.CreateNode(name, filePath);
             group.AppendChild(fileNode);
+        }
+
+        public List<SnippetFile> GetSnippetFiles()
+        {
+            //option, codesnippets
+            var snippetFileGroups = RootNode.SelectNodes(_codeSnippets + "/*").ToList();
+
+            var snippetFiles = new List<SnippetFile>();
+
+            snippetFileGroups.ForEach(g =>
+                g.SelectNodes("*").ToList().ForEach(s =>
+                    snippetFiles.Add(new SnippetFile()
+                    {
+                        GroupName = g.SelectSingleNode("@name").Value,
+                        FilePath = s.InnerXml,
+                        Name = s.SelectSingleNode("@name").Value
+                    })
+                )
+             );
+
+            return snippetFiles;
+            
         }
     }
 }

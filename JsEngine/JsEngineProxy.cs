@@ -56,6 +56,18 @@ namespace DBUI.JsEngine
             
         }
 
+        public MongoXMLRepository GetMongoRepo()
+        {
+            if (Program.MainXMLManager.CurrentEngine != JsEngineType.MongoDB)
+            {
+                return null;
+            }
+
+            var mongoRepo = this.MongoEngine.Repository;
+
+            return mongoRepo;
+        }
+
         //todo when to reload the repor
     }
 }
