@@ -243,8 +243,10 @@ namespace DBUI {
         private void SetDropDownCodeSnippet()
         {
             Program.JsEngine.Repository.CodeSnippets.ForEach
-                (f => this.snippetsMenu.DropDownItems.Add(f)
-            );
+                (f =>{
+                    string s = String.Format("{0};{1}", f.Name, f.FilePath);
+                    this.snippetsMenu.DropDownItems.Add(s);
+                });
         }
 
         #endregion

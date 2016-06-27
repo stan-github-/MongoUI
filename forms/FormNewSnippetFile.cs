@@ -27,7 +27,7 @@ namespace DBUI.Forms
         }
 
         private void SetGroupNameComboBox() {
-            var groupNames = Program.JsEngine.MongoEngine.Repository.GetSnippetFiles()
+            var groupNames = Program.JsEngine.MongoEngine.Repository.CodeSnippets
                 .Select(f => f.GroupName).Distinct();
 
             groupNames.ToList().ForEach(g => this.combo_box_group_name.Items.Add(g));

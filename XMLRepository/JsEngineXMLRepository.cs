@@ -74,27 +74,27 @@ namespace DBUI.Queries {
             }
         }
 
-        public List<String> CodeSnippets
+        public List<SnippetFile> CodeSnippets
         {
             get
             {
-                XmlNode n = RootNode.SelectSingleNode(_codeSnippets);
-                if (n == null)
-                {
-                    return new List<String>();
-                }
+                //option, codesnippets
+                var snippetFileGroups = RootNode.SelectNodes(_codeSnippets + "/*").ToList();
 
-                var currentGroup = n.SelectNodes("*").ToList().FirstOrDefault
-                        (x => x.SelectSingleNode("@name").Value
-                        == n.SelectSingleNode("@current").Value);
+                var snippetFiles = new List<SnippetFile>();
 
-                if (currentGroup == null)
-                {
-                    return new List<String>();
-                }
+                snippetFileGroups.ForEach(g =>
+                    g.SelectNodes("*").ToList().ForEach(s =>
+                        snippetFiles.Add(new SnippetFile()
+                        {
+                            GroupName = g.SelectSingleNode("@name").Value,
+                            FilePath = s.InnerXml,
+                            Name = s.SelectSingleNode("@name").Value
+                        })
+                    )
+                 );
 
-                return currentGroup.SelectNodes("*").
-                    ToList().Select(x=>x.InnerText).ToList();
+                return snippetFiles;
 
             }
         }

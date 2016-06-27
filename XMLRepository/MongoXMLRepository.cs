@@ -287,27 +287,27 @@ namespace DBUI.Queries
             group.AppendChild(fileNode);
         }
 
-        public List<SnippetFile> GetSnippetFiles()
-        {
-            //option, codesnippets
-            var snippetFileGroups = RootNode.SelectNodes(_codeSnippets + "/*").ToList();
+        //public List<SnippetFile> GetSnippetFiles()
+        //{
+        //    //option, codesnippets
+        //    var snippetFileGroups = RootNode.SelectNodes(_codeSnippets + "/*").ToList();
 
-            var snippetFiles = new List<SnippetFile>();
+        //    var snippetFiles = new List<SnippetFile>();
 
-            snippetFileGroups.ForEach(g =>
-                g.SelectNodes("*").ToList().ForEach(s =>
-                    snippetFiles.Add(new SnippetFile()
-                    {
-                        GroupName = g.SelectSingleNode("@name").Value,
-                        FilePath = s.InnerXml,
-                        Name = s.SelectSingleNode("@name").Value
-                    })
-                )
-             );
+        //    snippetFileGroups.ForEach(g =>
+        //        g.SelectNodes("*").ToList().ForEach(s =>
+        //            snippetFiles.Add(new SnippetFile()
+        //            {
+        //                GroupName = g.SelectSingleNode("@name").Value,
+        //                FilePath = s.InnerXml,
+        //                Name = s.SelectSingleNode("@name").Value
+        //            })
+        //        )
+        //     );
 
-            return snippetFiles;
+        //    return snippetFiles;
             
-        }
+        //}
 
         public void DeleteSnippetFile(String groupName, String name)
         {

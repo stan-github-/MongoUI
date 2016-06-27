@@ -61,6 +61,7 @@ namespace DBUI {
         private void SetEventHandlers() {
             this.button_add_file.Click += new EventHandler(ButtonFileAdd_EventHandler);
             this.button_delete_file.Click += new System.EventHandler(this.buttonFileDelete_Click);
+            this.button_cancel.Click += new System.EventHandler(this.button_cancel_Click);
         }
 
 
@@ -96,17 +97,7 @@ namespace DBUI {
 
             Program.JsEngine.MongoEngine.Repository.DeleteSnippetFile(groupName, name);
         }
-        
-        private void ButtonDatabaseAdd_EventHandler(object sender, EventArgs e){
-            
-            var form = new FormNewItem() {
-                //callBack = ButtonFileAdd_SetNewItem
-            };
-
-            form.ShowDialog();
-            
-        }
-
+       
         
         private MongoXMLRepository GetMongoRepo() {
             return Program.JsEngine.GetMongoRepo();
@@ -126,7 +117,7 @@ namespace DBUI {
                 Text= "File Path"
             });
 
-            foreach (var file in mongoRepo.GetSnippetFiles()) {
+            foreach (var file in mongoRepo.CodeSnippets) {
                 var item = new ListViewItem(file.GroupName);
                 
                 item.SubItems.Add(file.Name);
@@ -134,20 +125,6 @@ namespace DBUI {
                 this.list_view_files.Items.Add(item);
             }
         }
-
-        private void SetDisplayUserAndPassword(string serverName) {
-            var mongoRepo = GetMongoRepo();
-
-           // this.textbox_user.Text = mongoRepo.GetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.user);
-            //this.tex_box_password.Text = mongoRepo.GetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.password);
-            
-        }
-
-        private void SaveUserAndPasswordToXMLCache(string serverName) {
-            var mongoRepo = GetMongoRepo();
-
-            //mongoRepo.SetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.user, this.textbox_user.Text);
-            //mongoRepo.SetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.password, this.tex_box_password.Text);
-        }
+       
     }
 }
