@@ -19,8 +19,8 @@ namespace DBUI {
     public partial class FormMainMDI : Form {
         
         private FormOptions form_options;
-        private FormServerOptions form_server_options;
-
+        private FormServerOptions form_options_server;
+        private FormOptionsSnippets form_options_snippet;
         public String ServerName
         {
             get { return serverComboBox.Text; }
@@ -203,9 +203,7 @@ namespace DBUI {
         private void serverComboBox_Select(object sender, EventArgs e)
         {
             SetDatabaseComboBox();
-            SaveCurrentServerAndDatabase();
-            //_autoCompleter.RefreshCurrentDBCollectionNames();
-        
+            SaveCurrentServerAndDatabase();        
         }
 
         private void databaseComboBox_Select(object sender, EventArgs e)
@@ -254,6 +252,7 @@ namespace DBUI {
         private void setToolStripMenuItem(){
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             this.serversToolStripMenuItem.Click += new EventHandler(this.serversToolStripMenuItem_Click);
+            this.snippetsToolStripMenuItem.Click += new EventHandler(this.snippetsToolStripMenuItem_Click);
         }
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -266,15 +265,26 @@ namespace DBUI {
             this.form_options.Show();
 
         }
-        private void serversToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void snippetsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.form_server_options == null || this.form_server_options.IsDisposed == true)
+            if (this.form_options == null || this.form_options.IsDisposed == true)
             {
-                this.form_server_options = new FormServerOptions();
+                this.form_options = new FormOptions();
             }
 
-            this.form_server_options.Show();
+            this.form_options.Show();
 
+        }
+
+        private void serversToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.form_options_server == null || this.form_options_server.IsDisposed == true)
+            {
+                this.form_options_server = new FormServerOptions();
+            }
+
+            this.form_options_server.Show();
         }
     
         #endregion  
