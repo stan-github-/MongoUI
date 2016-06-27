@@ -39,40 +39,36 @@
     </CodeSnippets>
   </Options>
   <Servers comments="edit this to fill the combo boxes in application">
-    <Server name="localhost" alias="localhost" withWarning="false" isCurrent="true">
+    <Server name="localhost" alias="localhost" withWarning="false" isCurrent="true" user="ryan" password="root88">
       <Database name="test">
         <Collections>
-          <C name="2015-12-18T14:55:53.788-0500 W NETWORK  [thread1] Failed to connect to 127.0.0.1:27017, reason: errno:10061 No connection could be made because the target machine actively refused it." />
-          <C name="2015-12-18T14:55:53.788-0500 E QUERY    [thread1] Error: couldn't connect to server localhost:27017, connection attempt failed :" />
-          <C name="connect@src/mongo/shell/mongo.js:226:14" />
-          <C name="@(connect):1:6" />
-          <C name="exception: connect failed" />
+          <C name="exception: login failed" />
+          <C name="&#xA;&#xD;2016-06-24T16:29:55.155-0400 E QUERY    [thread1] Error: Missing expected field &quot;pwd&quot; :" />
+          <C name="DB.prototype._authOrThrow@src/mongo/shell/db.js:1395:16" />
+          <C name="@(auth):5:1" />
+          <C name="@(auth):1:2" />
+          <C name="&#xA;&#xD;" />
         </Collections>
       </Database>
       <Database name="temp">
       </Database>
       <Database name="system">
       </Database>
+      <Database name="gatewaydev">
+        <Collections>
+          <C name="exception: login failed" />
+          <C name="&#xA;&#xD;2016-06-27T10:01:46.151-0400 E QUERY    [thread1] Error: Missing expected field &quot;pwd&quot; :" />
+          <C name="DB.prototype._authOrThrow@src/mongo/shell/db.js:1395:16" />
+          <C name="@(auth):5:1" />
+          <C name="@(auth):1:2" />
+          <C name="&#xA;&#xD;" />
+        </Collections>
+      </Database>
     </Server>
-    <Server name="ncmongodev.westus.cloudapp.azure.com:27018" alias="ncmongodev.westus.cloudapp.azure.com:27018" withWarning="false" isCurrent="false">
+    <Server name="ncmongoeast2.cloudapp.net:27018" alias="ncmongoeast2.cloudapp.net:27018" withWarning="false" isCurrent="false" user="ryan" password="root88">
       <Database name="gatewaydev">
         <Collections>
           <C name="Cannot use 'commands' readMode, degrading to 'legacy' mode" />
-        </Collections>
-      </Database>
-      <Database name="ashandsteve">
-        <Collections>
-          <C name="&#xA;&#xD;Cannot use 'commands' readMode, degrading to 'legacy' mode" />
-          <C name="2016-06-20T14:41:49.347-0400 E QUERY    [thread1] Error: error: { &quot;$err&quot; : &quot;not master and slaveOk=false&quot;, &quot;code&quot; : 13435 } :" />
-          <C name="_getErrorWithCode@src/mongo/shell/utils.js:23:13" />
-          <C name="DBQuery.prototype.next@src/mongo/shell/query.js:288:1" />
-          <C name="DB.prototype._getCollectionInfosSystemNamespaces@src/mongo/shell/db.js:717:23" />
-          <C name="DB.prototype.getCollectionInfos@src/mongo/shell/db.js:762:12" />
-          <C name="DB.prototype.getCollectionNames@src/mongo/shell/db.js:769:12" />
-          <C name="GetCollectionNames@C:\Users\Steve\AppData\Local\Temp\\15e90813-cdd9-425a-b287-55730c261b1c.js:8:13" />
-          <C name="@C:\Users\Steve\AppData\Local\Temp\\15e90813-cdd9-425a-b287-55730c261b1c.js:43:1" />
-          <C name="failed to load: C:\Users\Steve\AppData\Local\Temp\\15e90813-cdd9-425a-b287-55730c261b1c.js" />
-          <C name="&#xA;&#xD;" />
         </Collections>
       </Database>
       <Database name="temp">
@@ -87,22 +83,25 @@
       </Database>
       <Database name="system">
       </Database>
+      <Database name="safasfd" />
     </Server>
   </Servers>
   <Miscellaneous comments="not for configuration; used by application only">
     <LastOpenedFilePath>
     </LastOpenedFilePath>
     <LastOpenedFilePaths>
-      <f>C:\Users\Steve\AppData\Local\Temp\\525179cb-e88e-45c1-a2c7-e9926d3a62cf.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\b6326d86-4378-45eb-afc6-6d23364cba05.js</f>
+      <f>C:\Users\Steve\Desktop\story_one_query_one.js</f>
+      <f>C:\Users\Steve\Desktop\mongoQueries\two-awesome-shortened.js</f>
     </LastOpenedFilePaths>
     <FileHistory>
-      <f>C:\Users\Steve\AppData\Local\Temp\\525179cb-e88e-45c1-a2c7-e9926d3a62cf.js</f>
+      <f>C:\Users\Steve\Desktop\mongoQueries\two-awesome-shortened.js</f>
       <f>C:\Users\Steve\Desktop\story_one_query_one.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\5539516f-2f1a-4780-948f-e0fdee34e7fe.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\b6326d86-4378-45eb-afc6-6d23364cba05.js</f>
       <f>C:\Users\Steve\AppData\Local\Temp\\f78bfeb9-625f-4b3b-ac4f-ddbdfeca293a.js</f>
     </FileHistory>
-    <CurrentServer name="ncmongodev.westus.cloudapp.azure.com:27018">
-      <CurrentDatabase>ashandsteve</CurrentDatabase>
+    <CurrentServer name="localhost">
+      <CurrentDatabase>gatewaydev</CurrentDatabase>
     </CurrentServer>
   </Miscellaneous>
 </DocumentElement>

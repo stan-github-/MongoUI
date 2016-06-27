@@ -165,10 +165,14 @@ namespace DBUI.Queries {
             get {
                 XmlNode n = RootNode.SelectSingleNode(_currentServer);
                 String database = n.SelectSingleNode("CurrentDatabase").InnerXml;
+                var userName = n.SelectSingleNode("@userName");
+                var password = n.SelectSingleNode("@password");
                 Server s = new Server()
                     {
                         Name = n.SelectSingleNode("@name").Value,
-                        CurrentDatabase = new Database { Name = database }
+                        UserName = userName!=null? userName.Value: null,
+                        Password = password!=null? password.Value: null,
+                        CurrentDatabase = new Database { Name = database },
                     };
                 return s;
             }
