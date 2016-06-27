@@ -21,6 +21,7 @@ namespace DBUI {
         private FormOptions form_options;
         private FormServerOptions form_options_server;
         private FormOptionsSnippets form_options_snippet;
+
         public String ServerName
         {
             get { return serverComboBox.Text; }
@@ -268,12 +269,12 @@ namespace DBUI {
 
         private void snippetsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.form_options == null || this.form_options.IsDisposed == true)
+            if (this.form_options_snippet == null || this.form_options_snippet.IsDisposed == true)
             {
-                this.form_options = new FormOptions();
+                this.form_options_snippet = new FormOptionsSnippets();
             }
 
-            this.form_options.Show();
+            this.form_options_snippet.Show();
 
         }
 

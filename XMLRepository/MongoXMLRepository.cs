@@ -10,10 +10,12 @@ using System.Xml.XPath;
 using DBUI;
 using DBUI.DataModel;
 
-namespace DBUI.Queries {
-   
-    public class MongoXMLRepository : JsEngineXMLRepository {
-        
+namespace DBUI.Queries
+{
+
+    public class MongoXMLRepository : JsEngineXMLRepository
+    {
+
         private const String _lastFilePath = "Miscellaneous/LastOpenedFilePath";
         private const String _lastFilePaths = "Miscellaneous/LastOpenedFilePaths";
         private const String _FileHistory = "Miscellaneous/FileHistory";
@@ -27,20 +29,22 @@ namespace DBUI.Queries {
         private const String _queryOutputTypes = "Options/QueryOutputTypes";
         private const String _sqlcmd = "Options/SQLCmd";
         private const String _codeSnippets = "Options/CodeSnippets";
+        private const String _queryFolder = "Options/Query/QueryFolder";
 
         private String _xmlPath;
 
-        public bool Init() {
+        public bool Init()
+        {
             return base.Init(JsEngineType.MongoDB);
         }
-        
+
         public List<Server> Servers
         {
             get
             {
                 var n = RootNode.SelectSingleNode(_servers);
                 List<Server> servers = new List<Server>();
-                
+
                 foreach (XmlNode m in n.SelectNodes("Server"))
                 {
                     var userName = m.SelectSingleNode("@user");
@@ -50,10 +54,10 @@ namespace DBUI.Queries {
                     {
                         Name = m.SelectSingleNode("@name").Value,
                         WithWarning = bool.Parse(m.SelectSingleNode("@withWarning").Value),
-                        User = userName != null? userName.Value: null,
-                        Password = password != null? password.Value: null,   
+                        User = userName != null ? userName.Value : null,
+                        Password = password != null ? password.Value : null,
                         Alias = m.SelectSingleNode("@alias").Value
-                        
+
                     };
                     s.Databases = GetDatabase(m);
                     servers.Add(s);
@@ -62,12 +66,14 @@ namespace DBUI.Queries {
             }
         }
 
-        public void SetCollectionList(List<String> l, String server, String database) {
+        public void SetCollectionList(List<String> l, String server, String database)
+        {
             var serverNode = RootNode.SelectNodes(_servers + "/*").ToList().FirstOrDefault(
                      x => x.SelectSingleNode("@name").Value == server);
 
-            if (serverNode == null) { 
-                return; 
+            if (serverNode == null)
+            {
+                return;
             }
 
             var databaseNode = serverNode.SelectNodes("Database").ToList().FirstOrDefault(
@@ -79,14 +85,16 @@ namespace DBUI.Queries {
             }
 
             var collectionNodeNew = this.CreateNode("Collections", null);
-            foreach (var collection in l) {
+            foreach (var collection in l)
+            {
                 var n = this.AppendNode(collectionNodeNew, "C", "");
                 var attr = this.AppendAttribute(n, "name", collection);
             }
 
             var collectionNodeOld = databaseNode.SelectSingleNode("Collections");
 
-            if (collectionNodeOld == null) {
+            if (collectionNodeOld == null)
+            {
                 databaseNode.AppendChild(collectionNodeNew);
                 return;
             }
@@ -140,19 +148,20 @@ namespace DBUI.Queries {
                         {
                             return d.SelectSingleNode("@name").Value == database;
                         }
-                        else {
+                        else
+                        {
                             return false;
                         }
-                        
+
                     });
-                
+
             if (databaseNode == null)
             {
                 return;
             }
 
             serverNode.RemoveChild(databaseNode);
-            
+
         }
 
         private List<String> GetCollectionList(XmlNode n)
@@ -170,8 +179,10 @@ namespace DBUI.Queries {
             return l;
         }
 
-        public Server CurrentServer {
-            get {
+        public Server CurrentServer
+        {
+            get
+            {
                 XmlNode n = RootNode.SelectSingleNode(_currentServer);
                 Server serverNode = Servers.Where
                     (s => s.Name == n.SelectSingleNode("@name").Value).First();
@@ -183,14 +194,16 @@ namespace DBUI.Queries {
                 };
                 return serverNode;
             }
-            set {
+            set
+            {
                 RootNode.SelectSingleNode(_currentServer + "/@name").Value = value.Name;
                 RootNode.SelectSingleNode(_currentServer + "/CurrentDatabase").InnerXml =
                          value.CurrentDatabase.Name;
             }
         }
 
-        public enum ServerAttribute { 
+        public enum ServerAttribute
+        {
             name,
             alias,
             withWarning,
@@ -199,7 +212,8 @@ namespace DBUI.Queries {
             password,
         }
 
-        public string GetServerAttribute(String server, ServerAttribute attribute) {
+        public string GetServerAttribute(String server, ServerAttribute attribute)
+        {
             var serverNode = RootNode.SelectNodes(_servers + "/*").ToList().FirstOrDefault(
                     x => x.SelectSingleNode("@name").Value == server);
             if (serverNode == null)
@@ -208,7 +222,8 @@ namespace DBUI.Queries {
             }
 
             var node = serverNode.SelectSingleNode(String.Format("@{0}", attribute.ToString()));
-            if (node == null) {
+            if (node == null)
+            {
                 return null;
             }
 
@@ -231,6 +246,44 @@ namespace DBUI.Queries {
             }
 
             return node.Value = value;
+        }
+
+        public string GetQueryFolder()
+        {
+
+            var queryFolderPath = RootNode.SelectNodes(_queryFolder).ToList().First();
+
+            if (queryFolderPath == null)
+            {
+                return null;
+            }
+
+            return queryFolderPath.Value;
+        }
+
+        /*
+          <Group name="3789">
+               <Path name="1">e:\Users\ztan\Desktop\demo\1.txt</Path>
+               <Path name="2">e:\Users\ztan\Desktop\demo\2.txt</Path>
+               <Path name="3">e:\Users\ztan\Desktop\demo\3.txt</Path>
+           </Group>
+         */
+
+        public void AddSnippetFile(string groupName, string name, string filePath)
+        {
+            //option, codesnippets
+            var group = RootNode.SelectNodes(_codeSnippets + "/*").ToList()
+                .First(g => g.Name == groupName);
+
+            if (group == null)
+            {
+                group = this.CreateNode("Group", null);
+                this.AppendAttribute(group, "name", groupName);
+                RootNode.SelectSingleNode(_codeSnippets).AppendChild(group);
+            }
+
+            var fileNode = this.CreateNode(name, filePath);
+            group.AppendChild(fileNode);
         }
     }
 }

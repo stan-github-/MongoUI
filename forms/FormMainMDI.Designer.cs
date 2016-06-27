@@ -66,6 +66,7 @@ namespace DBUI {
             this.toolsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.serversToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.snippetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.newWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cascadeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -94,7 +95,6 @@ namespace DBUI {
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.open_file_dialog = new System.Windows.Forms.OpenFileDialog();
-            this.snippetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.status_strip.SuspendLayout();
@@ -229,14 +229,20 @@ namespace DBUI {
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.optionsToolStripMenuItem.Text = "&Options";
             // 
             // serversToolStripMenuItem
             // 
             this.serversToolStripMenuItem.Name = "serversToolStripMenuItem";
-            this.serversToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.serversToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.serversToolStripMenuItem.Text = "&Servers";
+            // 
+            // snippetsToolStripMenuItem
+            // 
+            this.snippetsToolStripMenuItem.Name = "snippetsToolStripMenuItem";
+            this.snippetsToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.snippetsToolStripMenuItem.Text = "Snip&pets";
             // 
             // windowsMenu
             // 
@@ -454,12 +460,6 @@ namespace DBUI {
             // open_file_dialog
             // 
             this.open_file_dialog.FileName = "open_file_dialog";
-            // 
-            // snippetsToolStripMenuItem
-            // 
-            this.snippetsToolStripMenuItem.Name = "snippetsToolStripMenuItem";
-            this.snippetsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.snippetsToolStripMenuItem.Text = "Snip&pets";
             // 
             // FormMainMDI
             // 

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -26,9 +27,7 @@ namespace DBUI {
         public void finalize() {
 
             //save user name and password
-            var server = list_view_server.SelectedItems[0].Text;
-            this.SaveUserAndPasswordToXMLCache(server);
-
+            var server = list_view_files.SelectedItems[0].Text;            
             Program.JsEngine.Repository.SaveXml();
         }
 
@@ -53,52 +52,74 @@ namespace DBUI {
         private void SetControls() {
             SetDisplayMongoServers();
 
-            this.list_view_server.Items[0].Selected = true;
-
+            this.list_view_files.Items[0].Selected = true;
             SetEventHandlers();
             
         }
 
 
         private void SetEventHandlers() {
-            this.list_view_server.ItemSelectionChanged += new ListViewItemSelectionChangedEventHandler
+            this.list_view_files.ItemSelectionChanged += new ListViewItemSelectionChangedEventHandler
                 (ListViewServer_SelectionChangedEventHandler);
-            this.button_database_add.Click += new EventHandler(ButtonDatabaseAdd_EventHandler);
-            this.button_database_delete.Click += new System.EventHandler(this.button_database_delete_Click);
+            this.button_add_file.Click += new EventHandler(ButtonFileAdd_EventHandler);
+            this.button_delete_file.Click += new System.EventHandler(this.buttonFileDelete_Click);
         }
 
-        private void ButtonDatabaseAdd_SetNewItem(String item)
+        private string OpenOpenFileDialog()
         {
-            if (this.list_view_server.SelectedItems.Count != 1)
+            this.open_file_dialog.InitialDirectory =
+                Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            this.open_file_dialog.Filter = "JS Files (*.js)|*.js|All Files (*.*)|*.*";
+
+            //minimize window, can't hide
+            //todo should be better way to do this
+            if (Program.MainXMLManager.CurrentEngine == JsEngineType.MongoDB)
             {
-                return;
+                this.open_file_dialog.InitialDirectory =
+                Path.GetDirectoryName(Program.JsEngine.MongoEngine.Repository.GetQueryFolder());
+            }
+            else {
+                throw new NotImplementedException();
+            }
+            
+
+            if (this.open_file_dialog.ShowDialog(this) != DialogResult.OK)
+            {
+                return String.Empty;
             }
 
-            var serverName = this.list_view_server.SelectedItems[0].Text;
-            var mongoRepo = GetMongoRepo();
-            mongoRepo.AddDatabase(serverName, item);
-         
-            SetDisplayMongoDatabases(serverName);
+            return this.open_file_dialog.FileName;
         }
 
-        private void button_database_delete_Click(object sender, EventArgs e)
+        private void ButtonFileAdd_EventHandler(object sender, EventArgs e)
         {
-            if (this.list_view_server.SelectedItems.Count != 1 || 
-                this.list_view_database.SelectedItems.Count != 1)
+
+            var filePath = OpenOpenFileDialog();
+
+            var mongoRepo = GetMongoRepo();
+            //mongoRepo.AddDatabase(serverName, item);
+         
+            //SetDisplayMongoDatabases(serverName);
+        }
+
+        private void buttonFileDelete_Click(object sender, EventArgs e)
+        {
+            return;
+            if (this.list_view_files.SelectedItems.Count != 1)
             {
                 return;
             }
             
-            var serverName = this.list_view_server.SelectedItems[0].Text;
+            var serverName = this.list_view_files.SelectedItems[0].Text;
             var mongoRepo = GetMongoRepo();
-            mongoRepo.DeleteDatabase(serverName, this.list_view_database.SelectedItems[0].Text);
+            mongoRepo.DeleteDatabase(serverName, this.list_view_files.SelectedItems[0].Text);
             SetDisplayMongoDatabases(serverName);
         }
         
         private void ButtonDatabaseAdd_EventHandler(object sender, EventArgs e){
             
             var form = new FormNewItem() {
-                callBack = ButtonDatabaseAdd_SetNewItem
+                //callBack = ButtonFileAdd_SetNewItem
             };
 
             form.ShowDialog();
@@ -127,13 +148,13 @@ namespace DBUI {
         {
             var mongoRepo = GetMongoRepo();
 
-            this.list_view_database.Clear();
+            //this.list_view_database.Clear();
 
             var databases = mongoRepo.Servers.First(s=>s.Name == serverName).Databases;
 
             foreach (var database in databases)
             {
-                this.list_view_database.Items.Add(new ListViewItem(database.Name));
+                //this.list_view_database.Items.Add(new ListViewItem(database.Name));
             }
         }
 
@@ -141,23 +162,23 @@ namespace DBUI {
             var mongoRepo = GetMongoRepo();
 
             foreach (var server in mongoRepo.Servers) {
-                this.list_view_server.Items.Add(new ListViewItem(server.Name));
+                //this.list_view_server.Items.Add(new ListViewItem(server.Name));
             }
         }
 
         private void SetDisplayUserAndPassword(string serverName) {
             var mongoRepo = GetMongoRepo();
 
-            this.textbox_user.Text = mongoRepo.GetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.user);
-            this.tex_box_password.Text = mongoRepo.GetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.password);
+           // this.textbox_user.Text = mongoRepo.GetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.user);
+            //this.tex_box_password.Text = mongoRepo.GetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.password);
             
         }
 
         private void SaveUserAndPasswordToXMLCache(string serverName) {
             var mongoRepo = GetMongoRepo();
 
-            mongoRepo.SetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.user, this.textbox_user.Text);
-            mongoRepo.SetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.password, this.tex_box_password.Text);
+            //mongoRepo.SetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.user, this.textbox_user.Text);
+            //mongoRepo.SetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.password, this.tex_box_password.Text);
         }
     }
 }
