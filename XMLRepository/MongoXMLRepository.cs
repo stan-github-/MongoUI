@@ -30,12 +30,31 @@ namespace DBUI.Queries
         private const String _sqlcmd = "Options/SQLCmd";
         private const String _codeSnippets = "Options/CodeSnippets";
         private const String _queryFolder = "Options/Query/QueryFolder";
+        private const String _autoComplete = "Options/General/AutoComplete";
 
         private String _xmlPath;
 
         public bool Init()
         {
             return base.Init(JsEngineType.MongoDB);
+        }
+
+        public bool AutoComplete {
+            get {
+                XmlNode n = RootNode.SelectSingleNode(_autoComplete);
+                if (n == null) {
+                    return false;
+                }
+                return n.InnerXml == "true";
+            }
+            set {
+                XmlNode n = RootNode.SelectSingleNode(_autoComplete);
+                if (n == null)
+                {
+                    return;
+                }
+                n.InnerText = value.ToString();
+            }
         }
 
         public List<Server> Servers

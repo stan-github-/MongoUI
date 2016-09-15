@@ -4,6 +4,7 @@
     <General>
       <TempFolder>%temp%\</TempFolder>
       <DeleteTempFolderContents>true</DeleteTempFolderContents>
+      <AutoComplete>false</AutoComplete>
     </General>
     <Query>
       <QueryFolder>%temp%\\MongoQueries</QueryFolder>

@@ -78,6 +78,12 @@ namespace DBUI.Query.AutoComplete
         
         public static List<String> Main(String queryFirstHalf, string querySecondHalf)
         {
+            if (!Program.JsEngine.MongoEngine.Repository.AutoComplete) {
+                return new List<String>();
+            }
+
+            ErrorManager.Write("auto complete enabled! please don't include delete or update queries!!");
+
             var methodOrObjectName = Query.AutoComplete.ObjectChainParser
                 .GetMethodOrObjectChainBlock(queryFirstHalf);
 
