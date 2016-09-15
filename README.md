@@ -20,6 +20,7 @@ MongoUI is a bear-bone mongo mananger modeled after sql server manager, where mu
 ###Features in progress: ###
 
   - Autocomplete/Intellisense:
+    - Work in progress, should be disabled for update and delete. 
     - Works only with runnable code after "." is replaced by ";" (most of the time).
     <img src="Images/AutoComplete.jpg"></image>
     <img src="Images/AutoComplete2.jpg"></image>
