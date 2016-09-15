@@ -72,7 +72,7 @@ namespace DBUI.Queries
             {
                 XmlNode n = RootNode.SelectSingleNode(_currentServer);
                 Server serverNode = Servers.Where
-                    (s => s.Name == n.SelectSingleNode("@name").Value).First();
+                    (s => s.Alias == n.SelectSingleNode("@alias").Value).First();
                 String currentDatabase = n.SelectSingleNode("CurrentDatabase").InnerXml;
 
                 serverNode.CurrentDatabase = new Database()
@@ -83,7 +83,7 @@ namespace DBUI.Queries
             }
             set
             {
-                RootNode.SelectSingleNode(_currentServer + "/@name").Value = value.Name;
+                RootNode.SelectSingleNode(_currentServer + "/@alias").Value = value.Alias;
                 RootNode.SelectSingleNode(_currentServer + "/CurrentDatabase").InnerXml =
                          value.CurrentDatabase.Name;
             }

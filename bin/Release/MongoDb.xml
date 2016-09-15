@@ -10,7 +10,7 @@
     </Query>
     <CustomJavascriptFiles comments="not linked to Options form, yet">
       <Path>.\Scripts\underscore.js</Path>
-      <Path>.\Scripts\AutoCompleter.js</Path>
+      <Path>.\Scripts\GetCollectionNames.js</Path>
       <Path>.\Scripts\Custom.js</Path>
       <PathX>.\Scripts\UUIHelper.js</PathX>
     </CustomJavascriptFiles>
@@ -32,9 +32,8 @@
     </SQLCmd>
     <CodeSnippets current="3789">
       <Group name="3789">
-        <Path name="1">e:\Users\ztan\Desktop\demo\1.txt</Path>
-        <Path name="2">e:\Users\ztan\Desktop\demo\2.txt</Path>
-        <Path name="3">e:\Users\ztan\Desktop\demo\3.txt</Path>
+      </Group>
+      <Group name="grouptest">
       </Group>
     </CodeSnippets>
   </Options>
@@ -42,12 +41,6 @@
     <Server name="localhost" alias="localhost" withWarning="false" isCurrent="true" user="ryan" password="root88">
       <Database name="test">
         <Collections>
-          <C name="exception: login failed" />
-          <C name="&#xA;&#xD;2016-06-24T16:29:55.155-0400 E QUERY    [thread1] Error: Missing expected field &quot;pwd&quot; :" />
-          <C name="DB.prototype._authOrThrow@src/mongo/shell/db.js:1395:16" />
-          <C name="@(auth):5:1" />
-          <C name="@(auth):1:2" />
-          <C name="&#xA;&#xD;" />
         </Collections>
       </Database>
       <Database name="temp">
@@ -56,51 +49,54 @@
       </Database>
       <Database name="gatewaydev">
         <Collections>
-          <C name="exception: login failed" />
-          <C name="&#xA;&#xD;2016-06-27T10:01:46.151-0400 E QUERY    [thread1] Error: Missing expected field &quot;pwd&quot; :" />
-          <C name="DB.prototype._authOrThrow@src/mongo/shell/db.js:1395:16" />
-          <C name="@(auth):5:1" />
-          <C name="@(auth):1:2" />
-          <C name="&#xA;&#xD;" />
+          <C name="assessmentScoreDeltaLog" />
+          <C name="hisotry" />
+          <C name="history" />
+          <C name="parents" />
+          <C name="settings" />
+          <C name="student" />
+          <C name="students" />
+          <C name="tests" />
         </Collections>
       </Database>
     </Server>
-    <Server name="ncmongoeast2.cloudapp.net:27018" alias="ncmongoeast2.cloudapp.net:27018" withWarning="false" isCurrent="false" user="ryan" password="root88">
+    <Server name="ncmongors/ncmongoeast2.cloudapp.net:27017,ncmongoeast2.cloudapp.net:27018,ncmongoeast2.cloudapp.net:27019" alias="prod" withWarning="true" isCurrent="false" user="nc_gateway_app" password="3If7MVRi2O#45!d0#6aS">
       <Database name="gatewaydev">
         <Collections>
-          <C name="Cannot use 'commands' readMode, degrading to 'legacy' mode" />
         </Collections>
-      </Database>
-      <Database name="temp">
       </Database>
       <Database name="system">
       </Database>
     </Server>
-    <Server name="beta" alias="beta" withWarning="true" isCurrent="false">
-      <Database name="test">
+    <Server name="ncmongors/ncmongodev2.westus.cloudapp.azure.com:27018,ncmongodev.westus.cloudapp.azure.com:27018,ncmongodev3.westus.cloudapp.azure.com:27018" alias="dev" withWarning="false" isCurrent="false" user="nc_gateway_app" password="155P218U%Gc*N@*0Pjc0">
+      <Database name="gatewaydev">
       </Database>
-      <Database name="temp">
-      </Database>
-      <Database name="system">
-      </Database>
-      <Database name="safasfd" />
     </Server>
   </Servers>
   <Miscellaneous comments="not for configuration; used by application only">
     <LastOpenedFilePath>
     </LastOpenedFilePath>
     <LastOpenedFilePaths>
-      <f>C:\Users\Steve\AppData\Local\Temp\\b6326d86-4378-45eb-afc6-6d23364cba05.js</f>
       <f>C:\Users\Steve\Desktop\story_one_query_one.js</f>
-      <f>C:\Users\Steve\Desktop\mongoQueries\two-awesome-shortened.js</f>
+      <f>C:\Users\Steve\Desktop\mongoQueries\two-awesome-generic.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\f4499ff7-22b3-413c-9df9-3c0eb52d55c8.js</f>
+      <f>C:\Users\Steve\Desktop\mongoQueries\update-question.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\31c67a67-2306-4397-94fe-0f3de1a3c76c.js</f>
+      <f>C:\Users\Steve\Desktop\mongoQueries\two_awesome_shortened_zzzzz.js</f>
+      <f>C:\Users\Steve\Desktop\mongoQueries\update-question-tests.js</f>
     </LastOpenedFilePaths>
     <FileHistory>
-      <f>C:\Users\Steve\Desktop\mongoQueries\two-awesome-shortened.js</f>
+      <f>C:\Users\Steve\Desktop\mongoQueries\update-question-tests.js</f>
+      <f>C:\Users\Steve\Desktop\mongoQueries\two_awesome_shortened_zzzzz.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\31c67a67-2306-4397-94fe-0f3de1a3c76c.js</f>
+      <f>C:\Users\Steve\Desktop\mongoQueries\update-question.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\f4499ff7-22b3-413c-9df9-3c0eb52d55c8.js</f>
+      <f>C:\Users\Steve\Desktop\mongoQueries\two-awesome-generic.js</f>
       <f>C:\Users\Steve\Desktop\story_one_query_one.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\b6326d86-4378-45eb-afc6-6d23364cba05.js</f>
-      <f>C:\Users\Steve\AppData\Local\Temp\\f78bfeb9-625f-4b3b-ac4f-ddbdfeca293a.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\cbb5c38b-5157-41ea-b09b-38fbe1e0095a.js</f>
+      <f>C:\Users\Steve\AppData\Local\Temp\\25d982dc-7f22-4f3b-9fdb-1f31862b9811.js</f>
     </FileHistory>
-    <CurrentServer name="localhost">
+    <CurrentServer name="localhost" alias="localhost">
       <CurrentDatabase>gatewaydev</CurrentDatabase>
     </CurrentServer>
   </Miscellaneous>

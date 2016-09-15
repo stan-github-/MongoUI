@@ -160,12 +160,12 @@ namespace DBUI {
 
             Program.JsEngine.MongoEngine.Repository.Servers.ForEach
                     (x =>{
-                        if (!this.serverComboBox.Items.Contains(x.Name)){
-                            this.serverComboBox.Items.Add(x.Name);
+                        if (!this.serverComboBox.Items.Contains(x.Alias)){
+                            this.serverComboBox.Items.Add(x.Alias);
                         }
                     });
 
-            this.serverComboBox.Text = Program.JsEngine.MongoEngine.Repository.CurrentServer.Name;
+            this.serverComboBox.Text = Program.JsEngine.MongoEngine.Repository.CurrentServer.Alias;
             SetDatabaseComboBox();
         }
 
@@ -174,7 +174,7 @@ namespace DBUI {
 
             var server = 
                 Program.JsEngine.MongoEngine.Repository.Servers.Where
-                (x => x.Name == serverComboBox.Text).FirstOrDefault();
+                (x => x.Alias == serverComboBox.Text).FirstOrDefault();
                         
             if (server == null)
             {
@@ -224,7 +224,7 @@ namespace DBUI {
             Program.JsEngine.MongoEngine.Repository.CurrentServer =
                 new Server
                 {
-                    Name = serverComboBox.Text,
+                    Alias = serverComboBox.Text,
                     CurrentDatabase = new Database { Name = databaseComboBox.Text }
                 };
         }
