@@ -27,7 +27,7 @@ namespace DBUI.Forms
         }
 
         private void SetGroupNameComboBox() {
-            var groupNames = Program.JsEngine.MongoEngine.Repository.CodeSnippets
+            var groupNames = Program.Config.Data.Miscellaneous.CodeSnippets
                 .Select(f => f.GroupName).Distinct();
 
             groupNames.ToList().ForEach(g => this.combo_box_group_name.Items.Add(g));
@@ -39,19 +39,9 @@ namespace DBUI.Forms
                 Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             this.open_file_dialog.Filter = "JS Files (*.js)|*.js|All Files (*.*)|*.*";
 
-            //minimize window, can't hide
-            //todo should be better way to do this
-            if (Program.MainXMLManager.CurrentEngine == JsEngineType.MongoDB)
-            {
-                this.open_file_dialog.InitialDirectory =
-                Path.GetDirectoryName(Program.JsEngine.MongoEngine.Repository.GetQueryFolder());
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-
-
+            this.open_file_dialog.InitialDirectory =
+            Path.GetDirectoryName(Program.Config.Data.Miscellaneous.QueryFolder);
+            
             if (this.open_file_dialog.ShowDialog(this) != DialogResult.OK)
             {
                 return String.Empty;
@@ -63,12 +53,6 @@ namespace DBUI.Forms
         private void button_file_path_Click(object sender, EventArgs e)
         {
             
-            var mongoRepo = Program.JsEngine.GetMongoRepo();
-
-            if (mongoRepo == null) {
-                throw new NotImplementedException();
-            }
-
             var filePath = OpenOpenFileDialog();
             this.text_box_file_path.Text = filePath;
             

@@ -25,15 +25,7 @@ namespace DBUI.Queries
 
         //todo should be in jsengine or jsengine proxy
         public String Execute(string query){
-            if (Program.MainXMLManager.CurrentEngine == JsEngineType.MongoDB) {
-                return ExecuteMongo(query);
-            }
-            else if (Program.MainXMLManager.CurrentEngine == JsEngineType.Node)
-            {
-                return ExecuteNode(query);
-            }
-
-            return String.Empty;
+            return ExecuteMongo(query);
         }
 
         public String ExecuteMongo(string query)
@@ -62,7 +54,7 @@ namespace DBUI.Queries
             
             //actually executing the query using file
             //execute file
-            var currentServer = Program.JsEngine.MongoEngine.Repository.CurrentServer;
+            var currentServer = Program.Config.CurrentServer();
             String arguments = String.Format(
                 "{0} --quiet --host {1} --username {2} --password {3} {4}",
                 currentServer.CurrentDatabase.Name,
@@ -172,7 +164,7 @@ namespace DBUI.Queries
         public void DisplayQueryInExe(String content, String exe)
         {
             var tempPath = Environment.ExpandEnvironmentVariables
-                (Program.JsEngine.Repository.TempFolderPath + "\\"
+                (Program.Config.Data.Miscellaneous.TempFolder + "\\"
                  + Guid.NewGuid() + ".json");
 
             if (!FileManager.SaveToFile(tempPath, content))

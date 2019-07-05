@@ -13,7 +13,7 @@ using DBUI.DataModel;
 namespace DBUI.Queries
 {
 
-    public class MongoXMLRepository : JsEngineXMLRepository
+    /*public class MongoXMLRepository : JsEngineXMLRepository
     {
 
         private const String _lastFilePath = "Miscellaneous/LastOpenedFilePath";
@@ -280,14 +280,7 @@ namespace DBUI.Queries
             return queryFolderPath.Value;
         }
 
-        /*
-          <Group name="3789">
-               <Path name="1">e:\Users\ztan\Desktop\demo\1.txt</Path>
-               <Path name="2">e:\Users\ztan\Desktop\demo\2.txt</Path>
-               <Path name="3">e:\Users\ztan\Desktop\demo\3.txt</Path>
-           </Group>
-         */
-
+       
         public void AddSnippetFile(string groupName, string name, string filePath)
         {
             //option, codesnippets
@@ -306,28 +299,7 @@ namespace DBUI.Queries
             group.AppendChild(fileNode);
         }
 
-        //public List<SnippetFile> GetSnippetFiles()
-        //{
-        //    //option, codesnippets
-        //    var snippetFileGroups = RootNode.SelectNodes(_codeSnippets + "/*").ToList();
-
-        //    var snippetFiles = new List<SnippetFile>();
-
-        //    snippetFileGroups.ForEach(g =>
-        //        g.SelectNodes("*").ToList().ForEach(s =>
-        //            snippetFiles.Add(new SnippetFile()
-        //            {
-        //                GroupName = g.SelectSingleNode("@name").Value,
-        //                FilePath = s.InnerXml,
-        //                Name = s.SelectSingleNode("@name").Value
-        //            })
-        //        )
-        //     );
-
-        //    return snippetFiles;
-            
-        //}
-
+       
         public void DeleteSnippetFile(String groupName, String name)
         {
             var groupNode = RootNode.SelectNodes(_codeSnippets + "/*").ToList().FirstOrDefault(
@@ -349,5 +321,5 @@ namespace DBUI.Queries
             groupNode.RemoveChild(fileNode);
 
         }
-    }
+    }*/
 }

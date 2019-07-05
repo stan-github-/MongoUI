@@ -28,7 +28,8 @@ namespace DBUI {
 
             //save user name and password
             //var server = list_view_files.SelectedItems[0].Text;            
-            Program.JsEngine.Repository.SaveXml();
+            //Program.JsEngine.Repository.SaveXml();
+            Program.Config.Save();
         }
 
         private void button_save_Click(object sender, EventArgs e) {
@@ -45,7 +46,7 @@ namespace DBUI {
             //reload everything from saved xml file
             //may not be the best, since file history is lost
             //could make this just reload the servers and not any other
-            Program.JsEngine.Repository.Init(JsEngineType.MongoDB);
+            Program.Config.Reload();
             this.Close();
         }
 
@@ -71,7 +72,8 @@ namespace DBUI {
             listItem.SubItems.Add(filePath);
             list_view_files.Items.Add(listItem);
 
-            Program.JsEngine.MongoEngine.Repository.AddSnippetFile(groupName, name, filePath);
+            //todo
+            //Program.JsEngine.MongoEngine.Repository.AddSnippetFile(groupName, name, filePath);
 
         }
         
@@ -95,18 +97,11 @@ namespace DBUI {
 
             this.list_view_files.Items.Remove(this.list_view_files.SelectedItems[0]);
 
-            Program.JsEngine.MongoEngine.Repository.DeleteSnippetFile(groupName, name);
+            //Program.JsEngine.MongoEngine.Repository.DeleteSnippetFile(groupName, name);
         }
        
         
-        private MongoXMLRepository GetMongoRepo() {
-            return Program.JsEngine.GetMongoRepo();
-        }
-
-
         private void SetDisplaySnippetFiles() {
-            var mongoRepo = GetMongoRepo();
-
             this.list_view_files.Columns.Add(new ColumnHeader() { 
                 Text = "Group Name"
             });
@@ -117,10 +112,10 @@ namespace DBUI {
                 Text= "File Path"
             });
 
-            foreach (var file in mongoRepo.CodeSnippets) {
+            foreach (var file in Program.Config.Data.Miscellaneous.CodeSnippets) {
                 var item = new ListViewItem(file.GroupName);
                 
-                item.SubItems.Add(file.Name);
+                item.SubItems.Add(file.FileName);
                 item.SubItems.Add(file.FilePath);
                 this.list_view_files.Items.Add(item);
             }

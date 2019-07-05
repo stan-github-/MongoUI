@@ -67,18 +67,13 @@ namespace DBUI.Query.AutoComplete
 
         private String ReflectionString {
             get {
-                if (Program.MainXMLManager.CurrentEngine == JsEngineType.MongoDB) {
-                    return ReflectionStringMongo;
-                }else if (Program.MainXMLManager.CurrentEngine == JsEngineType.Node){
-                    return ReflectionStringNode;
-                }
-                return String.Empty;
+                return ReflectionStringMongo;
             }
         }
         
         public static List<String> Main(String queryFirstHalf, string querySecondHalf)
         {
-            if (!Program.JsEngine.MongoEngine.Repository.AutoComplete) {
+            if (true) {
                 return new List<String>();
             }
 

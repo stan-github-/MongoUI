@@ -37,7 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>NewtonSoft\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="ScintillaNET">
       <HintPath>packages\jacobslusser.ScintillaNET.3.5.6\lib\net40\ScintillaNET.dll</HintPath>
     </Reference>
@@ -58,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataModel\ConfigModel.cs" />
     <Compile Include="DataModel\JsEngine.cs" />
     <Compile Include="Forms\FormNewSnippetFile.cs">
       <SubType>Form</SubType>
@@ -89,19 +92,11 @@
     <Compile Include="Forms\FormServerOptions.Designer.cs">
       <DependentUpon>FormServerOptions.cs</DependentUpon>
     </Compile>
-    <Compile Include="JsEngine\JsEngine.cs" />
-    <Compile Include="JsEngine\JsEngineProxy.cs" />
     <Compile Include="Query\AutoComplete\ObjectChainParser.cs" />
     <Compile Include="Query\Execution\QueryExecutionConfiguration.cs" />
     <Compile Include="Query\Execution\MessageManager.cs" />
     <Compile Include="Query\Execution\QueryFileManager.cs" />
-    <Compile Include="XMLRepository\NodeXMLRepository.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="XMLRepository\JsEngineXMLRepository.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="XMLRepository\MainXMLRepository.cs">
+    <Compile Include="ConfigManager.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Core\ErrorManager.cs" />
@@ -135,9 +130,6 @@
     </Compile>
     <Compile Include="Forms\FormQuery.Designer.cs">
       <DependentUpon>FormQuery.cs</DependentUpon>
-    </Compile>
-    <Compile Include="XMLRepository\MongoXMLRepository.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Query\AutoComplete\QueryExecuter.cs" />
     <Compile Include="Query\Execution\QueryExecuter.cs" />
@@ -197,6 +189,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="MongoDB.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Node.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

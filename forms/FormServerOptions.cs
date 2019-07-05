@@ -28,7 +28,8 @@ namespace DBUI {
             var server = list_view_server.SelectedItems[0].Text;
             this.SaveUserAndPasswordToXMLCache(server);
 
-            Program.JsEngine.Repository.SaveXml();
+            Program.Config.Save();
+            
         }
 
         private void button_save_Click(object sender, EventArgs e) {
@@ -45,7 +46,7 @@ namespace DBUI {
             //reload everything from saved xml file
             //may not be the best, since file history is lost
             //could make this just reload the servers and not any other
-            Program.JsEngine.Repository.Init(JsEngineType.MongoDB);
+            //Program.JsEngine.Repository.Init(JsEngineType.MongoDB);
             this.Close();
         }
 
@@ -74,8 +75,11 @@ namespace DBUI {
             }
 
             var serverName = this.list_view_server.SelectedItems[0].Text;
-            var mongoRepo = GetMongoRepo();
-            mongoRepo.AddDatabase(serverName, item);
+
+            var server = Program.Config.Data.Servers.Find(s => s.Name == serverName);
+            server.Databases.Add(new DataModel.Database() { 
+                Name=item
+            });
          
             SetDisplayMongoDatabases(serverName);
         }
@@ -89,9 +93,10 @@ namespace DBUI {
             }
             
             var serverName = this.list_view_server.SelectedItems[0].Text;
-            var mongoRepo = GetMongoRepo();
-            mongoRepo.DeleteDatabase(serverName, this.list_view_database.SelectedItems[0].Text);
-            SetDisplayMongoDatabases(serverName);
+            var server = Program.Config.Data.Servers.FirstOrDefault(s => s.Name == serverName);
+            var database = server.Databases.Find(d=>d.Name == this.list_view_database.SelectedItems[0].Text);
+            server.Databases.Remove(database);
+            Program.Config.Save();
         }
         
         private void ButtonDatabaseAdd_EventHandler(object sender, EventArgs e){
@@ -111,24 +116,11 @@ namespace DBUI {
             SetDisplayUserAndPassword(serverName);
         }
 
-        private MongoXMLRepository GetMongoRepo() {
-            if (Program.MainXMLManager.CurrentEngine != JsEngineType.MongoDB)
-            {
-                return null;
-            }
-
-            var mongoRepo = (MongoXMLRepository)Program.JsEngine.MongoEngine.Repository;
-
-            return mongoRepo;
-        }
-
         private void SetDisplayMongoDatabases(string serverName)
         {
-            var mongoRepo = GetMongoRepo();
-
             this.list_view_database.Clear();
 
-            var databases = mongoRepo.Servers.First(s=>s.Name == serverName).Databases;
+            var databases = Program.Config.Data.Servers.Find(s => s.Name == serverName).Databases;
 
             foreach (var database in databases)
             {
@@ -137,26 +129,22 @@ namespace DBUI {
         }
 
         private void SetDisplayMongoServers() {
-            var mongoRepo = GetMongoRepo();
-
-            foreach (var server in mongoRepo.Servers) {
+            foreach (var server in Program.Config.Data.Servers) {
                 this.list_view_server.Items.Add(new ListViewItem(server.Name));
             }
         }
 
         private void SetDisplayUserAndPassword(string serverName) {
-            var mongoRepo = GetMongoRepo();
-
-            this.textbox_user.Text = mongoRepo.GetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.user);
-            this.tex_box_password.Text = mongoRepo.GetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.password);
-            
+            var server = Program.Config.Data.Servers.Find(s => s.Name == serverName);
+            this.textbox_user.Text = server.User;
+            this.tex_box_password.Text = server.Password;
         }
 
         private void SaveUserAndPasswordToXMLCache(string serverName) {
-            var mongoRepo = GetMongoRepo();
+            var server = Program.Config.Data.Servers.Find(s => s.Name == serverName);
 
-            mongoRepo.SetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.user, this.textbox_user.Text);
-            mongoRepo.SetServerAttribute(serverName, MongoXMLRepository.ServerAttribute.password, this.tex_box_password.Text);
+            server.User =  this.textbox_user.Text;
+            server.Password =  this.tex_box_password.Text;
         }
     }
 }

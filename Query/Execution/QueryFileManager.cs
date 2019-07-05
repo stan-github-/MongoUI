@@ -44,7 +44,7 @@ namespace DBUI.Queries
         private String PrependCustomJSCode()
         {
             var b = new StringBuilder();
-            foreach (var path in Program.JsEngine.Repository.CustomJSFilePaths)
+            foreach (var path in Program.Config.Data.CustomJavascriptFiles)
             {
                 b.Append(FileManager.ReadFromFile(path)).Append("\n");
             }
@@ -59,7 +59,7 @@ namespace DBUI.Queries
             }
 
             QueryFilePath = Environment.ExpandEnvironmentVariables
-                (Program.JsEngine.Repository.TempFolderPath
+                (Program.Config.Data.Miscellaneous.TempFolder
                 + "\\" + Guid.NewGuid() + ".js");    
         }
     }

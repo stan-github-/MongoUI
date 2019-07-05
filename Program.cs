@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using DBUI.Queries;
 using System.Linq;
-using DBUI.JsEngine;
 
 namespace DBUI
 {
     static class Program
     {
-        public static Queries.MainXMLRepository MainXMLManager;
-        public static JsEngineProxy JsEngine;
-        //todo 
-        //make this part of main xml settings
-        //public static Program.Mode ProgramMode = Mode.Mongo;
-
+        //public static JsEngineProxy JsEngine;
+        public static ConfigManager Config { get; set; }
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -24,10 +19,11 @@ namespace DBUI
         static void Main()
         {
 
-            MainXMLManager = new MainXMLRepository();
-            MainXMLManager.Init("main.xml");
+            //MainXMLManager = new MainXMLRepository();
+            //MainXMLManager.Init("main.xml");
+            Config  = new ConfigManager("mongoDB.json");
 
-            JsEngine = new JsEngineProxy();
+            //JsEngine = new JsEngineProxy();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

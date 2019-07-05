@@ -9,15 +9,6 @@ namespace DBUI.Queries
     {
         public List<String> GetCurrentDBCollectionNames() { 
             
-            //var server = Program.MongoXMLManager.CurrentServer.Name;
-            //var database = Program.MongoXMLManager.CurrentServer.CurrentDatabase.Name;
-
-            if (Program.MainXMLManager.CurrentEngine != JsEngineType.MongoDB)
-            {
-                return new List<String>();
-            }
-
-
             var executor = new JavaScriptExecuter() { QueryFileManager = new QueryFileManager() };
             //todo, a bit hacky here
             executor.MessageManager = new MessageManager(executor.QueryFileManager.QueryFilePath);
@@ -42,21 +33,15 @@ namespace DBUI.Queries
 
         public void RefreshCurrentDBCollectionNames() {
             
-            if (Program.MainXMLManager.CurrentEngine != JsEngineType.MongoDB) {
-                return;
-            }
-
-            var server = Program.JsEngine.MongoEngine.Repository.CurrentServer.Name;
-            var database = Program.JsEngine.MongoEngine.Repository.CurrentServer.CurrentDatabase.Name;
+            var server = Program.Config.CurrentServer();
+            var database = server.CurrentDatabase;
             var collectionNames = GetCurrentDBCollectionNames();
             
             collectionNames = collectionNames
                 .Select(n => n.Replace("\n\r", ""))
                 .Where(m => !String.IsNullOrEmpty(m)).ToList();
 
-            Program.JsEngine.MongoEngine.Repository.SetCollectionList
-                        (collectionNames, server, database);
-         
+            Program.Config.CurrentServer().CurrentDatabase.Collections = collectionNames;
         }
     }
 }

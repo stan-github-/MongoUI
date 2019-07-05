@@ -42,7 +42,6 @@ namespace DBUI {
         private bool Init() {
             
             this.setToolStripMenuItem();
-            this.SetJsEngineComboBox();
 
             this.SetDropDownFileHistory();
             this.SetDropDownCodeSnippet();
@@ -112,10 +111,8 @@ namespace DBUI {
 
         private void OpenLastOpendedFiles()
         {
-            foreach (var path in Program.JsEngine.Repository.LastOpenedFilePaths)
-            {
-                new Queries.FormQuery(this).Init(FormQuery.Mode.Existing, path);
-            }
+            var file = Program.Config.Data.Miscellaneous.LastOpenedFilePaths.Last();
+            new Queries.FormQuery(this).Init(FormQuery.Mode.Existing, file);
         }
 
         private void OpenFileWithFileDialog(object sender, EventArgs e)
@@ -137,10 +134,9 @@ namespace DBUI {
         {
             var l = new List<String>();
             MdiChildren.ToList().ForEach(c=> l.Add(((FormQuery)c).QueryFilePath));
-            Program.JsEngine.Repository.FileHistory = l;
+            Program.Config.Data.Miscellaneous.LastOpenedFilePaths = l;
 
-            Program.JsEngine.Repository.SaveXml();
-            Program.MainXMLManager.SaveXml();
+            Program.Config.Save();
         }
 
         private void ExitToolsStripMenuItem_Click(object sender, EventArgs e)
@@ -154,18 +150,14 @@ namespace DBUI {
 
         private void SetServerComboBox()
         {
-            if (Program.MainXMLManager.CurrentEngine != JsEngineType.MongoDB) {
-                return;
-            }
-
-            Program.JsEngine.MongoEngine.Repository.Servers.ForEach
+            Program.Config.Data.Servers.ForEach
                     (x =>{
                         if (!this.serverComboBox.Items.Contains(x.Alias)){
                             this.serverComboBox.Items.Add(x.Alias);
                         }
                     });
 
-            this.serverComboBox.Text = Program.JsEngine.MongoEngine.Repository.CurrentServer.Alias;
+            this.serverComboBox.Text = Program.Config.CurrentServer().Alias;
             SetDatabaseComboBox();
         }
 
@@ -173,7 +165,7 @@ namespace DBUI {
         {
 
             var server = 
-                Program.JsEngine.MongoEngine.Repository.Servers.Where
+                Program.Config.Data.Servers.Where
                 (x => x.Alias == serverComboBox.Text).FirstOrDefault();
                         
             if (server == null)
@@ -196,7 +188,7 @@ namespace DBUI {
                 return;
             }
 
-            this.databaseComboBox.Text = Program.JsEngine.MongoEngine.Repository.CurrentServer.CurrentDatabase.Name;
+            this.databaseComboBox.Text = Program.Config.CurrentServer().CurrentDatabase.Name;
             //_autoCompleter.RefreshCurrentDBCollectionNames();
         }
 
@@ -221,12 +213,10 @@ namespace DBUI {
                 return;
             }
 
-            Program.JsEngine.MongoEngine.Repository.CurrentServer =
-                new Server
-                {
-                    Alias = serverComboBox.Text,
-                    CurrentDatabase = new Database { Name = databaseComboBox.Text }
-                };
+            Program.Config.Data.Servers.ForEach(s=>s.IsCurrent = false);
+            Program.Config.Data.Servers.Find
+                (s => s.Name == databaseComboBox.Text).IsCurrent = true;
+            
         }
         #endregion
 
@@ -235,16 +225,16 @@ namespace DBUI {
         #region "drop down snippet code files etc"
         private void SetDropDownFileHistory()
         {
-            Program.JsEngine.Repository.FileHistory.ForEach
+            Program.Config.Data.Miscellaneous.LastOpenedFilePaths.ForEach
                 (f=> this.historyMenu.DropDownItems.Add(f)
             );
         }
 
         private void SetDropDownCodeSnippet()
         {
-            Program.JsEngine.Repository.CodeSnippets.ForEach
+            Program.Config.Data.Miscellaneous.CodeSnippets.ForEach
                 (f =>{
-                    string s = String.Format("{0};{1}", f.Name, f.FilePath);
+                    string s = String.Format("{0};{1}", f.FileName, f.FilePath);
                     this.snippetsMenu.DropDownItems.Add(s);
                 });
         }
@@ -295,16 +285,10 @@ namespace DBUI {
         #region "new features"
         private void SetMongoCollectionsOnDataImport()
         {
-            if (Program.MainXMLManager.CurrentEngine != JsEngineType.MongoDB) {
-                return;
-            }
-            
             return; 
             //todo
             //todo:code not working
-
-            var currentDB = Program.JsEngine.MongoEngine.Repository.CurrentServer.Databases.FirstOrDefault(
-                d => Name == Program.JsEngine.MongoEngine.Repository.CurrentServer.CurrentDatabase.Name);
+            var currentDB = Program.Config.CurrentServer().CurrentDatabase;
             if (currentDB == null)
             {
                 return;
@@ -417,62 +401,6 @@ namespace DBUI {
 
         #endregion
 
-        private void SetJsEngineComboBox()
-        {
-            Program.MainXMLManager.Engines.ForEach
-                    (x =>
-                    {
-                        if (!this.jsEngineComboBox.Items.Contains(x.Type.ToString()))
-                        {
-                            this.jsEngineComboBox.Items.Add(x.Type.ToString());
-                        }
-                    });
-
-            this.jsEngineComboBox.Text = Program.MainXMLManager.Engines
-                .First(e => e.IsCurrent == true).Type.ToString();
-
-            if (Program.MainXMLManager.CurrentEngine == JsEngineType.MongoDB) {
-                this.SetServerComboBox();
-            }
-
-            this.jsEngineComboBox.SelectedIndexChanged += jsEngineComboBox_SelectedIndexChanged;
-
-            this.updateMongoServerAndDatabaseUI();
-        }
-
-        private void updateMongoServerAndDatabaseUI()
-        {
-            var isMongo = Program.MainXMLManager.CurrentEngine == JsEngineType.MongoDB;
-            this.serverComboBox.Visible = isMongo;
-            this.databaseComboBox.Visible = isMongo;
-        }
-
-        void jsEngineComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            SaveJsEngineType();
-            Program.JsEngine.Repository.Init(Program.MainXMLManager.CurrentEngine);
-            SetJsEngineComboBox();
-        }
-      
-        private void SaveJsEngineType()
-        {
-            if (String.IsNullOrEmpty(this.jsEngineComboBox.Text))
-            {
-                return;
-            }
-
-            var node = Program.MainXMLManager.Engines.First(e => e.Type == (JsEngineType)
-                Enum.Parse(typeof(JsEngineType), this.jsEngineComboBox.Text));
-            
-            if (node == null){
-                return;
-            }
-
-            Program.MainXMLManager.CurrentEngine = 
-                (JsEngineType)Enum.Parse(typeof(JsEngineType), this.jsEngineComboBox.Text);
-            
-        }
-        
         private string OpenOpenFileDialog()
         {
             this.open_file_dialog.InitialDirectory =
@@ -492,9 +420,7 @@ namespace DBUI {
             }
             return this.open_file_dialog.FileName;
         }
-        
-        
-
+      
         
     }
 }

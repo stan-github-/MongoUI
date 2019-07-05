@@ -21,7 +21,7 @@ namespace DBUI {
         }
 
         public void finalize() {
-            Program.JsEngine.Repository.SaveXml();
+            //Program.JsEngine.Repository.SaveXml();
         }
 
         private void button_save_Click(object sender, EventArgs e) {

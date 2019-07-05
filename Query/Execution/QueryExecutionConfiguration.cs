@@ -14,12 +14,12 @@ namespace DBUI.Queries
 
     public class QueryExecutionConfiguration {
 
-        public MongoXMLRepository MongoXMLRepository
+        /*public MongoXMLRepository MongoXMLRepository
         {   get 
             { 
                 return Program.JsEngine.MongoEngine.Repository; 
             } 
-        }
+        }*/
         
         public QueryExecutionConfiguration()
         {
@@ -40,23 +40,20 @@ namespace DBUI.Queries
 
         public bool ContinueWithExecutionAfterWarning()
         {
-            if (Program.MainXMLManager.CurrentEngine != JsEngineType.MongoDB) {
-                return true;
-            }
-
+            
             if (NoConfirmation)
             {
                 return true;
             }
 
-            var serverName = this.MongoXMLRepository.CurrentServer.Name;
+            var server = Program.Config.CurrentServer();
 
-            if (!MongoXMLRepository.Servers.First(s => s.Name == serverName).WithWarning)
+            if (!server.WithWarning)
             {
                 return true;
             }
 
-            if (MessageBox.Show("Continue query with " + serverName, 
+            if (MessageBox.Show("Continue query with " + server.Alias, 
                 "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 return true;

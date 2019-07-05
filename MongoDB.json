@@ -1,0 +1,40 @@
+﻿{
+    CustomJavascriptFiles: [
+      './Scripts/underscore.js',
+      './Scripts/GetCollectionNames.js',
+      '/Scripts/Custom.js',
+      './Scripts/UUIHelper.js'
+    ],
+    QueryOutputTypes: 
+    [{
+        name: "MongoUI", isCurrent: true,
+        name: "notepad.exe", isCurrent: false,
+    }],    
+	Servers: [
+        {
+            name: 'localhost',
+            alias: 'localhost',
+            withWarning: false,
+            isCurrent: true,
+            database:[
+                {
+                    name: 'test',
+                    Collections: []
+                }
+            ]
+        }
+    ],
+    Miscellaneous: {
+        QueryFolder: '%temp%\\MongoQueries',
+        LastOpenedFilePaths: [],
+		CodeSnippets: [
+			{groupName: 'zzz', filePath: ''}
+		],
+        TempFolder: '%temp%',
+        DeleteTempFolderContents: true,
+        AutoComplete: false
+    }
+}
+
+    
+  
