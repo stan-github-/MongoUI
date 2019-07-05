@@ -248,7 +248,7 @@ namespace DBUI.Queries {
                 this.OutputTypeComboBox.Items.Add(t.Name);
             }
 
-            this.OutputTypeComboBox.Text = Program.Config.Data.QueryOutputTypes.First(o=>o.isCurrent).Name;
+            this.OutputTypeComboBox.Text = Program.Config.Data.QueryOutputTypes.First(o=>o.IsCurrent).Name;
         }
 
         #endregion
@@ -275,9 +275,9 @@ namespace DBUI.Queries {
 
         private void QueryOutputType_Selected(object sender, EventArgs e)
         {
-            Program.Config.Data.QueryOutputTypes.ForEach(q => q.isCurrent = false);
+            Program.Config.Data.QueryOutputTypes.ForEach(q => q.IsCurrent = false);
             Program.Config.Data.QueryOutputTypes.Find
-                (f => f.Name == OutputTypeComboBox.Text).isCurrent = true;
+                (f => f.Name == OutputTypeComboBox.Text).IsCurrent = true;
         }
 
         #endregion

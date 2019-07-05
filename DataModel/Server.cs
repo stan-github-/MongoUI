@@ -17,7 +17,17 @@ namespace DBUI.DataModel {
 
         public Database CurrentDatabase  {
             get {
-                return Databases.FirstOrDefault(d => d.isCurrent);
+                if (Databases == null || Databases.Count == 0) {
+                    return new Database() { Name = "admin", IsCurrent = true };
+                }
+                if (Databases.Count == 1) {
+                    return Databases[0];
+                }
+                var db =  Databases.FirstOrDefault(d => d.IsCurrent);
+                if (db == null) {
+                    return Databases[0];
+                }
+                return null;
             }                                  
         }
 
@@ -27,7 +37,7 @@ namespace DBUI.DataModel {
     {
         public String Name { get; set; }
         public List<String> Collections { get; set; }
-        public bool isCurrent { get; set; }
+        public bool IsCurrent { get; set; }
     }
 
     public class SnippetFile {

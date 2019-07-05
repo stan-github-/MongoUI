@@ -20,6 +20,7 @@ namespace DBUI.Queries
 
         public ConfigManager(string path)
         {
+            FilePath = path;
             Load(path);
         }
 
@@ -47,7 +48,7 @@ namespace DBUI.Queries
         }
 
         public OutputType CurrentQueryOutputType(){
-            var type = Data.QueryOutputTypes.First(q => q.isCurrent);
+            var type = Data.QueryOutputTypes.First(q => q.IsCurrent);
             return type;
         }
     }

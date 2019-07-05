@@ -43,6 +43,7 @@ namespace DBUI {
             
             this.setToolStripMenuItem();
 
+            this.SetServerComboBox();
             this.SetDropDownFileHistory();
             this.SetDropDownCodeSnippet();
             this.SetMongoCollectionsOnDataImport();
@@ -63,11 +64,11 @@ namespace DBUI {
             this.saveToolStripButton.Visible = true;
             this.saveFileDialog1.FileOk += SaveQueryWithFileDialog;
 
-            _autoCompleter.RefreshCurrentDBCollectionNames();
+            //_autoCompleter.RefreshCurrentDBCollectionNames();
         
             //future features
-            this.historyMenu.Enabled = false;
-            this.historyMenu.Visible = false;
+            //this.historyMenu.Enabled = false;
+            //this.historyMenu.Visible = false;
 
             return true;
         }
@@ -111,7 +112,12 @@ namespace DBUI {
 
         private void OpenLastOpendedFiles()
         {
-            var file = Program.Config.Data.Miscellaneous.LastOpenedFilePaths.Last();
+            var l = Program.Config.Data.Miscellaneous.LastOpenedFilePaths;
+            if (l.Count == 0) {
+                return;
+            }
+
+            var file = l.Last();
             new Queries.FormQuery(this).Init(FormQuery.Mode.Existing, file);
         }
 
@@ -202,7 +208,7 @@ namespace DBUI {
         private void databaseComboBox_Select(object sender, EventArgs e)
         {
             SaveCurrentServerAndDatabase();
-            _autoCompleter.RefreshCurrentDBCollectionNames();
+            //_autoCompleter.RefreshCurrentDBCollectionNames();
         }
 
         private void SaveCurrentServerAndDatabase()
@@ -214,8 +220,12 @@ namespace DBUI {
             }
 
             Program.Config.Data.Servers.ForEach(s=>s.IsCurrent = false);
-            Program.Config.Data.Servers.Find
-                (s => s.Name == databaseComboBox.Text).IsCurrent = true;
+            var server = Program.Config.Data.Servers.First
+                (s => s.Name == serverComboBox.Text);
+            server.IsCurrent = true;
+            server.Databases.ForEach(s => s.IsCurrent = false);
+            var database = server.Databases.First(d => d.Name == databaseComboBox.Text);
+            database.IsCurrent = true;
             
         }
         #endregion

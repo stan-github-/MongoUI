@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using DBUI.Queries;
 using System.Linq;
+using System.Security.Permissions;
 
 namespace DBUI
 {
@@ -16,18 +17,27 @@ namespace DBUI
         /// 
         [STAThread]
         //todo need save file as.
+        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
         static void Main()
         {
 
             //MainXMLManager = new MainXMLRepository();
             //MainXMLManager.Init("main.xml");
-            Config  = new ConfigManager("mongoDB.json");
+            Config = new ConfigManager("mongoDB.json");
 
-            //JsEngine = new JsEngineProxy();
-
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(GlobalErrorHandler);
+      
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMainMDI());
+        }
+
+        static void GlobalErrorHandler(object sender, UnhandledExceptionEventArgs args)
+        {
+            Exception e = (Exception)args.ExceptionObject;
+            ErrorManager.Write(e);
+            ErrorManager.Write(e.StackTrace);
         }
     }
 }

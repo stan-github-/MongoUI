@@ -6,20 +6,20 @@
       './Scripts/UUIHelper.js'
     ],
     QueryOutputTypes: 
-    [{
-        name: "MongoUI", isCurrent: true,
-        name: "notepad.exe", isCurrent: false,
-    }],    
+    [
+		{name: "MongoUI", isCurrent: true},
+        {name: "notepad.exe", isCurrent: false}
+	],    
 	Servers: [
         {
             name: 'localhost',
             alias: 'localhost',
             withWarning: false,
             isCurrent: true,
-            database:[
+            databases:[
                 {
-                    name: 'test',
-                    Collections: []
+                    name: 'admin',
+                    collections: []
                 }
             ]
         }
