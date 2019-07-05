@@ -1,5 +1,6 @@
 ﻿{
-    CustomJavascriptFiles: [
+    MongoClientExePath: 'd:/mongodb/bin/mongo.exe ',
+	CustomJavascriptFiles: [
       './Scripts/underscore.js',
       './Scripts/GetCollectionNames.js',
       '/Scripts/Custom.js',
@@ -16,6 +17,8 @@
             alias: 'localhost',
             withWarning: false,
             isCurrent: true,
+			user: 'admin',
+			password: 'admin',
             databases:[
                 {
                     name: 'admin',

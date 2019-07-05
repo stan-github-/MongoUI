@@ -63,7 +63,15 @@ namespace DBUI.Queries
                 currentServer.Password,
                 queryFilePath);
 
-            ExecuteConsoleApp("mongo.exe", arguments);
+            if (string.IsNullOrWhiteSpace(currentServer.User) || string.IsNullOrWhiteSpace(currentServer.Name)){
+                arguments = String.Format(
+                "{0} --quiet --host {1} {2}",
+                currentServer.CurrentDatabase.Name,
+                currentServer.Name,
+                queryFilePath);
+            } 
+
+            ExecuteConsoleApp(Program.Config.Data.MongoClientExePath, arguments);
 
             //delete file
             FileManager.DeleteFile(queryFilePath);

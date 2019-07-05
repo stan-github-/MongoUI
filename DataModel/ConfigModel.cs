@@ -32,6 +32,6 @@ namespace DBUI.DataModel
         public List<Server> Servers { get; set; }
         public Miscellaneous Miscellaneous { get; set; }
         public List<OutputType> QueryOutputTypes { get; set; }
-        
+        public string MongoClientExePath { get; set; }   
     }
 }

@@ -67,9 +67,9 @@
             this.layout_panel.Name = "layout_panel";
             this.layout_panel.RowCount = 2;
             this.layout_panel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layout_panel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 56F));
+            this.layout_panel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 41F));
             this.layout_panel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 125F));
-            this.layout_panel.Size = new System.Drawing.Size(1087, 538);
+            this.layout_panel.Size = new System.Drawing.Size(701, 344);
             this.layout_panel.TabIndex = 1;
             // 
             // panel1
@@ -77,15 +77,14 @@
             this.panel1.Controls.Add(this.button_apply);
             this.panel1.Controls.Add(this.button_cancel);
             this.panel1.Controls.Add(this.button_save);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 485);
+            this.panel1.Location = new System.Drawing.Point(3, 306);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1081, 50);
+            this.panel1.Size = new System.Drawing.Size(695, 35);
             this.panel1.TabIndex = 2;
             // 
             // button_apply
             // 
-            this.button_apply.Location = new System.Drawing.Point(528, 12);
+            this.button_apply.Location = new System.Drawing.Point(611, 9);
             this.button_apply.Name = "button_apply";
             this.button_apply.Size = new System.Drawing.Size(75, 23);
             this.button_apply.TabIndex = 2;
@@ -95,7 +94,7 @@
             // 
             // button_cancel
             // 
-            this.button_cancel.Location = new System.Drawing.Point(442, 12);
+            this.button_cancel.Location = new System.Drawing.Point(523, 9);
             this.button_cancel.Name = "button_cancel";
             this.button_cancel.Size = new System.Drawing.Size(75, 23);
             this.button_cancel.TabIndex = 1;
@@ -105,7 +104,7 @@
             // 
             // button_save
             // 
-            this.button_save.Location = new System.Drawing.Point(361, 12);
+            this.button_save.Location = new System.Drawing.Point(433, 9);
             this.button_save.Name = "button_save";
             this.button_save.Size = new System.Drawing.Size(75, 23);
             this.button_save.TabIndex = 0;
@@ -126,8 +125,8 @@
             // main_split_conntainer.Panel2
             // 
             this.main_split_conntainer.Panel2.Controls.Add(this.tab_control);
-            this.main_split_conntainer.Size = new System.Drawing.Size(1081, 476);
-            this.main_split_conntainer.SplitterDistance = 360;
+            this.main_split_conntainer.Size = new System.Drawing.Size(695, 297);
+            this.main_split_conntainer.SplitterDistance = 141;
             this.main_split_conntainer.TabIndex = 4;
             // 
             // list_view_server
@@ -137,7 +136,7 @@
             this.list_view_server.Location = new System.Drawing.Point(0, 0);
             this.list_view_server.MultiSelect = false;
             this.list_view_server.Name = "list_view_server";
-            this.list_view_server.Size = new System.Drawing.Size(360, 476);
+            this.list_view_server.Size = new System.Drawing.Size(141, 297);
             this.list_view_server.TabIndex = 4;
             this.list_view_server.UseCompatibleStateImageBehavior = false;
             this.list_view_server.View = System.Windows.Forms.View.List;
@@ -150,7 +149,7 @@
             this.tab_control.Location = new System.Drawing.Point(0, 0);
             this.tab_control.Name = "tab_control";
             this.tab_control.SelectedIndex = 0;
-            this.tab_control.Size = new System.Drawing.Size(717, 476);
+            this.tab_control.Size = new System.Drawing.Size(550, 297);
             this.tab_control.TabIndex = 1;
             // 
             // tab_page_databases
@@ -159,7 +158,7 @@
             this.tab_page_databases.Location = new System.Drawing.Point(4, 22);
             this.tab_page_databases.Name = "tab_page_databases";
             this.tab_page_databases.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_page_databases.Size = new System.Drawing.Size(709, 450);
+            this.tab_page_databases.Size = new System.Drawing.Size(542, 271);
             this.tab_page_databases.TabIndex = 0;
             this.tab_page_databases.Text = "databases";
             this.tab_page_databases.UseVisualStyleBackColor = true;
@@ -179,8 +178,8 @@
             // 
             this.database_split_container.Panel2.Controls.Add(this.button_database_delete);
             this.database_split_container.Panel2.Controls.Add(this.button_database_add);
-            this.database_split_container.Size = new System.Drawing.Size(703, 444);
-            this.database_split_container.SplitterDistance = 390;
+            this.database_split_container.Size = new System.Drawing.Size(536, 265);
+            this.database_split_container.SplitterDistance = 232;
             this.database_split_container.TabIndex = 0;
             // 
             // list_view_database
@@ -188,14 +187,14 @@
             this.list_view_database.Dock = System.Windows.Forms.DockStyle.Fill;
             this.list_view_database.Location = new System.Drawing.Point(0, 0);
             this.list_view_database.Name = "list_view_database";
-            this.list_view_database.Size = new System.Drawing.Size(703, 390);
+            this.list_view_database.Size = new System.Drawing.Size(536, 232);
             this.list_view_database.TabIndex = 0;
             this.list_view_database.UseCompatibleStateImageBehavior = false;
             this.list_view_database.View = System.Windows.Forms.View.List;
             // 
             // button_database_delete
             // 
-            this.button_database_delete.Location = new System.Drawing.Point(614, 12);
+            this.button_database_delete.Location = new System.Drawing.Point(455, 8);
             this.button_database_delete.Name = "button_database_delete";
             this.button_database_delete.Size = new System.Drawing.Size(75, 23);
             this.button_database_delete.TabIndex = 2;
@@ -204,7 +203,7 @@
             // 
             // button_database_add
             // 
-            this.button_database_add.Location = new System.Drawing.Point(520, 12);
+            this.button_database_add.Location = new System.Drawing.Point(370, 8);
             this.button_database_add.Name = "button_database_add";
             this.button_database_add.Size = new System.Drawing.Size(75, 23);
             this.button_database_add.TabIndex = 1;
@@ -261,7 +260,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1087, 538);
+            this.ClientSize = new System.Drawing.Size(701, 344);
             this.Controls.Add(this.layout_panel);
             this.Name = "FormServerOptions";
             this.Text = "Server Options";
