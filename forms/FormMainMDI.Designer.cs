@@ -309,6 +309,7 @@ namespace DBUI {
             this.snippetsMenu.Name = "snippetsMenu";
             this.snippetsMenu.Size = new System.Drawing.Size(68, 20);
             this.snippetsMenu.Text = "Snippets";
+            this.snippetsMenu.Visible = false;
             // 
             // dataMenu
             // 
@@ -318,6 +319,7 @@ namespace DBUI {
             this.dataMenu.Name = "dataMenu";
             this.dataMenu.Size = new System.Drawing.Size(46, 20);
             this.dataMenu.Text = "Data";
+            this.dataMenu.Visible = false;
             // 
             // importSubMenu
             // 

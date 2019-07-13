@@ -45,7 +45,7 @@ namespace DBUI {
 
             this.SetServerComboBox();
             this.SetDropDownFileHistory();
-            this.SetDropDownCodeSnippet();
+            //this.SetDropDownCodeSnippet();
             this.SetMongoCollectionsOnDataImport();
             this.OpenLastOpendedFiles();
 
@@ -66,10 +66,6 @@ namespace DBUI {
 
             //_autoCompleter.RefreshCurrentDBCollectionNames();
         
-            //future features
-            //this.historyMenu.Enabled = false;
-            //this.historyMenu.Visible = false;
-
             return true;
         }
 
@@ -137,11 +133,7 @@ namespace DBUI {
 
         #region "on exit"
         void FormMainMDI_Closed(object sender, EventArgs e)
-        {
-            var l = new List<String>();
-            MdiChildren.ToList().ForEach(c=> l.Add(((FormQuery)c).QueryFilePath));
-            Program.Config.Data.Miscellaneous.LastOpenedFilePaths = l;
-
+        {   
             Program.Config.Save();
         }
 
@@ -233,20 +225,12 @@ namespace DBUI {
         #endregion
 
         #region "drop down snippet code files etc"
-        private void SetDropDownFileHistory()
+        public void SetDropDownFileHistory()
         {
+            this.historyMenu.DropDownItems.Clear();
             Program.Config.Data.Miscellaneous.LastOpenedFilePaths.ForEach
                 (f=> this.historyMenu.DropDownItems.Add(f)
             );
-        }
-
-        private void SetDropDownCodeSnippet()
-        {
-            Program.Config.Data.Miscellaneous.CodeSnippets.ForEach
-                (f =>{
-                    string s = String.Format("{0};{1}", f.FileName, f.FilePath);
-                    this.snippetsMenu.DropDownItems.Add(s);
-                });
         }
 
         #endregion

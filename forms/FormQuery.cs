@@ -185,22 +185,18 @@ namespace DBUI.Queries {
             switch (mode)
             {
                 case Mode.New:
-                    EnsureQueryFilePathExists();
                     break;
                 case Mode.Existing:
                     this.QueryFilePath = filePath;
-                    EnsureQueryFilePathExists();
                     break;
                 case Mode.Last:
                     this.QueryFilePath = Program.Config.LastOpenedFile();
-                    EnsureQueryFilePathExists();
                     break;
                 case Mode.FileDialog:
                     this.QueryFilePath = this.OpenOpenFileDialog();
-                    EnsureQueryFilePathExists();
                     break;
             }
-
+            EnsureQueryFilePathExists();
 
             //form tile
             this.Text = this.QueryFilePath;
@@ -270,7 +266,15 @@ namespace DBUI.Queries {
 
         private void Form_Closed(object sender, FormClosedEventArgs e)
         {
-            Program.Config.Save();
+            var l = Program.Config.Data.Miscellaneous.LastOpenedFilePaths;
+            l.Add(this.QueryFilePath);
+            
+            if (l.Count > 10) {
+                var f = l.First();
+                l.Remove(f);
+            }
+
+            ((FormMainMDI)this.MdiParent).SetDropDownFileHistory();
         }
 
         private void QueryOutputType_Selected(object sender, EventArgs e)

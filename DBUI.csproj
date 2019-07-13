@@ -61,7 +61,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataModel\ConfigModel.cs" />
-    <Compile Include="DataModel\JsEngine.cs" />
     <Compile Include="Forms\FormNewSnippetFile.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,8 +106,6 @@
     <Compile Include="Core\FormError.Designer.cs">
       <DependentUpon>FormError.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\XMLManager.cs" />
-    <Compile Include="DataModel\Enums.cs" />
     <Compile Include="DataModel\Server.cs" />
     <Compile Include="Extensions\Scintilla.cs" />
     <Compile Include="Forms\AboutDBUI.cs">
@@ -188,27 +185,14 @@
     <None Include="MongoDB.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="Query\Wrapper.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Scripts\angular.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Scripts\GetCollectionNames.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\Custom.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\JavaScript1.js" />
-    <Content Include="Scripts\scraps\PhantomJsWrapper.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Scripts\underscore.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Scripts\scraps\Wrapper.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\UUIHelper.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

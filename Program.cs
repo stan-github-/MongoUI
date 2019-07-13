@@ -9,6 +9,12 @@ namespace DBUI
 {
     static class Program
     {
+        //todo
+
+        //history of files....
+        //code snippets....
+
+
         //public static JsEngineProxy JsEngine;
         public static ConfigManager Config { get; set; }
         /// <summary>
@@ -21,8 +27,6 @@ namespace DBUI
         static void Main()
         {
 
-            //MainXMLManager = new MainXMLRepository();
-            //MainXMLManager.Init("main.xml");
             Config = new ConfigManager("mongoDB.json");
 
             AppDomain currentDomain = AppDomain.CurrentDomain;
