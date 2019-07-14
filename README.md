@@ -14,15 +14,7 @@ MongoUI is a bear-bone mongo mananger modeled after sql server manager, where mu
 ###Additional features: ###
 
   - Pops confirmation dialog before query execution, depending on server configuration.</td></tr>
-  - Reopens all files opened in previous session.</td></tr>
-  - Stores static list of files for quick access.</td></tr>
-
-###Features in progress: ###
-
-  - Autocomplete/Intellisense:
-    - Works only with runnable code after "." is replaced by ";" (most of the time).
-    <img src="Images/AutoComplete.jpg"></image>
-    <img src="Images/AutoComplete2.jpg"></image>
-    <img src="Images/AutoComplete3.jpg"></image>
+  - Reopens last file opened in previous session.</td></tr>
+ 
 
 
