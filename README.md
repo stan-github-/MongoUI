@@ -17,4 +17,5 @@ MongoUI is a bear-bone mongo mananger modeled after sql server manager, where mu
   - Reopens last file opened in previous session.</td></tr>
  
 
+<img src="Images/App.jpg"></image>
 
