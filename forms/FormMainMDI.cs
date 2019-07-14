@@ -159,7 +159,7 @@ namespace DBUI {
             SetDatabaseComboBox();
         }
 
-        private void SetDatabaseComboBox()
+        public void SetDatabaseComboBox()
         {
 
             var server = Program.Config.CurrentServer();
@@ -263,7 +263,7 @@ namespace DBUI {
         {
             if (this.form_options_server == null || this.form_options_server.IsDisposed == true)
             {
-                this.form_options_server = new FormServerOptions();
+                this.form_options_server = new FormServerOptions(this);
             }
 
             this.form_options_server.Show();

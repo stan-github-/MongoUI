@@ -12,7 +12,12 @@ using System.Windows.Forms;
 
 namespace DBUI {
     public partial class FormServerOptions : Form {
-        public FormServerOptions() {
+
+        public FormMainMDI ParentMDI;
+
+        public FormServerOptions(FormMainMDI parentMDI) {
+            this.ParentMDI = parentMDI;
+
             InitializeComponent();
             init();
         }
@@ -80,9 +85,15 @@ namespace DBUI {
 
         private void button_database_remove_Click(object sender, EventArgs e)
         {
+
             if (this.list_view_server.SelectedItems.Count != 1 || 
                 this.list_view_database.SelectedItems.Count != 1)
             {
+                return;
+            }
+
+            if (this.list_view_database.Items.Count == 1) {
+                ErrorManager.Write("can't delete the last database!");
                 return;
             }
 
@@ -91,6 +102,7 @@ namespace DBUI {
             server.Databases.Remove(database);
 
             //reset listview UI
+            this.ParentMDI.SetDatabaseComboBox();
             SetMongoDatabases();
         }
         
