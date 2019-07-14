@@ -61,12 +61,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataModel\ConfigModel.cs" />
-    <Compile Include="Forms\FormNewSnippetFile.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormNewSnippetFile.Designer.cs">
-      <DependentUpon>FormNewSnippetFile.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\FormNewItem.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -141,9 +135,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormMainMDI.resx">
       <DependentUpon>FormMainMDI.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormNewSnippetFile.resx">
-      <DependentUpon>FormNewSnippetFile.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormNewItem.resx">
       <DependentUpon>FormNewItem.cs</DependentUpon>

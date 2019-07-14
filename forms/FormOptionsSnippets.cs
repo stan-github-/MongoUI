@@ -79,10 +79,10 @@ namespace DBUI {
         
         private void ButtonFileAdd_EventHandler(object sender, EventArgs e)
         {
-            var form = new FormNewSnippetFile() { 
-                callBack = AddNewFile
-            };
-            form.Show();
+            //var form = new FormNewSnippetFile() { 
+            //    callBack = AddNewFile
+            //};
+            //form.Show();
         }
 
         private void buttonFileDelete_Click(object sender, EventArgs e)
