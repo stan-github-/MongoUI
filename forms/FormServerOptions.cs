@@ -81,6 +81,7 @@ namespace DBUI {
             });
          
             SetMongoDatabases();
+            this.ParentMDI.SetDatabaseComboBox();
         }
 
         private void button_database_remove_Click(object sender, EventArgs e)

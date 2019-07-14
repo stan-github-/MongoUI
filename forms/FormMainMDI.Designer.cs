@@ -240,7 +240,7 @@ namespace DBUI {
             // snippetsToolStripMenuItem
             // 
             this.snippetsToolStripMenuItem.Name = "snippetsToolStripMenuItem";
-            this.snippetsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.snippetsToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.snippetsToolStripMenuItem.Text = "Snip&pets";
             this.snippetsToolStripMenuItem.Visible = false;
             // 
