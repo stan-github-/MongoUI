@@ -3,7 +3,7 @@
 	CustomJavascriptFiles: [
       './Scripts/underscore.js',
       './Scripts/GetCollectionNames.js',
-      '/Scripts/Custom.js',
+      './Scripts/Custom.js',
       './Scripts/UUIHelper.js'
     ],
     QueryOutputTypes: 
