@@ -162,16 +162,8 @@ namespace DBUI {
         private void SetDatabaseComboBox()
         {
 
-            var server = 
-                Program.Config.Data.Servers.Where
-                (x => x.Alias == serverComboBox.Text).FirstOrDefault();
-                        
-            if (server == null)
-            {
-                MessageBox.Show("Server not configured correctly; check configure file.");
-                return;
-            }
-
+            var server = Program.Config.CurrentServer();
+            
             try
             {
                 databaseComboBox.Items.Clear();
@@ -187,12 +179,12 @@ namespace DBUI {
             }
 
             this.databaseComboBox.Text = Program.Config.CurrentServer().CurrentDatabase.Name;
-            //_autoCompleter.RefreshCurrentDBCollectionNames();
         }
 
         #region "saving server and databae setting"
         private void serverComboBox_Select(object sender, EventArgs e)
         {
+            Program.Config.CurrentServer(serverComboBox.Text);   
             SetDatabaseComboBox();
             SaveCurrentServerAndDatabase();        
         }
@@ -211,10 +203,13 @@ namespace DBUI {
                 return;
             }
 
+            //set current server
             Program.Config.Data.Servers.ForEach(s=>s.IsCurrent = false);
-            var server = Program.Config.Data.Servers.First
-                (s => s.Name == serverComboBox.Text);
+            var server = Program.Config.Data.Servers.First(s => s.Alias == serverComboBox.Text);
             server.IsCurrent = true;
+
+            //set current database
+            
             server.Databases.ForEach(s => s.IsCurrent = false);
             var database = server.Databases.First(d => d.Name == databaseComboBox.Text);
             database.IsCurrent = true;

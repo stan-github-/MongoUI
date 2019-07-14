@@ -32,13 +32,15 @@
             this.tab_page_databases = new System.Windows.Forms.TabPage();
             this.database_split_container = new System.Windows.Forms.SplitContainer();
             this.list_view_database = new System.Windows.Forms.ListView();
-            this.button_database_delete = new System.Windows.Forms.Button();
+            this.button_database_remove = new System.Windows.Forms.Button();
             this.button_database_add = new System.Windows.Forms.Button();
-            this.tab_page_user_password = new System.Windows.Forms.TabPage();
+            this.tab_page_settings = new System.Windows.Forms.TabPage();
             this.label2 = new System.Windows.Forms.Label();
             this.text_box_password = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.textbox_user = new System.Windows.Forms.TextBox();
+            this.textbox_hostname = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.layout_panel.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.main_split_conntainer)).BeginInit();
@@ -51,7 +53,7 @@
             this.database_split_container.Panel1.SuspendLayout();
             this.database_split_container.Panel2.SuspendLayout();
             this.database_split_container.SuspendLayout();
-            this.tab_page_user_password.SuspendLayout();
+            this.tab_page_settings.SuspendLayout();
             this.SuspendLayout();
             // 
             // layout_panel
@@ -119,7 +121,7 @@
             // tab_control
             // 
             this.tab_control.Controls.Add(this.tab_page_databases);
-            this.tab_control.Controls.Add(this.tab_page_user_password);
+            this.tab_control.Controls.Add(this.tab_page_settings);
             this.tab_control.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tab_control.Location = new System.Drawing.Point(0, 0);
             this.tab_control.Name = "tab_control";
@@ -151,7 +153,7 @@
             // 
             // database_split_container.Panel2
             // 
-            this.database_split_container.Panel2.Controls.Add(this.button_database_delete);
+            this.database_split_container.Panel2.Controls.Add(this.button_database_remove);
             this.database_split_container.Panel2.Controls.Add(this.button_database_add);
             this.database_split_container.Size = new System.Drawing.Size(536, 265);
             this.database_split_container.SplitterDistance = 232;
@@ -167,14 +169,14 @@
             this.list_view_database.UseCompatibleStateImageBehavior = false;
             this.list_view_database.View = System.Windows.Forms.View.List;
             // 
-            // button_database_delete
+            // button_database_remove
             // 
-            this.button_database_delete.Location = new System.Drawing.Point(455, 8);
-            this.button_database_delete.Name = "button_database_delete";
-            this.button_database_delete.Size = new System.Drawing.Size(75, 23);
-            this.button_database_delete.TabIndex = 2;
-            this.button_database_delete.Text = "&Delete";
-            this.button_database_delete.UseVisualStyleBackColor = true;
+            this.button_database_remove.Location = new System.Drawing.Point(455, 8);
+            this.button_database_remove.Name = "button_database_remove";
+            this.button_database_remove.Size = new System.Drawing.Size(75, 23);
+            this.button_database_remove.TabIndex = 2;
+            this.button_database_remove.Text = "&Remove";
+            this.button_database_remove.UseVisualStyleBackColor = true;
             // 
             // button_database_add
             // 
@@ -185,19 +187,21 @@
             this.button_database_add.Text = "&Add";
             this.button_database_add.UseVisualStyleBackColor = true;
             // 
-            // tab_page_user_password
+            // tab_page_settings
             // 
-            this.tab_page_user_password.Controls.Add(this.label2);
-            this.tab_page_user_password.Controls.Add(this.text_box_password);
-            this.tab_page_user_password.Controls.Add(this.label1);
-            this.tab_page_user_password.Controls.Add(this.textbox_user);
-            this.tab_page_user_password.Location = new System.Drawing.Point(4, 22);
-            this.tab_page_user_password.Name = "tab_page_user_password";
-            this.tab_page_user_password.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_page_user_password.Size = new System.Drawing.Size(542, 271);
-            this.tab_page_user_password.TabIndex = 1;
-            this.tab_page_user_password.Text = "user password";
-            this.tab_page_user_password.UseVisualStyleBackColor = true;
+            this.tab_page_settings.Controls.Add(this.label3);
+            this.tab_page_settings.Controls.Add(this.textbox_hostname);
+            this.tab_page_settings.Controls.Add(this.label2);
+            this.tab_page_settings.Controls.Add(this.text_box_password);
+            this.tab_page_settings.Controls.Add(this.label1);
+            this.tab_page_settings.Controls.Add(this.textbox_user);
+            this.tab_page_settings.Location = new System.Drawing.Point(4, 22);
+            this.tab_page_settings.Name = "tab_page_settings";
+            this.tab_page_settings.Padding = new System.Windows.Forms.Padding(3);
+            this.tab_page_settings.Size = new System.Drawing.Size(542, 271);
+            this.tab_page_settings.TabIndex = 1;
+            this.tab_page_settings.Text = "settings";
+            this.tab_page_settings.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
@@ -231,6 +235,22 @@
             this.textbox_user.Size = new System.Drawing.Size(226, 20);
             this.textbox_user.TabIndex = 0;
             // 
+            // textbox_hostname
+            // 
+            this.textbox_hostname.Location = new System.Drawing.Point(105, 125);
+            this.textbox_hostname.Name = "textbox_hostname";
+            this.textbox_hostname.Size = new System.Drawing.Size(226, 20);
+            this.textbox_hostname.TabIndex = 4;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(28, 132);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(49, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Name/Ip";
+            // 
             // FormServerOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -251,8 +271,8 @@
             this.database_split_container.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.database_split_container)).EndInit();
             this.database_split_container.ResumeLayout(false);
-            this.tab_page_user_password.ResumeLayout(false);
-            this.tab_page_user_password.PerformLayout();
+            this.tab_page_settings.ResumeLayout(false);
+            this.tab_page_settings.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -267,14 +287,16 @@
         private System.Windows.Forms.TabControl tab_control;
         private System.Windows.Forms.TabPage tab_page_databases;
         private System.Windows.Forms.SplitContainer database_split_container;
-        private System.Windows.Forms.TabPage tab_page_user_password;
+        private System.Windows.Forms.TabPage tab_page_settings;
         private System.Windows.Forms.ListView list_view_database;
-        private System.Windows.Forms.Button button_database_delete;
+        private System.Windows.Forms.Button button_database_remove;
         private System.Windows.Forms.Button button_database_add;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox text_box_password;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textbox_user;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox textbox_hostname;
 
 
     }

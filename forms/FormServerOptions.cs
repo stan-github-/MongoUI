@@ -27,7 +27,7 @@ namespace DBUI {
             get {
                 //assume localhost is always set, and we will always have one server!
                 var server = Program.Config.Data.Miscellaneous.ServerOptions.SelectedServer;
-                return Program.Config.Data.Servers.FirstOrDefault(s => s.Name == server);
+                return Program.Config.Data.Servers.FirstOrDefault(s => s.Alias == server);
             }            
         }
 
@@ -36,7 +36,7 @@ namespace DBUI {
             SetEventHandlers();
 
             foreach (ListViewItem i in list_view_server.Items) {
-                if (i.Text == SelectedServer.Name) {
+                if (i.Text == SelectedServer.Alias) {
                     i.Selected = true;
                     break;
                 }
@@ -47,7 +47,7 @@ namespace DBUI {
         {
             foreach (var server in Program.Config.Data.Servers)
             {
-                this.list_view_server.Items.Add(new ListViewItem(server.Name));
+                this.list_view_server.Items.Add(new ListViewItem(server.Alias));
             }
         }
 
@@ -55,10 +55,11 @@ namespace DBUI {
             this.list_view_server.ItemSelectionChanged += new ListViewItemSelectionChangedEventHandler
                 (ListViewServer_SelectionChangedEventHandler);
             this.button_database_add.Click += new EventHandler(ButtonDatabaseAdd_EventHandler);
-            this.button_database_delete.Click += new System.EventHandler(this.button_database_delete_Click);
+            this.button_database_remove.Click += new System.EventHandler(this.button_database_remove_Click);
             this.button_ok.Click += button_ok_Click;
             this.text_box_password.Leave += tex_box_password_Leave;
             this.textbox_user.Leave += textbox_user_Leave;
+            this.textbox_hostname.Leave += textbox_hostname_Leave;
         }
 
 
@@ -77,7 +78,7 @@ namespace DBUI {
             SetMongoDatabases();
         }
 
-        private void button_database_delete_Click(object sender, EventArgs e)
+        private void button_database_remove_Click(object sender, EventArgs e)
         {
             if (this.list_view_server.SelectedItems.Count != 1 || 
                 this.list_view_database.SelectedItems.Count != 1)
@@ -86,8 +87,11 @@ namespace DBUI {
             }
 
             var server = SelectedServer;
-            var database = server.Databases.Find(d=>d.Name == this.list_view_database.SelectedItems[0].Text);
+            var database = server.Databases.FirstOrDefault(d=>d.Name == this.list_view_database.SelectedItems[0].Text);
             server.Databases.Remove(database);
+
+            //reset listview UI
+            SetMongoDatabases();
         }
         
         private void ButtonDatabaseAdd_EventHandler(object sender, EventArgs e){
@@ -106,7 +110,7 @@ namespace DBUI {
             Program.Config.Data.Miscellaneous.ServerOptions.SelectedServer = e.Item.Text;
 
             SetMongoDatabases();
-            SetUserAndPassword();
+            SetSettings();
         }
 
         private void SetMongoDatabases()
@@ -120,10 +124,11 @@ namespace DBUI {
             }
         }
 
-        private void SetUserAndPassword() {
+        private void SetSettings() {
             var server = SelectedServer;
             this.textbox_user.Text = server.User;
             this.text_box_password.Text = server.Password;
+            this.textbox_hostname.Text = server.Name;
         }
 
         void textbox_user_Leave(object sender, EventArgs e)
@@ -134,6 +139,11 @@ namespace DBUI {
         void tex_box_password_Leave(object sender, EventArgs e)
         {
             SelectedServer.Password = this.text_box_password.Text;
+        }
+
+        void textbox_hostname_Leave(object sender, EventArgs e)
+        {
+            SelectedServer.Name = this.textbox_hostname.Text;
         }
 
         void button_ok_Click(object sender, EventArgs e)

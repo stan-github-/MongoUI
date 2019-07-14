@@ -18,16 +18,19 @@ namespace DBUI.DataModel {
         public Database CurrentDatabase  {
             get {
                 if (Databases == null || Databases.Count == 0) {
-                    return new Database() { Name = "admin", IsCurrent = true };
+                    ErrorManager.Write(string.Format("Please set up databases for server {0}", this.Alias));
+                    return null;
                 }
                 if (Databases.Count == 1) {
+                    Databases[0].IsCurrent = true;
                     return Databases[0];
                 }
                 var db =  Databases.FirstOrDefault(d => d.IsCurrent);
                 if (db == null) {
+                    Databases[0].IsCurrent = true;
                     return Databases[0];
                 }
-                return null;
+                return db;
             }                                  
         }
 

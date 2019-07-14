@@ -38,8 +38,16 @@ namespace DBUI.Queries
             File.WriteAllText(FilePath, str);
         }
 
-        public Server CurrentServer() {
-            return Data.Servers.Find(s => s.IsCurrent);
+        public Server CurrentServer(string serverAlias = null) {
+            if (serverAlias == null) {
+                return Data.Servers.Find(s => s.IsCurrent);
+            }
+
+            Data.Servers.ForEach(s => s.IsCurrent = false);
+
+            var server = Data.Servers.First(s => s.Alias == serverAlias);
+            server.IsCurrent = true;
+            return server;
         }
 
         public string LastOpenedFile() {
