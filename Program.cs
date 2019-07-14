@@ -11,18 +11,9 @@ namespace DBUI
     {
         //todo
 
-        //history of files....
-        //code snippets....
-
-
-        //public static JsEngineProxy JsEngine;
         public static ConfigManager Config { get; set; }
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        /// 
+        
         [STAThread]
-        //todo need save file as.
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
         static void Main()
         {

@@ -37,7 +37,7 @@ namespace DBUI.Queries {
             get
             {
                 return Environment.ExpandEnvironmentVariables(
-                    Program.Config.Data.Miscellaneous.TempFolder
+                    Program.Config.Data.Miscellaneous.QueryFolder
                     + "\\" + Guid.NewGuid() + ".js");
             }
         }

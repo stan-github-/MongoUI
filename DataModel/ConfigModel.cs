@@ -14,11 +14,11 @@ namespace DBUI.DataModel
 
     public class Miscellaneous {
         public List<string> LastOpenedFilePaths {get; set;}
-        public string TempFolder {get; set;}
-        public bool DeleteTempFolderContents {get; set;}
+        public string QueryFolder {get; set;}
+        //public bool DeleteTempFolderContents {get; set;}
         public bool AutoComplete { get; set; }
         public List<CodeSnippet> CodeSnippets { get; set; }
-        public string QueryFolder { get; set; }
+        //public string QueryFolder { get; set; }
     }
 
     public class OutputType {

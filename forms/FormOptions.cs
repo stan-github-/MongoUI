@@ -20,36 +20,19 @@ namespace DBUI {
             return true;
         }
 
-        public void finalize() {
-            //Program.JsEngine.Repository.SaveXml();
-        }
-
-        private void button_save_Click(object sender, EventArgs e) {
+        
+        private void button_okay_Click(object sender, EventArgs e) {
             SaveControls();
-            this.finalize();
-            this.Close();
-        }
-
-        private void button_apply_Click(object sender, EventArgs e) {
-            SaveControls();
-            this.finalize();
-        }
-
-        private void button_cancel_Click(object sender, EventArgs e) {
             this.Close();
         }
 
         private void SetControls() {
-            //this.textBoxQueryFolder.Text = Program.MainXMLManager.QueryFolderPath;
-            //this.TextBoxTempFolder.Text = Program.MainXMLManager.TempFolderPath;
-            //this.checkBoxDeleteTempFolderContents.Checked = Program.MainXMLManager.DeleteTempFolderContents;
+            this.TextBoxQueryFolder.Text = Program.Config.Data.Miscellaneous.QueryFolder;
+            this.button_okay.Click +=button_okay_Click;
         }
 
         private void SaveControls() {
-            //Program.MainXMLManager.QueryFolderPath = this.textBoxQueryFolder.Text;
-            //Program.MainXMLManager.TempFolderPath = this.TextBoxTempFolder.Text;
-            //Program.MainXMLManager.DeleteTempFolderContents = this.checkBoxDeleteTempFolderContents.Checked;
-            
+            Program.Config.Data.Miscellaneous.QueryFolder = this.TextBoxQueryFolder.Text;
         }
     }
 }

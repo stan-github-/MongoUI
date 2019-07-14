@@ -33,7 +33,6 @@
 		CodeSnippets: [
 			{groupName: 'zzz', filePath: ''}
 		],
-        TempFolder: '%temp%',
         DeleteTempFolderContents: true,
         AutoComplete: false
     }

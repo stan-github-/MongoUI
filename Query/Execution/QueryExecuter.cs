@@ -172,7 +172,7 @@ namespace DBUI.Queries
         public void DisplayQueryInExe(String content, String exe)
         {
             var tempPath = Environment.ExpandEnvironmentVariables
-                (Program.Config.Data.Miscellaneous.TempFolder + "\\"
+                (Program.Config.Data.Miscellaneous.QueryFolder + "\\"
                  + Guid.NewGuid() + ".json");
 
             if (!FileManager.SaveToFile(tempPath, content))

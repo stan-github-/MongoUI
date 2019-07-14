@@ -22,51 +22,51 @@ namespace DBUI {
             return true;
         }
 
-        public void finalize() {
-
-            //save user name and password
-            var server = list_view_server.SelectedItems[0].Text;
-            this.SaveUserAndPasswordToXMLCache(server);
-
-            Program.Config.Save();
-            
-        }
-
-        private void button_save_Click(object sender, EventArgs e) {
-            this.finalize();
-            this.Close();
-        }
-
-        private void button_apply_Click(object sender, EventArgs e) {
-            this.finalize();
-        }
-
-        private void button_cancel_Click(object sender, EventArgs e) {
-            //todo:
-            //reload everything from saved xml file
-            //may not be the best, since file history is lost
-            //could make this just reload the servers and not any other
-            //Program.JsEngine.Repository.Init(JsEngineType.MongoDB);
-            this.Close();
-        }
-
         private void SetControls() {
-            SetDisplayMongoServers();
-
-            this.list_view_server.Items[0].Selected = true;
-
+            SetMongoServers();
             SetEventHandlers();
-            
+
+            if (this.list_view_server.Items.Count == 0) {
+                return;
+            }
+            this.list_view_server.Items[0].Selected = true;
         }
 
+        private void SetMongoServers()
+        {
+            foreach (var server in Program.Config.Data.Servers)
+            {
+                this.list_view_server.Items.Add(new ListViewItem(server.Name));
+            }
+        }
 
         private void SetEventHandlers() {
             this.list_view_server.ItemSelectionChanged += new ListViewItemSelectionChangedEventHandler
                 (ListViewServer_SelectionChangedEventHandler);
             this.button_database_add.Click += new EventHandler(ButtonDatabaseAdd_EventHandler);
             this.button_database_delete.Click += new System.EventHandler(this.button_database_delete_Click);
+            this.button_ok.Click += button_ok_Click;
+            this.text_box_password.Leave += tex_box_password_Leave;
+            this.textbox_user.Leave += textbox_user_Leave;
         }
 
+        void textbox_user_Leave(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        void tex_box_password_Leave(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        void button_ok_Click(object sender, EventArgs e)
+        {
+            //server.User = this.textbox_user.Text;
+            //server.Password = this.tex_box_password.Text;
+        }
+
+        #region database add delete
         private void ButtonDatabaseAdd_SetNewItem(String item)
         {
             if (this.list_view_server.SelectedItems.Count != 1)
@@ -81,7 +81,7 @@ namespace DBUI {
                 Name=item
             });
          
-            SetDisplayMongoDatabases(serverName);
+            SetMongoDatabases(serverName);
         }
 
         private void button_database_delete_Click(object sender, EventArgs e)
@@ -106,17 +106,18 @@ namespace DBUI {
             };
 
             form.ShowDialog();
-            
         }
+        #endregion
 
+        #region "server selected"
         private void ListViewServer_SelectionChangedEventHandler(object sender, ListViewItemSelectionChangedEventArgs e) 
         {
             var serverName = e.Item.Text;
-            SetDisplayMongoDatabases(serverName);
-            SetDisplayUserAndPassword(serverName);
+            SetMongoDatabases(serverName);
+            SetUserAndPassword(serverName);
         }
 
-        private void SetDisplayMongoDatabases(string serverName)
+        private void SetMongoDatabases(string serverName)
         {
             this.list_view_database.Clear();
 
@@ -128,23 +129,19 @@ namespace DBUI {
             }
         }
 
-        private void SetDisplayMongoServers() {
-            foreach (var server in Program.Config.Data.Servers) {
-                this.list_view_server.Items.Add(new ListViewItem(server.Name));
-            }
-        }
-
-        private void SetDisplayUserAndPassword(string serverName) {
+        private void SetUserAndPassword(string serverName) {
             var server = Program.Config.Data.Servers.Find(s => s.Name == serverName);
             this.textbox_user.Text = server.User;
-            this.tex_box_password.Text = server.Password;
+            this.text_box_password.Text = server.Password;
         }
 
         private void SaveUserAndPasswordToXMLCache(string serverName) {
             var server = Program.Config.Data.Servers.Find(s => s.Name == serverName);
 
             server.User =  this.textbox_user.Text;
-            server.Password =  this.tex_box_password.Text;
+            server.Password =  this.text_box_password.Text;
         }
+        #endregion
+
     }
 }

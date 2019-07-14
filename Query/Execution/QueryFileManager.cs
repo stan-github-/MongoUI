@@ -59,7 +59,7 @@ namespace DBUI.Queries
             }
 
             QueryFilePath = Environment.ExpandEnvironmentVariables
-                (Program.Config.Data.Miscellaneous.TempFolder
+                (Program.Config.Data.Miscellaneous.QueryFolder
                 + "\\" + Guid.NewGuid() + ".js");    
         }
     }
