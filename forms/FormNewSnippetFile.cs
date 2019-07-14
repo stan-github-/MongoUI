@@ -23,15 +23,15 @@ namespace DBUI.Forms
             this.button_okay.Click += button_okay_Click;
             this.button_file_path.Click += button_file_path_Click;
 
-            SetGroupNameComboBox();    
+            //SetGroupNameComboBox();    
         }
 
-        private void SetGroupNameComboBox() {
+        /*private void SetGroupNameComboBox() {
             var groupNames = Program.Config.Data.Miscellaneous.CodeSnippets
                 .Select(f => f.GroupName).Distinct();
 
             groupNames.ToList().ForEach(g => this.combo_box_group_name.Items.Add(g));
-        }
+        }*/
 
         private string OpenOpenFileDialog()
         {

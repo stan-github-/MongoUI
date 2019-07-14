@@ -1,4 +1,5 @@
-﻿using DBUI.Forms;
+﻿using DBUI.DataModel;
+using DBUI.Forms;
 using DBUI.Queries;
 using System;
 using System.Collections.Generic;
@@ -22,14 +23,24 @@ namespace DBUI {
             return true;
         }
 
+        public Server SelectedServer {
+            get {
+                //assume localhost is always set, and we will always have one server!
+                var server = Program.Config.Data.Miscellaneous.ServerOptions.SelectedServer;
+                return Program.Config.Data.Servers.FirstOrDefault(s => s.Name == server);
+            }            
+        }
+
         private void SetControls() {
             SetMongoServers();
             SetEventHandlers();
 
-            if (this.list_view_server.Items.Count == 0) {
-                return;
+            foreach (ListViewItem i in list_view_server.Items) {
+                if (i.Text == SelectedServer.Name) {
+                    i.Selected = true;
+                    break;
+                }
             }
-            this.list_view_server.Items[0].Selected = true;
         }
 
         private void SetMongoServers()
@@ -50,21 +61,6 @@ namespace DBUI {
             this.textbox_user.Leave += textbox_user_Leave;
         }
 
-        void textbox_user_Leave(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        void tex_box_password_Leave(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        void button_ok_Click(object sender, EventArgs e)
-        {
-            //server.User = this.textbox_user.Text;
-            //server.Password = this.tex_box_password.Text;
-        }
 
         #region database add delete
         private void ButtonDatabaseAdd_SetNewItem(String item)
@@ -74,14 +70,11 @@ namespace DBUI {
                 return;
             }
 
-            var serverName = this.list_view_server.SelectedItems[0].Text;
-
-            var server = Program.Config.Data.Servers.Find(s => s.Name == serverName);
-            server.Databases.Add(new DataModel.Database() { 
+            SelectedServer.Databases.Add(new DataModel.Database() { 
                 Name=item
             });
          
-            SetMongoDatabases(serverName);
+            SetMongoDatabases();
         }
 
         private void button_database_delete_Click(object sender, EventArgs e)
@@ -91,12 +84,10 @@ namespace DBUI {
             {
                 return;
             }
-            
-            var serverName = this.list_view_server.SelectedItems[0].Text;
-            var server = Program.Config.Data.Servers.FirstOrDefault(s => s.Name == serverName);
+
+            var server = SelectedServer;
             var database = server.Databases.Find(d=>d.Name == this.list_view_database.SelectedItems[0].Text);
             server.Databases.Remove(database);
-            Program.Config.Save();
         }
         
         private void ButtonDatabaseAdd_EventHandler(object sender, EventArgs e){
@@ -112,35 +103,44 @@ namespace DBUI {
         #region "server selected"
         private void ListViewServer_SelectionChangedEventHandler(object sender, ListViewItemSelectionChangedEventArgs e) 
         {
-            var serverName = e.Item.Text;
-            SetMongoDatabases(serverName);
-            SetUserAndPassword(serverName);
+            Program.Config.Data.Miscellaneous.ServerOptions.SelectedServer = e.Item.Text;
+
+            SetMongoDatabases();
+            SetUserAndPassword();
         }
 
-        private void SetMongoDatabases(string serverName)
+        private void SetMongoDatabases()
         {
             this.list_view_database.Clear();
 
-            var databases = Program.Config.Data.Servers.Find(s => s.Name == serverName).Databases;
-
+            var databases = SelectedServer.Databases;
             foreach (var database in databases)
             {
                 this.list_view_database.Items.Add(new ListViewItem(database.Name));
             }
         }
 
-        private void SetUserAndPassword(string serverName) {
-            var server = Program.Config.Data.Servers.Find(s => s.Name == serverName);
+        private void SetUserAndPassword() {
+            var server = SelectedServer;
             this.textbox_user.Text = server.User;
             this.text_box_password.Text = server.Password;
         }
 
-        private void SaveUserAndPasswordToXMLCache(string serverName) {
-            var server = Program.Config.Data.Servers.Find(s => s.Name == serverName);
-
-            server.User =  this.textbox_user.Text;
-            server.Password =  this.text_box_password.Text;
+        void textbox_user_Leave(object sender, EventArgs e)
+        {
+            SelectedServer.User = this.textbox_user.Text;
         }
+
+        void tex_box_password_Leave(object sender, EventArgs e)
+        {
+            SelectedServer.Password = this.text_box_password.Text;
+        }
+
+        void button_ok_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
         #endregion
 
     }

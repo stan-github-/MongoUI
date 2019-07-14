@@ -52,7 +52,7 @@ namespace DBUI {
 
        
         private void SetControls() {
-            SetDisplaySnippetFiles();
+            //SetDisplaySnippetFiles();
 
             //this.list_view_files.Items[0].Selected = true;
             SetEventHandlers();     
@@ -101,7 +101,7 @@ namespace DBUI {
         }
        
         
-        private void SetDisplaySnippetFiles() {
+        /*private void SetDisplaySnippetFiles() {
             this.list_view_files.Columns.Add(new ColumnHeader() { 
                 Text = "Group Name"
             });
@@ -119,7 +119,7 @@ namespace DBUI {
                 item.SubItems.Add(file.FilePath);
                 this.list_view_files.Items.Add(item);
             }
-        }
+        }*/
        
     }
 }

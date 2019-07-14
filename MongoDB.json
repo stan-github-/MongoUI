@@ -25,6 +25,34 @@
                     collections: []
                 }
             ]
+        },
+		{
+            name: '127.0.0.1',
+            alias: 'staging',
+            withWarning: false,
+            isCurrent: false,
+			user: 'user_staging',
+			password: 'pwd_staging',
+            databases:[
+                {
+                    name: 'admin_staging',
+                    collections: []
+                }
+            ]
+        },
+		{
+            name: '127.0.0.2',
+            alias: 'uat',
+            withWarning: false,
+            isCurrent: false,
+			user: 'user_uat',
+			password: 'pwd_uat',
+            databases:[
+                {
+                    name: 'admin_uat',
+                    collections: []
+                }
+            ]
         }
     ],
     Miscellaneous: {
@@ -34,7 +62,10 @@
 			{groupName: 'zzz', filePath: ''}
 		],
         DeleteTempFolderContents: true,
-        AutoComplete: false
+        AutoComplete: false,
+		ServerOptions: {
+			SelectedServer: 'localhost'
+		}
     }
 }
 

@@ -6,18 +6,18 @@ using System.IO;
 
 namespace DBUI.DataModel
 {
-    public class CodeSnippet {
-        public string GroupName { get; set; }
-        public string FilePath { get; set; }
-        public string FileName { get; set; }
+    
+    public class ServerOptions {
+        public string SelectedServer {get;set;}
     }
 
     public class Miscellaneous {
         public List<string> LastOpenedFilePaths {get; set;}
         public string QueryFolder {get; set;}
+        public ServerOptions ServerOptions { get; set; }
         //public bool DeleteTempFolderContents {get; set;}
-        public bool AutoComplete { get; set; }
-        public List<CodeSnippet> CodeSnippets { get; set; }
+        //public bool AutoComplete { get; set; }
+        //public List<CodeSnippet> CodeSnippets { get; set; }
         //public string QueryFolder { get; set; }
     }
 
