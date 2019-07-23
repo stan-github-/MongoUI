@@ -1,6 +1,6 @@
 ﻿{
-    MongoClientExePath: 'd:/mongodb/bin/mongo.exe ',
-	CustomJavascriptFiles: [
+    MongoClientExePath: 'c:/programs/mongodb/bin/mongo.exe',
+	  CustomJavascriptFiles: [
       './Scripts/underscore.js',
       './Scripts/GetCollectionNames.js',
       './Scripts/Custom.js',
@@ -8,71 +8,71 @@
     ],
     QueryOutputTypes: 
     [
-		{name: "MongoUI", isCurrent: true},
+		    {name: "MongoUI", isCurrent: true},
         {name: "notepad.exe", isCurrent: false}
-	],    
-	Servers: [
+	  ],    
+	  Servers: [
         {
             name: 'localhost',
             alias: 'dev',
             withWarning: false,
             isCurrent: true,
-			user: 'admin',
-			password: 'admin',
+			      user: 'admin',
+			      password: 'admin',
             databases:[
                 {
                     name: 'admin',
                     collections: []
                 },
-				{
+				        {
                     name: 'uuu_dev',
                     collections: []
                 },
-				{
+				        {
                     name: 'vvv_dev',
                     collections: []
                 }
             ]
         },
-		{
+		    {
             name: '127.0.0.1',
             alias: 'staging',
             withWarning: false,
             isCurrent: false,
-			user: 'user_staging',
-			password: 'pwd_staging',
+			      user: 'user_staging',
+			      password: 'pwd_staging',
             databases:[
                 {
                     name: 'admin_staging',
                     collections: []
                 },
-				{
+				        {
                     name: 'aaa_staging',
                     collections: []
                 },
-				{
+				        {
                     name: 'bbb_staging',
                     collections: []
                 }
             ]
         },
-		{
+		    {
             name: '127.0.0.2',
             alias: 'uat',
             withWarning: false,
             isCurrent: false,
-			user: 'user_uat',
-			password: 'pwd_uat',
+			      user: 'user_uat',
+			      password: 'pwd_uat',
             databases:[
                 {
                     name: 'admin_uat',
                     collections: []
                 },
-				{
+				        {
                     name: 'xxx_uat',
                     collections: []
                 },
-				{
+				        {
                     name: 'yyy_uat',
                     collections: []
                 }
@@ -80,16 +80,16 @@
         }
     ],
     Miscellaneous: {
-        QueryFolder: '%temp%\\MongoQueries',
+        QueryFolder: '%temp%/',
         LastOpenedFilePaths: [],
-		CodeSnippets: [
-			{groupName: 'zzz', filePath: ''}
-		],
+		    CodeSnippets: [
+			    {groupName: 'zzz', filePath: ''}
+		    ],
         DeleteTempFolderContents: true,
         AutoComplete: false,
-		ServerOptions: {
-			SelectedServer: 'dev'
-		}
+		    ServerOptions: {
+			    SelectedServer: 'dev'
+		    }
     }
 }
 

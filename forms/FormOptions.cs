@@ -28,11 +28,13 @@ namespace DBUI {
 
         private void SetControls() {
             this.TextBoxQueryFolder.Text = Program.Config.Data.Miscellaneous.QueryFolder;
+            this.TextBoxMongoExePath.Text = Program.Config.Data.MongoClientExePath;
             this.button_okay.Click +=button_okay_Click;
         }
 
         private void SaveControls() {
             Program.Config.Data.Miscellaneous.QueryFolder = this.TextBoxQueryFolder.Text;
+            Program.Config.Data.MongoClientExePath = this.TextBoxMongoExePath.Text;
         }
     }
 }

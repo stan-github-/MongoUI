@@ -23,7 +23,6 @@ namespace DBUI.Queries
             QueryExecutionConfiguration = new QueryExecutionConfiguration();
         }
 
-        //todo should be in jsengine or jsengine proxy
         public String Execute(string query){
             return ExecuteMongo(query);
         }
@@ -114,13 +113,19 @@ namespace DBUI.Queries
         }
     
 
-        private void ExecuteConsoleApp(String exeName, String arguments)
+        private void ExecuteConsoleApp(String exePath, String arguments)
         {
+            if (!File.Exists(exePath))
+            {
+                ErrorManager.Write(exePath + " not found; please update in [Options]");
+                return;
+            }
+
             var process = new Process();
 
             try
             {
-                process.StartInfo.FileName = exeName; //"mongo.exe ";
+                process.StartInfo.FileName = exePath; //"mongo.exe ";
 
                 process.StartInfo.Arguments = arguments;
                 process.StartInfo.UseShellExecute = false;
