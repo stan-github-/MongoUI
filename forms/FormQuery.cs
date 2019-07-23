@@ -267,6 +267,11 @@ namespace DBUI.Queries {
         private void Form_Closed(object sender, FormClosedEventArgs e)
         {
             var l = Program.Config.Data.Miscellaneous.LastOpenedFilePaths;
+            if (l.Contains(this.QueryFilePath))
+            {
+                return;
+            }
+
             l.Add(this.QueryFilePath);
             
             if (l.Count > 10) {
